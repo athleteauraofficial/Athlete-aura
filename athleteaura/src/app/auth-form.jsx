@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { hasSupabaseEnv, supabase, supabaseConfigError } from "@/lib/supabase";
 import styles from "./page.module.css";
 
@@ -14,6 +15,7 @@ const roleLabels = {
 const accountRoles = ["athlete", "scout_coach"];
 
 export default function AuthForm() {
+  const router = useRouter();
   const [mode, setMode] = useState("register");
   const [role, setRole] = useState("athlete");
   const [email, setEmail] = useState("");
@@ -105,9 +107,15 @@ export default function AuthForm() {
     }
 
     setUser(authResult.data.user);
+
+    if (authResult.data.session) {
+      router.push("/profile");
+      return;
+    }
+
     setMessage(
       mode === "register"
-        ? "Check your email to confirm your account, then come back to sign in."
+        ? "Check your email to confirm your account, then sign in to create your profile."
         : "You are signed in."
     );
   }
@@ -127,7 +135,7 @@ export default function AuthForm() {
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: window.location.origin,
+        redirectTo: `${window.location.origin}/profile`,
       },
     });
 
@@ -166,8 +174,8 @@ export default function AuthForm() {
           <p className={styles.kicker}>AthleteAura</p>
           <h1>{mode === "register" ? "Create your account" : "Welcome back"}</h1>
           <p>
-            Join as an athlete building a profile, or as a scout/coach finding the
-            right talent.
+            Choose your account type first. After signup, you will create your full
+            profile on the next page.
           </p>
         </div>
 
@@ -193,7 +201,10 @@ export default function AuthForm() {
             <p className={styles.statusLabel}>Signed in</p>
             <h2>{user.email}</h2>
             <p>Account type: {roleLabels[user.user_metadata?.role] ?? "Not set"}</p>
-            <button className={styles.primaryButton} type="button" onClick={handleSignOut}>
+            <button className={styles.primaryButton} type="button" onClick={() => router.push("/profile")}>
+              Create profile
+            </button>
+            <button className={styles.secondaryButton} type="button" onClick={handleSignOut}>
               Sign out
             </button>
           </div>

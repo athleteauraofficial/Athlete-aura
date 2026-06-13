@@ -12,7 +12,7 @@
 }
 
 .authPanel {
-  width: min(100%, 460px);
+  width: min(100%, 720px);
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -70,7 +70,8 @@
 .modeSwitch button,
 .roleGrid button,
 .oauthGrid button,
-.primaryButton {
+.primaryButton,
+.secondaryButton {
   min-height: 44px;
   border: 1px solid transparent;
   border-radius: 8px;
@@ -158,22 +159,62 @@
   font-weight: 700;
 }
 
-.authForm input {
+.authForm input,
+.authForm select,
+.authForm textarea {
   width: 100%;
-  min-height: 46px;
   border: 1px solid #cfdedb;
   border-radius: 8px;
   background: #ffffff;
   color: #111827;
   font: inherit;
   font-weight: 500;
-  padding: 0 13px;
   outline: none;
 }
 
-.authForm input:focus {
+.authForm input,
+.authForm select {
+  min-height: 46px;
+  padding: 0 13px;
+}
+
+.authForm textarea {
+  min-height: 92px;
+  padding: 12px 13px;
+  resize: vertical;
+}
+
+.authForm input:focus,
+.authForm select:focus,
+.authForm textarea:focus {
   border-color: #0f766e;
   box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+}
+
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #dce7e4;
+  border-radius: 8px;
+  background: #f7fbfa;
+}
+
+.sectionTitle {
+  color: #10201d;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.fullWidthField {
+  grid-column: 1 / -1;
 }
 
 .primaryButton {
@@ -181,6 +222,50 @@
   background: #0f766e;
   color: #ffffff;
   padding: 0 16px;
+}
+
+.secondaryButton {
+  width: 100%;
+  background: #ffffff;
+  border-color: #0f766e;
+  color: #0f766e;
+  padding: 0 16px;
+}
+
+.profileLink {
+  color: #0f766e;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.stepTracker {
+  display: flex;
+  gap: 8px;
+}
+
+.stepDot,
+.activeStepDot {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #cfdedb;
+  border-radius: 999px;
+  color: #52615d;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.activeStepDot {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #ffffff;
+}
+
+.stepActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .signedInPanel {
@@ -215,14 +300,16 @@
 .modeSwitch button:hover,
 .roleGrid button:hover,
 .oauthGrid button:hover,
-.primaryButton:hover {
+.primaryButton:hover,
+.secondaryButton:hover {
   transform: translateY(-1px);
 }
 
 .modeSwitch button:disabled,
 .roleGrid button:disabled,
 .oauthGrid button:disabled,
-.primaryButton:disabled {
+.primaryButton:disabled,
+.secondaryButton:disabled {
   cursor: not-allowed;
   opacity: 0.66;
   transform: none;
@@ -244,6 +331,10 @@
   }
 
   .roleGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .fieldGrid {
     grid-template-columns: 1fr;
   }
 }
