@@ -18,7 +18,8 @@ const initialAthleteProfile = {
   country: "",
   current_club: "",
   sport: "",
-  position: "",
+  main_position: "",
+  secondary_position: "",
   date_of_birth: "",
   height: "",
   weight: "",
@@ -55,10 +56,221 @@ const sportOptions = [
   { value: "other", label: "Other" },
 ];
 
+const countryOptions = [
+  "Afghanistan",
+  "Albania",
+  "Algeria",
+  "Andorra",
+  "Angola",
+  "Antigua and Barbuda",
+  "Argentina",
+  "Armenia",
+  "Australia",
+  "Austria",
+  "Azerbaijan",
+  "Bahamas",
+  "Bahrain",
+  "Bangladesh",
+  "Barbados",
+  "Belarus",
+  "Belgium",
+  "Belize",
+  "Benin",
+  "Bhutan",
+  "Bolivia",
+  "Bosnia and Herzegovina",
+  "Botswana",
+  "Brazil",
+  "Brunei",
+  "Bulgaria",
+  "Burkina Faso",
+  "Burundi",
+  "Cabo Verde",
+  "Cambodia",
+  "Cameroon",
+  "Canada",
+  "Central African Republic",
+  "Chad",
+  "Chile",
+  "China",
+  "Colombia",
+  "Comoros",
+  "Congo",
+  "Costa Rica",
+  "Croatia",
+  "Cuba",
+  "Cyprus",
+  "Czechia",
+  "Democratic Republic of the Congo",
+  "Denmark",
+  "Djibouti",
+  "Dominica",
+  "Dominican Republic",
+  "Ecuador",
+  "Egypt",
+  "El Salvador",
+  "Equatorial Guinea",
+  "Eritrea",
+  "Estonia",
+  "Eswatini",
+  "Ethiopia",
+  "Fiji",
+  "Finland",
+  "France",
+  "Gabon",
+  "Gambia",
+  "Georgia",
+  "Germany",
+  "Ghana",
+  "Greece",
+  "Grenada",
+  "Guatemala",
+  "Guinea",
+  "Guinea-Bissau",
+  "Guyana",
+  "Haiti",
+  "Honduras",
+  "Hungary",
+  "Iceland",
+  "India",
+  "Indonesia",
+  "Iran",
+  "Iraq",
+  "Ireland",
+  "Israel",
+  "Italy",
+  "Jamaica",
+  "Japan",
+  "Jordan",
+  "Kazakhstan",
+  "Kenya",
+  "Kiribati",
+  "Kuwait",
+  "Kyrgyzstan",
+  "Laos",
+  "Latvia",
+  "Lebanon",
+  "Lesotho",
+  "Liberia",
+  "Libya",
+  "Liechtenstein",
+  "Lithuania",
+  "Luxembourg",
+  "Madagascar",
+  "Malawi",
+  "Malaysia",
+  "Maldives",
+  "Mali",
+  "Malta",
+  "Marshall Islands",
+  "Mauritania",
+  "Mauritius",
+  "Mexico",
+  "Micronesia",
+  "Moldova",
+  "Monaco",
+  "Mongolia",
+  "Montenegro",
+  "Morocco",
+  "Mozambique",
+  "Myanmar",
+  "Namibia",
+  "Nauru",
+  "Nepal",
+  "Netherlands",
+  "New Zealand",
+  "Nicaragua",
+  "Niger",
+  "Nigeria",
+  "North Korea",
+  "North Macedonia",
+  "Norway",
+  "Oman",
+  "Pakistan",
+  "Palau",
+  "Palestine",
+  "Panama",
+  "Papua New Guinea",
+  "Paraguay",
+  "Peru",
+  "Philippines",
+  "Poland",
+  "Portugal",
+  "Qatar",
+  "Romania",
+  "Russia",
+  "Rwanda",
+  "Saint Kitts and Nevis",
+  "Saint Lucia",
+  "Saint Vincent and the Grenadines",
+  "Samoa",
+  "San Marino",
+  "Sao Tome and Principe",
+  "Saudi Arabia",
+  "Senegal",
+  "Serbia",
+  "Seychelles",
+  "Sierra Leone",
+  "Singapore",
+  "Slovakia",
+  "Slovenia",
+  "Solomon Islands",
+  "Somalia",
+  "South Africa",
+  "South Korea",
+  "South Sudan",
+  "Spain",
+  "Sri Lanka",
+  "Sudan",
+  "Suriname",
+  "Sweden",
+  "Switzerland",
+  "Syria",
+  "Taiwan",
+  "Tajikistan",
+  "Tanzania",
+  "Thailand",
+  "Timor-Leste",
+  "Togo",
+  "Tonga",
+  "Trinidad and Tobago",
+  "Tunisia",
+  "Turkey",
+  "Turkmenistan",
+  "Tuvalu",
+  "Uganda",
+  "Ukraine",
+  "United Arab Emirates",
+  "United Kingdom",
+  "United States",
+  "Uruguay",
+  "Uzbekistan",
+  "Vanuatu",
+  "Vatican City",
+  "Venezuela",
+  "Vietnam",
+  "Yemen",
+  "Zambia",
+  "Zimbabwe",
+].map((country) => ({ value: country, label: country }));
+
+const positionOptionsBySport = {
+  football: ["Goalkeeper", "Defender", "Midfielder", "Forward", "Winger", "Striker"],
+  basketball: ["Point Guard", "Shooting Guard", "Small Forward", "Power Forward", "Center"],
+  tennis: ["Singles", "Doubles"],
+  volleyball: ["Setter", "Outside Hitter", "Opposite Hitter", "Middle Blocker", "Libero"],
+  handball: ["Goalkeeper", "Left Wing", "Right Wing", "Left Back", "Right Back", "Center Back", "Pivot"],
+  swimming: ["Freestyle", "Backstroke", "Breaststroke", "Butterfly", "Medley"],
+  athletics: ["Sprinter", "Middle Distance", "Long Distance", "Hurdles", "Jumps", "Throws", "Combined Events"],
+  boxing: ["Flyweight", "Bantamweight", "Featherweight", "Lightweight", "Welterweight", "Middleweight", "Heavyweight"],
+  mma: ["Striker", "Wrestler", "Grappler", "All-rounder"],
+  other: ["Athlete"],
+};
+
 const athleteIdentityFields = [
-  { name: "first_name", label: "First Name", autoComplete: "given-name", required: true },
-  { name: "last_name", label: "Last Name", autoComplete: "family-name", required: true },
-  { name: "country", label: "Country", autoComplete: "country-name", required: true },
+  { name: "first_name", label: "First Name", autoComplete: "given-name", onlyLetters: true, required: true },
+  { name: "last_name", label: "Last Name", autoComplete: "family-name", onlyLetters: true, required: true },
+  { name: "country", label: "Country", required: true, type: "select", options: countryOptions },
 ];
 
 const athleteSportFields = [
@@ -67,9 +279,10 @@ const athleteSportFields = [
 ];
 
 const athletePerformanceFields = [
-  { name: "position", label: "Position", required: true },
-  { name: "height", label: "Height", placeholder: "cm", type: "number" },
-  { name: "weight", label: "Weight", placeholder: "kg", type: "number" },
+  { name: "main_position", label: "Main position", required: true, type: "position" },
+  { name: "secondary_position", label: "Secondary position", type: "position" },
+  { name: "height", label: "Height (cm)", maxLength: 3, numericOnly: true, placeholder: "cm" },
+  { name: "weight", label: "Weight (kg)", maxLength: 3, numericOnly: true, placeholder: "kg" },
   { name: "date_of_birth", label: "Date of Birth", required: true, type: "date" },
   {
     name: "preferred_foot",
@@ -96,12 +309,13 @@ const athleteFieldGroups = [
   { title: "Sport details", fields: athletePerformanceFields },
   { title: "Social links", fields: athleteSocialFields },
   { title: "Profile picture", fields: [], hasProfilePicture: true },
+  { title: "You are all set", fields: [], isConfirmation: true },
 ];
 
 const scoutCoachIdentityFields = [
-  { name: "first_name", label: "First Name", autoComplete: "given-name", required: true },
-  { name: "last_name", label: "Last Name", autoComplete: "family-name", required: true },
-  { name: "country", label: "Country", autoComplete: "country-name", required: true },
+  { name: "first_name", label: "First Name", autoComplete: "given-name", onlyLetters: true, required: true },
+  { name: "last_name", label: "Last Name", autoComplete: "family-name", onlyLetters: true, required: true },
+  { name: "country", label: "Country", required: true, type: "select", options: countryOptions },
 ];
 
 const scoutCoachSportFields = [
@@ -112,7 +326,7 @@ const scoutCoachSportFields = [
 const scoutCoachRoleFields = [
   { name: "role_title", label: "Role title", required: true },
   { name: "organization", label: "Organization" },
-  { name: "experience_years", label: "Experience years", type: "number" },
+  { name: "experience_years", label: "Experience years", maxLength: 2, numericOnly: true },
 ];
 
 const scoutCoachProofFields = [
@@ -125,10 +339,31 @@ const scoutCoachFieldGroups = [
   { title: "Sport", fields: scoutCoachSportFields },
   { title: "Professional details", fields: scoutCoachRoleFields },
   { title: "Achievements and certificates", fields: scoutCoachProofFields },
+  { title: "You are all set", fields: [], isConfirmation: true },
 ];
 
 function emptyToNull(value) {
   return value === "" ? null : value;
+}
+
+function cleanFieldValue(field, value) {
+  if (field.onlyLetters) {
+    return value.replace(/[^\p{L}\s]/gu, "");
+  }
+
+  if (field.numericOnly) {
+    return value.replace(/\D/g, "").slice(0, field.maxLength);
+  }
+
+  return value;
+}
+
+function getPositionOptions(sport) {
+  const positions = positionOptionsBySport[sport] ?? [];
+  return [
+    { value: "", label: sport ? "Choose position" : "Choose sport first" },
+    ...positions.map((position) => ({ value: position, label: position })),
+  ];
 }
 
 function normalizeProfile(role, profile, profilePicUrl) {
@@ -144,7 +379,9 @@ function normalizeProfile(role, profile, profilePicUrl) {
     return {
       commonProfile,
       detailProfile: {
-        position: profile.position,
+        position: profile.main_position,
+        main_position: profile.main_position,
+        secondary_position: emptyToNull(profile.secondary_position),
         date_of_birth: profile.date_of_birth,
         height: profile.height ? Number(profile.height) : null,
         weight: profile.weight ? Number(profile.weight) : null,
@@ -189,6 +426,12 @@ export default function ProfilePage() {
   const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === profileSteps.length - 1;
   const profileState = role === "athlete" ? athleteProfile : scoutCoachProfile;
+  const hasOptionalSocialValue =
+    role === "athlete" && ["instagram", "youtube", "tiktok"].some((field) => profileState[field]);
+  const hasProfilePictureValue = Boolean(profilePic || profilePicUrl);
+  const shouldShowSkip =
+    (activeStep?.title === "Social links" && !hasOptionalSocialValue) ||
+    (activeStep?.hasProfilePicture && !hasProfilePictureValue);
 
   useEffect(() => {
     let isMounted = true;
@@ -203,7 +446,7 @@ export default function ProfilePage() {
       if (activeRole === "athlete") {
         const { data: athleteDetails } = await supabase
           .from("athlete_profiles")
-          .select("position,date_of_birth,height,weight,preferred_foot,instagram,youtube,tiktok,profile_pic_url")
+          .select("position,main_position,secondary_position,date_of_birth,height,weight,preferred_foot,instagram,youtube,tiktok,profile_pic_url")
           .eq("user_id", userId)
           .maybeSingle();
 
@@ -211,6 +454,7 @@ export default function ProfilePage() {
           ...initialAthleteProfile,
           ...commonProfile,
           ...athleteDetails,
+          main_position: athleteDetails?.main_position ?? athleteDetails?.position ?? "",
           height: athleteDetails?.height?.toString() ?? "",
           weight: athleteDetails?.weight?.toString() ?? "",
         });
@@ -319,6 +563,11 @@ export default function ProfilePage() {
     setError("");
     setMessage("");
 
+    if (!isLastStep) {
+      handleNextStep();
+      return;
+    }
+
     if (!user || !role) {
       setError("Please sign in again before creating your profile.");
       return;
@@ -396,7 +645,25 @@ export default function ProfilePage() {
     setProfile((profile) => ({
       ...profile,
       [fieldName]: value,
+      ...(fieldName === "sport" && role === "athlete"
+        ? {
+            main_position: positionOptionsBySport[value]?.includes(profile.main_position)
+              ? profile.main_position
+              : "",
+            secondary_position: positionOptionsBySport[value]?.includes(profile.secondary_position)
+              ? profile.secondary_position
+              : "",
+          }
+        : {}),
     }));
+  }
+
+  function getFieldOptions(field) {
+    if (field.type === "position") {
+      return getPositionOptions(profileState.sport);
+    }
+
+    return field.options ?? [];
   }
 
   function renderProfileField(field) {
@@ -415,7 +682,9 @@ export default function ProfilePage() {
       );
     }
 
-    if (field.type === "select") {
+    if (field.type === "select" || field.type === "position") {
+      const options = getFieldOptions(field);
+
       return (
         <label className={fieldClassName} key={field.name}>
           {field.label}
@@ -424,7 +693,7 @@ export default function ProfilePage() {
             required={field.required}
             value={profileState[field.name] ?? ""}
           >
-            {field.options.map((option) => (
+            {options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -439,11 +708,14 @@ export default function ProfilePage() {
         {field.label}
         <input
           autoComplete={field.autoComplete}
-          min={field.type === "number" ? "0" : undefined}
-          onChange={(event) => updateProfileField(field.name, event.target.value)}
+          inputMode={field.numericOnly ? "numeric" : undefined}
+          maxLength={field.maxLength}
+          onChange={(event) =>
+            updateProfileField(field.name, cleanFieldValue(field, event.target.value))
+          }
           placeholder={field.placeholder}
           required={field.required}
-          type={field.type ?? "text"}
+          type="text"
           value={profileState[field.name] ?? ""}
         />
       </label>
@@ -480,6 +752,13 @@ export default function ProfilePage() {
 
             <div className={styles.profileSection}>
               <p className={styles.sectionTitle}>{activeStep.title}</p>
+              {activeStep.isConfirmation && (
+                <div className={styles.confirmPanel}>
+                  <p>Now you set up your profile.</p>
+                  <p>Click save profile to finish.</p>
+                </div>
+              )}
+
               {activeStep.fields.length > 0 && (
                 <div className={styles.fieldGrid}>
                   {activeStep.fields.map((field) => renderProfileField(field))}
@@ -520,7 +799,7 @@ export default function ProfilePage() {
                 </button>
               ) : (
                 <button className={styles.primaryButton} disabled={isSaving} type="button" onClick={handleNextStep}>
-                  Next
+                  {shouldShowSkip ? "Skip" : "Next"}
                 </button>
               )}
             </div>

@@ -238,6 +238,16 @@
   font-weight: 750;
 }
 
+.confirmPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #30413d;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
 .stepTracker {
   display: flex;
   gap: 8px;

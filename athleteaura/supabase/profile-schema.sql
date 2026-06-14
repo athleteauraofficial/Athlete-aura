@@ -16,6 +16,8 @@ alter table public.profiles alter column last_name drop not null;
 create table if not exists public.athlete_profiles (
   user_id uuid primary key references public.profiles(user_id) on delete cascade,
   position text not null,
+  main_position text,
+  secondary_position text,
   date_of_birth date not null,
   height numeric(5, 2),
   weight numeric(5, 2),
@@ -27,6 +29,9 @@ create table if not exists public.athlete_profiles (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.athlete_profiles add column if not exists main_position text;
+alter table public.athlete_profiles add column if not exists secondary_position text;
 
 create table if not exists public.scout_coach_profiles (
   user_id uuid primary key references public.profiles(user_id) on delete cascade,
