@@ -217,6 +217,12 @@
   grid-column: 1 / -1;
 }
 
+.dateGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
 .primaryButton {
   width: 100%;
   background: #0f766e;
@@ -345,6 +351,10 @@
   }
 
   .fieldGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .dateGrid {
     grid-template-columns: 1fr;
   }
 }

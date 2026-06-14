@@ -271,6 +271,7 @@ const athleteIdentityFields = [
   { name: "first_name", label: "First Name", autoComplete: "given-name", onlyLetters: true, required: true },
   { name: "last_name", label: "Last Name", autoComplete: "family-name", onlyLetters: true, required: true },
   { name: "country", label: "Country", required: true, type: "select", options: countryOptions },
+  { name: "date_of_birth", label: "Date of Birth", required: true, type: "dob" },
 ];
 
 const athleteSportFields = [
@@ -283,7 +284,6 @@ const athletePerformanceFields = [
   { name: "secondary_position", label: "Secondary position", type: "position" },
   { name: "height", label: "Height (cm)", maxLength: 3, numericOnly: true, placeholder: "cm" },
   { name: "weight", label: "Weight (kg)", maxLength: 3, numericOnly: true, placeholder: "kg" },
-  { name: "date_of_birth", label: "Date of Birth", required: true, type: "date" },
   {
     name: "preferred_foot",
     label: "Preferred Foot",
@@ -364,6 +364,29 @@ function getPositionOptions(sport) {
     { value: "", label: sport ? "Choose position" : "Choose sport first" },
     ...positions.map((position) => ({ value: position, label: position })),
   ];
+}
+
+function getDateParts(dateValue) {
+  const [year = "", month = "", day = ""] = (dateValue ?? "").split("-");
+  return { day, month, year };
+}
+
+function getDaysInMonth(month, year) {
+  if (!month || !year) {
+    return 31;
+  }
+
+  return new Date(Number(year), Number(month), 0).getDate();
+}
+
+function buildDateValue(parts) {
+  if (!parts.day || !parts.month || !parts.year) {
+    return "";
+  }
+
+  const maxDay = getDaysInMonth(parts.month, parts.year);
+  const safeDay = Math.min(Number(parts.day), maxDay).toString().padStart(2, "0");
+  return `${parts.year}-${parts.month}-${safeDay}`;
 }
 
 function normalizeProfile(role, profile, profilePicUrl) {
@@ -666,8 +689,72 @@ export default function ProfilePage() {
     return field.options ?? [];
   }
 
+  function updateDatePart(partName, value) {
+    const currentParts = getDateParts(profileState.date_of_birth);
+    updateProfileField("date_of_birth", buildDateValue({ ...currentParts, [partName]: value }));
+  }
+
   function renderProfileField(field) {
     const fieldClassName = field.fullWidth ? styles.fullWidthField : undefined;
+
+    if (field.type === "dob") {
+      const currentYear = new Date().getFullYear();
+      const years = Array.from({ length: 80 }, (_, index) => currentYear - index - 5);
+      const months = Array.from({ length: 12 }, (_, index) =>
+        (index + 1).toString().padStart(2, "0")
+      );
+      const { day, month, year } = getDateParts(profileState.date_of_birth);
+      const days = Array.from({ length: getDaysInMonth(month, year) }, (_, index) =>
+        (index + 1).toString().padStart(2, "0")
+      );
+
+      return (
+        <label className={styles.fullWidthField} key={field.name}>
+          {field.label}
+          <div className={styles.dateGrid}>
+            <select
+              aria-label="Birth day"
+              onChange={(event) => updateDatePart("day", event.target.value)}
+              required={field.required}
+              value={day}
+            >
+              <option value="">Day</option>
+              {days.map((dayOption) => (
+                <option key={dayOption} value={dayOption}>
+                  {dayOption}
+                </option>
+              ))}
+            </select>
+            <select
+              aria-label="Birth month"
+              onChange={(event) => updateDatePart("month", event.target.value)}
+              required={field.required}
+              value={month}
+            >
+              <option value="">Month</option>
+              {months.map((monthOption) => (
+                <option key={monthOption} value={monthOption}>
+                  {monthOption}
+                </option>
+              ))}
+            </select>
+            <select
+              aria-label="Birth year"
+              onChange={(event) => updateDatePart("year", event.target.value)}
+              required={field.required}
+              value={year}
+            >
+              <option value="">Year</option>
+              {years.map((yearOption) => (
+                <option key={yearOption} value={yearOption}>
+                  {yearOption}
+                </option>
+              ))}
+            </select>
+          </div>
+        </label>
+      );
+    }
 
     if (field.type === "textarea") {
       return (
@@ -715,7 +802,7 @@ export default function ProfilePage() {
           }
           placeholder={field.placeholder}
           required={field.required}
-          type="text"
+          type={field.type ?? "text"}
           value={profileState[field.name] ?? ""}
         />
       </label>
