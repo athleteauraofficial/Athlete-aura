@@ -442,6 +442,7 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [dobParts, setDobParts] = useState({ day: "", month: "", year: "" });
 
   const selectedRoleLabel = useMemo(() => roleLabels[role] ?? "Profile", [role]);
   const profileSteps = role === "athlete" ? athleteFieldGroups : scoutCoachFieldGroups;
@@ -473,14 +474,17 @@ export default function ProfilePage() {
           .eq("user_id", userId)
           .maybeSingle();
 
-        setAthleteProfile({
+        const loadedAthleteProfile = {
           ...initialAthleteProfile,
           ...commonProfile,
           ...athleteDetails,
           main_position: athleteDetails?.main_position ?? athleteDetails?.position ?? "",
           height: athleteDetails?.height?.toString() ?? "",
           weight: athleteDetails?.weight?.toString() ?? "",
-        });
+        };
+
+        setAthleteProfile(loadedAthleteProfile);
+        setDobParts(getDateParts(loadedAthleteProfile.date_of_birth));
         setProfilePicUrl(athleteDetails?.profile_pic_url ?? null);
         return;
       }
@@ -690,8 +694,14 @@ export default function ProfilePage() {
   }
 
   function updateDatePart(partName, value) {
-    const currentParts = getDateParts(profileState.date_of_birth);
-    updateProfileField("date_of_birth", buildDateValue({ ...currentParts, [partName]: value }));
+    const nextParts = { ...dobParts, [partName]: value };
+    const maxDay = getDaysInMonth(nextParts.month, nextParts.year);
+    if (nextParts.day && Number(nextParts.day) > maxDay) {
+      nextParts.day = maxDay.toString().padStart(2, "0");
+    }
+
+    setDobParts(nextParts);
+    updateProfileField("date_of_birth", buildDateValue(nextParts));
   }
 
   function renderProfileField(field) {
@@ -703,7 +713,7 @@ export default function ProfilePage() {
       const months = Array.from({ length: 12 }, (_, index) =>
         (index + 1).toString().padStart(2, "0")
       );
-      const { day, month, year } = getDateParts(profileState.date_of_birth);
+      const { day, month, year } = dobParts;
       const days = Array.from({ length: getDaysInMonth(month, year) }, (_, index) =>
         (index + 1).toString().padStart(2, "0")
       );
