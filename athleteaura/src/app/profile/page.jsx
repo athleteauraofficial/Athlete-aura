@@ -255,17 +255,37 @@ const countryOptions = [
 ].map((country) => ({ value: country, label: country }));
 
 const positionOptionsBySport = {
-  football: ["Goalkeeper", "Defender", "Midfielder", "Forward", "Winger", "Striker"],
+  football: [
+    "Goalkeeper",
+    "Center Back",
+    "Full Back",
+    "Wing Back",
+    "Defensive Midfielder",
+    "Central Midfielder",
+    "Attacking Midfielder",
+    "Winger",
+    "Striker",
+  ],
   basketball: ["Point Guard", "Shooting Guard", "Small Forward", "Power Forward", "Center"],
-  tennis: ["Singles", "Doubles"],
-  volleyball: ["Setter", "Outside Hitter", "Opposite Hitter", "Middle Blocker", "Libero"],
+  tennis: ["Singles Player", "Doubles Player", "All-court Player", "Baseline Player", "Serve-and-volley Player"],
+  volleyball: ["Setter", "Outside Hitter", "Opposite Hitter", "Middle Blocker", "Libero", "Defensive Specialist"],
   handball: ["Goalkeeper", "Left Wing", "Right Wing", "Left Back", "Right Back", "Center Back", "Pivot"],
-  swimming: ["Freestyle", "Backstroke", "Breaststroke", "Butterfly", "Medley"],
+  swimming: ["Freestyle", "Backstroke", "Breaststroke", "Butterfly", "Individual Medley", "Relay"],
   athletics: ["Sprinter", "Middle Distance", "Long Distance", "Hurdles", "Jumps", "Throws", "Combined Events"],
-  boxing: ["Flyweight", "Bantamweight", "Featherweight", "Lightweight", "Welterweight", "Middleweight", "Heavyweight"],
-  mma: ["Striker", "Wrestler", "Grappler", "All-rounder"],
+  boxing: ["Orthodox", "Southpaw", "Switch Hitter", "Out-boxer", "Pressure Fighter", "Counter Puncher"],
+  mma: ["Striker", "Wrestler", "Grappler", "Brazilian Jiu-Jitsu", "Kickboxer", "All-rounder"],
   other: ["Athlete"],
 };
+
+const handPreferenceSports = new Set([
+  "basketball",
+  "tennis",
+  "volleyball",
+  "handball",
+  "swimming",
+  "boxing",
+  "mma",
+]);
 
 const athleteIdentityFields = [
   { name: "first_name", label: "First Name", autoComplete: "given-name", onlyLetters: true, required: true },
@@ -287,13 +307,7 @@ const athletePerformanceFields = [
   {
     name: "preferred_foot",
     label: "Preferred Foot",
-    type: "select",
-    options: [
-      { value: "", label: "Select" },
-      { value: "right", label: "Right" },
-      { value: "left", label: "Left" },
-      { value: "both", label: "Both" },
-    ],
+    type: "preference",
   },
 ];
 
@@ -366,6 +380,30 @@ function getPositionOptions(sport) {
   ];
 }
 
+function getPreferenceField(sport) {
+  if (handPreferenceSports.has(sport)) {
+    return {
+      label: "Preferred Hand",
+      options: [
+        { value: "", label: "Select" },
+        { value: "right", label: "Right hand" },
+        { value: "left", label: "Left hand" },
+        { value: "both", label: "Both hands" },
+      ],
+    };
+  }
+
+  return {
+    label: "Preferred Foot",
+    options: [
+      { value: "", label: "Select" },
+      { value: "right", label: "Right foot" },
+      { value: "left", label: "Left foot" },
+      { value: "both", label: "Both feet" },
+    ],
+  };
+}
+
 function getDateParts(dateValue) {
   const [year = "", month = "", day = ""] = (dateValue ?? "").split("-");
   return { day, month, year };
@@ -389,8 +427,11 @@ function buildDateValue(parts) {
   return `${parts.year}-${parts.month}-${safeDay}`;
 }
 
-function normalizeProfile(role, profile, profilePicUrl) {
+function normalizeProfile(role, profile, profilePicUrl, userEmail) {
+  const fullName = `${profile.first_name} ${profile.last_name}`.trim();
   const commonProfile = {
+    email: userEmail,
+    full_name: fullName,
     first_name: profile.first_name,
     last_name: profile.last_name,
     country: profile.country,
@@ -402,7 +443,6 @@ function normalizeProfile(role, profile, profilePicUrl) {
     return {
       commonProfile,
       detailProfile: {
-        position: profile.main_position,
         main_position: profile.main_position,
         secondary_position: emptyToNull(profile.secondary_position),
         date_of_birth: profile.date_of_birth,
@@ -427,6 +467,10 @@ function normalizeProfile(role, profile, profilePicUrl) {
       certificates: emptyToNull(profile.certificates),
     },
   };
+}
+
+function isMissingCurrentClubColumn(error) {
+  return error?.message?.includes("'current_club' column") || error?.code === "PGRST204";
 }
 
 export default function ProfilePage() {
@@ -461,16 +505,26 @@ export default function ProfilePage() {
     let isMounted = true;
 
     async function loadExistingProfile(userId, activeRole) {
-      const { data: commonProfile } = await supabase
+      let { data: commonProfile, error: commonProfileError } = await supabase
         .from("profiles")
-        .select("first_name,last_name,country,current_club,sport")
+        .select("full_name,first_name,last_name,country,current_club,sport")
         .eq("user_id", userId)
         .maybeSingle();
+
+      if (isMissingCurrentClubColumn(commonProfileError)) {
+        const fallbackResult = await supabase
+          .from("profiles")
+          .select("full_name,first_name,last_name,country,sport")
+          .eq("user_id", userId)
+          .maybeSingle();
+
+        commonProfile = fallbackResult.data;
+      }
 
       if (activeRole === "athlete") {
         const { data: athleteDetails } = await supabase
           .from("athlete_profiles")
-          .select("position,main_position,secondary_position,date_of_birth,height,weight,preferred_foot,instagram,youtube,tiktok,profile_pic_url")
+          .select("main_position,secondary_position,date_of_birth,height,weight,preferred_foot,instagram,youtube,tiktok,profile_pic_url")
           .eq("user_id", userId)
           .maybeSingle();
 
@@ -478,7 +532,7 @@ export default function ProfilePage() {
           ...initialAthleteProfile,
           ...commonProfile,
           ...athleteDetails,
-          main_position: athleteDetails?.main_position ?? athleteDetails?.position ?? "",
+          main_position: athleteDetails?.main_position ?? "",
           height: athleteDetails?.height?.toString() ?? "",
           weight: athleteDetails?.weight?.toString() ?? "",
         };
@@ -608,14 +662,23 @@ export default function ProfilePage() {
       const { commonProfile, detailProfile } = normalizeProfile(
         role,
         activeProfile,
-        uploadedProfilePicUrl
+        uploadedProfilePicUrl,
+        user.email
       );
 
-      const { error: profileError } = await supabase.from("profiles").upsert({
+      const profilePayload = {
         user_id: user.id,
         role,
         ...commonProfile,
-      });
+      };
+      let { error: profileError } = await supabase.from("profiles").upsert(profilePayload);
+
+      if (isMissingCurrentClubColumn(profileError)) {
+        const fallbackProfilePayload = { ...profilePayload };
+        delete fallbackProfilePayload.current_club;
+        const fallbackResult = await supabase.from("profiles").upsert(fallbackProfilePayload);
+        profileError = fallbackResult.error;
+      }
 
       if (profileError) {
         throw profileError;
@@ -690,7 +753,19 @@ export default function ProfilePage() {
       return getPositionOptions(profileState.sport);
     }
 
+    if (field.type === "preference") {
+      return getPreferenceField(profileState.sport).options;
+    }
+
     return field.options ?? [];
+  }
+
+  function getFieldLabel(field) {
+    if (field.type === "preference") {
+      return getPreferenceField(profileState.sport).label;
+    }
+
+    return field.label;
   }
 
   function updateDatePart(partName, value) {
@@ -779,12 +854,12 @@ export default function ProfilePage() {
       );
     }
 
-    if (field.type === "select" || field.type === "position") {
+    if (field.type === "select" || field.type === "position" || field.type === "preference") {
       const options = getFieldOptions(field);
 
       return (
         <label className={fieldClassName} key={field.name}>
-          {field.label}
+          {getFieldLabel(field)}
           <select
             onChange={(event) => updateProfileField(field.name, event.target.value)}
             required={field.required}
