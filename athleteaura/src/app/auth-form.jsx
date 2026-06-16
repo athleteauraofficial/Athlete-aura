@@ -14,6 +14,10 @@ const roleLabels = {
 
 const accountRoles = ["athlete", "scout_coach"];
 
+function getPostAuthRoute(userRole) {
+  return userRole === "scout_coach" ? "/scout/profile" : "/profile";
+}
+
 export default function AuthForm() {
   const router = useRouter();
   const [mode, setMode] = useState("register");
@@ -109,7 +113,7 @@ export default function AuthForm() {
     setUser(authResult.data.user);
 
     if (authResult.data.session) {
-      router.push("/profile");
+      router.push(getPostAuthRoute(authResult.data.user?.user_metadata?.role ?? role));
       return;
     }
 
@@ -135,7 +139,7 @@ export default function AuthForm() {
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/profile`,
+        redirectTo: `${window.location.origin}${getPostAuthRoute(role)}`,
       },
     });
 
@@ -201,8 +205,12 @@ export default function AuthForm() {
             <p className={styles.statusLabel}>Signed in</p>
             <h2>{user.email}</h2>
             <p>Account type: {roleLabels[user.user_metadata?.role] ?? "Not set"}</p>
-            <button className={styles.primaryButton} type="button" onClick={() => router.push("/profile")}>
-              Create profile
+            <button
+              className={styles.primaryButton}
+              type="button"
+              onClick={() => router.push(getPostAuthRoute(user.user_metadata?.role))}
+            >
+              {user.user_metadata?.role === "scout_coach" ? "Go to my profile" : "Create profile"}
             </button>
             <button className={styles.secondaryButton} type="button" onClick={handleSignOut}>
               Sign out

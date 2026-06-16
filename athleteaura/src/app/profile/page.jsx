@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { hasSupabaseEnv, supabase, supabaseConfigError } from "@/lib/supabase";
 import styles from "../page.module.css";
 
@@ -485,6 +486,7 @@ export default function ProfilePage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [dobParts, setDobParts] = useState({ day: "", month: "", year: "" });
 
@@ -643,6 +645,7 @@ export default function ProfilePage() {
     event.preventDefault();
     setError("");
     setMessage("");
+    setIsSaved(false);
 
     if (!isLastStep) {
       handleNextStep();
@@ -696,6 +699,7 @@ export default function ProfilePage() {
 
       setProfilePicUrl(uploadedProfilePicUrl);
       setMessage("Profile saved.");
+      setIsSaved(true);
     } catch (saveError) {
       setError(saveError.message);
     } finally {
@@ -982,6 +986,15 @@ export default function ProfilePage() {
         )}
 
         {message && <p className={styles.successMessage}>{message}</p>}
+        {isSaved && role === "scout_coach" && (
+          <Link
+            className={styles.primaryButton}
+            href="/scout/profile"
+            style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+          >
+            View my profile
+          </Link>
+        )}
         {error && <p className={styles.errorMessage}>{error}</p>}
       </section>
     </main>
