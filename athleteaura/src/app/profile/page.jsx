@@ -542,7 +542,7 @@ export default function ProfilePage() {
         setAthleteProfile(loadedAthleteProfile);
         setDobParts(getDateParts(loadedAthleteProfile.date_of_birth));
         setProfilePicUrl(athleteDetails?.profile_pic_url ?? null);
-        return;
+        return Boolean(athleteDetails);
       }
 
       const { data: scoutCoachDetails } = await supabase
@@ -557,6 +557,7 @@ export default function ProfilePage() {
         ...scoutCoachDetails,
         experience_years: scoutCoachDetails?.experience_years?.toString() ?? "",
       });
+      return Boolean(scoutCoachDetails);
     }
 
     async function loadProfile() {
@@ -605,7 +606,13 @@ export default function ProfilePage() {
       setRole(activeRole);
       setCurrentStep(0);
 
-      await loadExistingProfile(activeUser.id, activeRole);
+      const hasExistingProfile = await loadExistingProfile(activeUser.id, activeRole);
+      const isEditing = new URLSearchParams(window.location.search).get("edit") === "1";
+
+      if (activeRole === "athlete" && hasExistingProfile && !isEditing) {
+        router.replace("/athlete/profile");
+        return;
+      }
 
       if (isMounted) {
         setIsLoading(false);
@@ -698,8 +705,12 @@ export default function ProfilePage() {
       }
 
       setProfilePicUrl(uploadedProfilePicUrl);
-      setMessage("Profile saved.");
-      setIsSaved(true);
+      if (role === "athlete") {
+        router.push("/athlete/profile");
+      } else {
+        setMessage("Profile saved.");
+        setIsSaved(true);
+      }
     } catch (saveError) {
       setError(saveError.message);
     } finally {

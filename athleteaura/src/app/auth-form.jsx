@@ -210,7 +210,7 @@ export default function AuthForm() {
               type="button"
               onClick={() => router.push(getPostAuthRoute(user.user_metadata?.role))}
             >
-              {user.user_metadata?.role === "scout_coach" ? "Go to my profile" : "Create profile"}
+              Go to my profile
             </button>
             <button className={styles.secondaryButton} type="button" onClick={handleSignOut}>
               Sign out
