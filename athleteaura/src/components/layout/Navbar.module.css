@@ -1,0 +1,105 @@
+.navbar {
+  position: sticky;
+  z-index: 100;
+  top: 0;
+  width: 100%;
+  border-bottom: 1px solid #dce7e4;
+  background: rgba(255, 255, 255, 0.96);
+  color: #10201d;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  backdrop-filter: blur(12px);
+}
+
+.container {
+  display: flex;
+  width: min(1120px, 100%);
+  min-height: 64px;
+  margin: 0 auto;
+  padding: 0 24px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  color: #0f766e;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.link,
+.activeLink,
+.signOutButton {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.link {
+  color: #52615d;
+}
+
+.link:hover,
+.activeLink {
+  background: #edf5f3;
+  color: #0f766e;
+}
+
+.signOutButton {
+  border: 1px solid #0f766e;
+  background: #ffffff;
+  color: #0f766e;
+  cursor: pointer;
+}
+
+.signOutButton:hover {
+  background: #0f766e;
+  color: #ffffff;
+}
+
+.signOutButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.link:focus-visible,
+.activeLink:focus-visible,
+.signOutButton:focus-visible,
+.brand:focus-visible {
+  outline: 3px solid rgba(15, 118, 110, 0.2);
+  outline-offset: 2px;
+}
+
+@media (max-width: 560px) {
+  .container {
+    min-height: auto;
+    padding: 12px 16px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .links {
+    width: 100%;
+  }
+
+  .link,
+  .activeLink,
+  .signOutButton {
+    flex: 1;
+    padding: 0 10px;
+  }
+}
