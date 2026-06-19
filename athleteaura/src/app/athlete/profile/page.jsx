@@ -254,11 +254,6 @@ export default function AthleteProfilePage() {
     ].filter((item) => item.url);
   }, [profile]);
 
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    router.push("/");
-  }
-
   async function handleQuickPhotoUpload(event) {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -580,9 +575,6 @@ export default function AthleteProfilePage() {
             <div className={styles.actions}>
               <button className={styles.primaryLink} type="button" onClick={startEditing}>
                 Edit profile
-              </button>
-              <button className={styles.secondaryButton} type="button" onClick={handleSignOut}>
-                Sign out
               </button>
             </div>
           </div>

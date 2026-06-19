@@ -921,11 +921,6 @@ export default function ProfilePage() {
     );
   }
 
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    router.push("/");
-  }
-
   return (
     <main className={styles.pageShell}>
       <section className={styles.authPanel} aria-label="Create user profile">
@@ -1002,9 +997,6 @@ export default function ProfilePage() {
                 </button>
               )}
             </div>
-            <button className={styles.secondaryButton} type="button" onClick={handleSignOut}>
-              Sign out
-            </button>
           </form>
         )}
 

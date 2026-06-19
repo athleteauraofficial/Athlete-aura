@@ -1,0 +1,127 @@
+.search {
+  display: block;
+  margin-bottom: 32px;
+}
+
+.search input {
+  width: 100%;
+  padding: 16px 18px;
+  border: 1px solid #cfd9d2;
+  border-radius: 14px;
+  outline: none;
+  background: #ffffff;
+  color: #17211b;
+  font: inherit;
+  box-shadow: 0 8px 24px rgba(30, 49, 37, 0.06);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.search input:focus {
+  border-color: #238650;
+  box-shadow: 0 0 0 4px rgba(35, 134, 80, 0.12);
+}
+
+.search input::placeholder {
+  color: #859188;
+}
+
+.card {
+  overflow: hidden;
+  border: 1px solid #dce4df;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 14px 36px rgba(30, 49, 37, 0.08);
+}
+
+.photo {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  place-items: center;
+  background-color: #dfece4;
+  background-position: center;
+  background-size: cover;
+  color: #197143;
+  font-size: 2.25rem;
+  font-weight: 800;
+}
+
+.cardBody {
+  display: grid;
+  gap: 20px;
+  padding: 22px;
+}
+
+.sport {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: #197143;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cardBody h2 {
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.details {
+  display: grid;
+  gap: 10px;
+}
+
+.details div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.details dt {
+  color: #7a877e;
+}
+
+.details dd {
+  color: #27352c;
+  font-weight: 600;
+  text-align: right;
+}
+
+.profileLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: #197143;
+  color: #ffffff;
+  font-weight: 700;
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.profileLink:hover {
+  background: #125a34;
+  transform: translateY(-1px);
+}
+
+.profileLink:focus-visible {
+  outline: 3px solid rgba(35, 134, 80, 0.28);
+  outline-offset: 3px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

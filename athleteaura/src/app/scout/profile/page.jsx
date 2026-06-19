@@ -134,11 +134,6 @@ export default function ScoutProfilePage() {
     ].filter((item) => item.value);
   }, [profile]);
 
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    router.push("/");
-  }
-
   function updateDraft(field, value) {
     setDraft((current) => ({ ...current, [field]: value }));
   }
@@ -241,7 +236,6 @@ export default function ScoutProfilePage() {
             <p>{[profile.role_title, profile.organization, profile.sport].filter(Boolean).join(" | ")}</p>
             <div className={styles.actions}>
               <button className={styles.primaryButton} type="button" onClick={startEditing}>Edit profile</button>
-              <button className={styles.secondaryButton} type="button" onClick={handleSignOut}>Sign out</button>
             </div>
           </div>
         </header>
