@@ -26,9 +26,19 @@ export async function getAthleteProfile(userId) {
     throw detailsError;
   }
 
+  const { data: highlights, error: highlightsError } = await supabase
+    .from("athlete_highlights")
+    .select("id,title,url,created_at")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (highlightsError) {
+    throw highlightsError;
+  }
+
   if (!details) {
     return null;
   }
 
-  return { ...common, ...details };
+  return { ...common, ...details, highlights: highlights ?? [] };
 }

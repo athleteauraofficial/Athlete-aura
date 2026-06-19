@@ -567,7 +567,19 @@ export default function ProfilePage() {
         return;
       }
 
-      const { data, error: userError } = await supabase.auth.getUser();
+      let data;
+      let userError;
+      try {
+        const result = await supabase.auth.getUser();
+        data = result.data;
+        userError = result.error;
+      } catch {
+        if (isMounted) {
+          setError("Unable to reach Supabase. Check your connection and try again.");
+          setIsLoading(false);
+        }
+        return;
+      }
 
       if (!isMounted) {
         return;

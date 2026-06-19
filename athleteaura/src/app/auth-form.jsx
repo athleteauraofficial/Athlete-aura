@@ -40,7 +40,16 @@ export default function AuthForm() {
         return;
       }
 
-      const { data } = await supabase.auth.getUser();
+      let data;
+      try {
+        const result = await supabase.auth.getUser();
+        data = result.data;
+      } catch {
+        if (isMounted) {
+          setError("Unable to reach Supabase. Check your connection and try again.");
+        }
+        return;
+      }
 
       if (!isMounted) {
         return;
