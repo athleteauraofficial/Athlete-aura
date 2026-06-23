@@ -27,6 +27,81 @@
   color: #859188;
 }
 
+.filters {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.filtersHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.filtersLabel {
+  color: #197143;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.clearFilters {
+  border: none;
+  background: none;
+  padding: 4px 0;
+  color: #197143;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.clearFilters:hover {
+  text-decoration: underline;
+}
+
+.clearFilters:focus-visible {
+  outline: 3px solid rgba(35, 134, 80, 0.28);
+  outline-offset: 3px;
+}
+
+.filterControls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.filter {
+  display: block;
+}
+
+.filter select {
+  width: 100%;
+  padding: 12px 40px 12px 14px;
+  border: 1px solid #cfd9d2;
+  border-radius: 12px;
+  outline: none;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23197143' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  color: #17211b;
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+  box-shadow: 0 8px 24px rgba(30, 49, 37, 0.06);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.filter select:focus {
+  border-color: #238650;
+  box-shadow: 0 0 0 4px rgba(35, 134, 80, 0.12);
+}
+
 .card {
   overflow: hidden;
   border: 1px solid #dce4df;

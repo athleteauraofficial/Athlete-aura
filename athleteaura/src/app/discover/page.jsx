@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import AthleteCard from "@/components/discover/AthleteCard";
+import DiscoverFilters from "@/components/discover/DiscoverFilters";
 import DiscoverSearch from "@/components/discover/DiscoverSearch";
 import {
   hasSupabaseEnv,
@@ -10,9 +11,22 @@ import {
 } from "@/lib/supabase";
 import styles from "./discover.module.css";
 
+const FILTER_FIELDS = [
+  { field: "sport", label: "Sport" },
+  { field: "main_position", label: "Position" },
+  { field: "country", label: "Country" },
+  { field: "current_club", label: "Club" },
+];
+
+const EMPTY_FILTERS = FILTER_FIELDS.reduce(
+  (acc, { field }) => ({ ...acc, [field]: "" }),
+  {}
+);
+
 export default function DiscoverPage() {
   const [athletes, setAthletes] = useState([]);
   const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -80,11 +94,30 @@ export default function DiscoverPage() {
     };
   }, []);
 
+  const filterOptions = useMemo(() => {
+    return FILTER_FIELDS.reduce((acc, { field }) => {
+      const values = new Set();
+      for (const athlete of athletes) {
+        const value = athlete[field];
+        if (value) values.add(value);
+      }
+      acc[field] = Array.from(values).sort((a, b) => a.localeCompare(b));
+      return acc;
+    }, {});
+  }, [athletes]);
+
   const filteredAthletes = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) return athletes;
 
     return athletes.filter((athlete) => {
+      const matchesFilters = FILTER_FIELDS.every(({ field }) => {
+        const selected = filters[field];
+        return !selected || athlete[field] === selected;
+      });
+
+      if (!matchesFilters) return false;
+      if (!query) return true;
+
       const searchableValues = [
         athlete.full_name,
         `${athlete.first_name ?? ""} ${athlete.last_name ?? ""}`,
@@ -98,7 +131,15 @@ export default function DiscoverPage() {
         value?.toLowerCase().includes(query)
       );
     });
-  }, [athletes, search]);
+  }, [athletes, search, filters]);
+
+  function handleFilterChange(field, value) {
+    setFilters((current) => ({ ...current, [field]: value }));
+  }
+
+  function handleResetFilters() {
+    setFilters(EMPTY_FILTERS);
+  }
 
   return (
     <main className={styles.page}>
@@ -110,6 +151,16 @@ export default function DiscoverPage() {
         </header>
 
         <DiscoverSearch value={search} onChange={setSearch} />
+
+        {!isLoading && !error && athletes.length > 0 && (
+          <DiscoverFilters
+            fields={FILTER_FIELDS}
+            options={filterOptions}
+            values={filters}
+            onChange={handleFilterChange}
+            onReset={handleResetFilters}
+          />
+        )}
 
         {isLoading && (
           <p className={styles.status} role="status">
