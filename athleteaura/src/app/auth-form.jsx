@@ -18,9 +18,9 @@ function getPostAuthRoute(userRole) {
   return userRole === "scout_coach" ? "/scout/profile" : "/profile";
 }
 
-export default function AuthForm() {
+export default function AuthForm({ initialMode = "register" }) {
   const router = useRouter();
-  const [mode, setMode] = useState("register");
+  const [mode, setMode] = useState(initialMode);
   const [role, setRole] = useState("athlete");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -160,7 +160,7 @@ export default function AuthForm() {
   }
 
   return (
-    <main className={styles.pageShell}>
+    <div className={styles.pageShell}>
       <section className={styles.authPanel} aria-label="AthleteAura authentication">
         <div className={styles.brandBlock}>
           <p className={styles.kicker}>AthleteAura</p>
@@ -269,6 +269,6 @@ export default function AuthForm() {
         {message && <p className={styles.successMessage}>{message}</p>}
         {error && <p className={styles.errorMessage}>{error}</p>}
       </section>
-    </main>
+    </div>
   );
 }

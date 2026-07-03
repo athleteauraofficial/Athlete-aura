@@ -1,70 +1,70 @@
 .page {
   flex: 1;
   min-height: 100vh;
-  padding: 64px 24px;
-  background:
-    radial-gradient(circle at top right, rgba(39, 174, 96, 0.12), transparent 34%),
-    #f5f7f6;
-  color: #17211b;
+  padding: 32px 28px 64px;
+  color: var(--foreground);
 }
 
 .container {
-  width: min(1120px, 100%);
+  width: min(1180px, 100%);
   margin: 0 auto;
 }
 
 .header {
-  max-width: 660px;
-  margin-bottom: 32px;
+  max-width: 720px;
+  margin-bottom: 28px;
 }
 
 .eyebrow {
   margin-bottom: 10px;
-  color: #197143;
+  color: #c4b5fd;
   font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  font-weight: 950;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .header h1 {
   margin-bottom: 10px;
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  line-height: 1.05;
-  letter-spacing: -0.04em;
+  color: #ffffff;
+  font-size: clamp(2.1rem, 5vw, 3.7rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
 }
 
 .header > p:last-child {
-  color: #5e6d63;
-  font-size: 1.05rem;
-  line-height: 1.6;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.65;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 20px;
 }
 
 .status,
 .error {
   padding: 48px 24px;
-  border: 1px solid #dce4df;
-  border-radius: 18px;
-  background: #ffffff;
-  color: #657169;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--muted);
   text-align: center;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(22px);
 }
 
 .error {
   display: grid;
   gap: 8px;
-  color: #9b2c2c;
+  color: #fecdd3;
 }
 
 @media (max-width: 640px) {
   .page {
-    padding: 40px 16px;
+    padding: 24px 14px 44px;
   }
 
   .grid {

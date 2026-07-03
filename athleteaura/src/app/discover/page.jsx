@@ -27,6 +27,7 @@ export default function DiscoverPage() {
   const [athletes, setAthletes] = useState([]);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState(EMPTY_FILTERS);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -56,7 +57,7 @@ export default function DiscoverPage() {
         if (userIds.length > 0) {
           const { data, error: athleteError } = await supabase
             .from("athlete_profiles")
-            .select("user_id,main_position,date_of_birth")
+            .select("user_id,main_position,date_of_birth,profile_pic_url")
             .in("user_id", userIds);
 
           if (athleteError) throw athleteError;
@@ -133,6 +134,11 @@ export default function DiscoverPage() {
     });
   }, [athletes, search, filters]);
 
+  const activeFilterCount = useMemo(
+    () => Object.values(filters).filter(Boolean).length,
+    [filters]
+  );
+
   function handleFilterChange(field, value) {
     setFilters((current) => ({ ...current, [field]: value }));
   }
@@ -150,9 +156,15 @@ export default function DiscoverPage() {
           <p>Browse athlete profiles and find the right fit for your team.</p>
         </header>
 
-        <DiscoverSearch value={search} onChange={setSearch} />
+        <DiscoverSearch
+          activeFilterCount={activeFilterCount}
+          filtersOpen={filtersOpen}
+          value={search}
+          onChange={setSearch}
+          onFilterToggle={() => setFiltersOpen((isOpen) => !isOpen)}
+        />
 
-        {!isLoading && !error && athletes.length > 0 && (
+        {!isLoading && !error && athletes.length > 0 && filtersOpen && (
           <DiscoverFilters
             fields={FILTER_FIELDS}
             options={filterOptions}
