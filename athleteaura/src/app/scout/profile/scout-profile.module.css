@@ -17,6 +17,8 @@
 .detailsCard,
 .textCard,
 .editSection,
+.activitySection,
+.postsSection,
 .summaryGrid,
 .emptyCard {
   border: 1px solid var(--line);
@@ -128,7 +130,9 @@
 .completionSection,
 .detailsCard,
 .textCard,
-.editSection {
+.editSection,
+.activitySection,
+.postsSection {
   padding: 22px;
 }
 
@@ -143,8 +147,111 @@
 .summaryGrid strong,
 .detailsCard h2,
 .textCard h2,
+.activitySection h2,
+.postsSection h2,
 .editHeading h2 {
   color: #ffffff;
+}
+
+.activityGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.activityGrid div {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px 12px;
+  background: rgba(255, 255, 255, 0.045);
+  text-align: center;
+}
+
+.activityGrid svg {
+  color: #93c5fd;
+}
+
+.activityGrid div:nth-child(2) svg {
+  color: #a855f7;
+}
+
+.activityGrid strong {
+  color: #ffffff;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.activityGrid span,
+.emptyText {
+  color: var(--muted);
+}
+
+.postList {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.postCard {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.postMeta,
+.postStats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.postMeta {
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.postMeta span {
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: var(--accent-soft);
+  color: #e9d5ff;
+}
+
+.postCard p {
+  color: var(--foreground);
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.postImage {
+  width: 100%;
+  height: auto;
+  max-height: 460px;
+  object-fit: contain;
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.postStats {
+  margin-top: 14px;
+  color: var(--muted-strong);
+  font-weight: 900;
+}
+
+.postStats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .progressTrack {
@@ -349,6 +456,10 @@
   }
 
   .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .activityGrid {
     grid-template-columns: 1fr;
   }
 

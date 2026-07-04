@@ -80,7 +80,7 @@ main {
 }
 
 @media (min-width: 980px) {
-  body {
+  body:has(.app-shell-nav) {
     padding-left: 335px;
     padding-top: 96px;
   }

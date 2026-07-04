@@ -525,7 +525,8 @@
 }
 
 .actionButton,
-.likedAction {
+.likedAction,
+.savedAction {
   min-height: 38px;
   display: inline-flex;
   align-items: center;
@@ -544,6 +545,12 @@
   border-color: var(--line-strong);
   background: var(--accent-soft);
   color: #e9d5ff;
+}
+
+.savedAction {
+  border-color: rgba(147, 197, 253, 0.34);
+  background: rgba(147, 197, 253, 0.12);
+  color: #bfdbfe;
 }
 
 .comments {

@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { hasSupabaseEnv, supabase, supabaseConfigError } from "@/lib/supabase";
 import styles from "./page.module.css";
 
-const pendingRoleKey = "athleteaura.pendingRole";
-
 const roleLabels = {
   athlete: "Athlete",
   scout_coach: "Scout / Coach",
@@ -16,6 +14,10 @@ const accountRoles = ["athlete", "scout_coach"];
 
 function getPostAuthRoute(userRole) {
   return userRole === "scout_coach" ? "/scout/profile" : "/profile";
+}
+
+function isStrongPassword(value) {
+  return value.length >= 8 && /[A-Z]/.test(value) && /\d/.test(value);
 }
 
 export default function AuthForm({ initialMode = "register" }) {
@@ -56,20 +58,6 @@ export default function AuthForm({ initialMode = "register" }) {
       }
 
       setUser(data.user);
-
-      const pendingRole = window.localStorage.getItem(pendingRoleKey);
-      if (data.user && pendingRole && !data.user.user_metadata?.role) {
-        const { data: updatedUser, error: updateError } = await supabase.auth.updateUser({
-          data: { role: pendingRole },
-        });
-
-        if (updateError) {
-          setError(updateError.message);
-        } else {
-          setUser(updatedUser.user);
-          window.localStorage.removeItem(pendingRoleKey);
-        }
-      }
     }
 
     loadSession();
@@ -93,6 +81,11 @@ export default function AuthForm({ initialMode = "register" }) {
 
     if (!hasSupabaseEnv) {
       setError(supabaseConfigError);
+      return;
+    }
+
+    if (mode === "register" && !isStrongPassword(password)) {
+      setError("Password must be at least 8 characters and include 1 capital letter and 1 number.");
       return;
     }
 
@@ -131,32 +124,6 @@ export default function AuthForm({ initialMode = "register" }) {
         ? "Check your email to confirm your account, then sign in to create your profile."
         : "You are signed in."
     );
-  }
-
-  async function handleOAuth(provider) {
-    setError("");
-    setMessage("");
-
-    if (!hasSupabaseEnv) {
-      setError(supabaseConfigError);
-      return;
-    }
-
-    setIsLoading(true);
-    window.localStorage.setItem(pendingRoleKey, role);
-
-    const { error: oauthError } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}${getPostAuthRoute(role)}`,
-      },
-    });
-
-    if (oauthError) {
-      window.localStorage.removeItem(pendingRoleKey);
-      setError(oauthError.message);
-      setIsLoading(false);
-    }
   }
 
   return (
@@ -216,19 +183,6 @@ export default function AuthForm({ initialMode = "register" }) {
               ))}
             </div>
 
-            <div className={styles.oauthGrid}>
-              <button type="button" onClick={() => handleOAuth("google")} disabled={isLoading}>
-                Continue with Google
-              </button>
-              <button type="button" onClick={() => handleOAuth("apple")} disabled={isLoading}>
-                Continue with Apple
-              </button>
-            </div>
-
-            <div className={styles.divider}>
-              <span>or use email</span>
-            </div>
-
             <form className={styles.authForm} onSubmit={handleEmailAuth}>
               <label>
                 Email
@@ -246,9 +200,10 @@ export default function AuthForm({ initialMode = "register" }) {
                 Password
                 <input
                   autoComplete={mode === "register" ? "new-password" : "current-password"}
-                  minLength={6}
+                  minLength={mode === "register" ? 8 : 6}
                   onChange={(event) => setPassword(event.target.value)}
-                  placeholder="At least 6 characters"
+                  pattern={mode === "register" ? "^(?=.*[A-Z])(?=.*\\d).{8,}$" : undefined}
+                  placeholder={mode === "register" ? "8+ chars, 1 capital, 1 number" : "Your password"}
                   required
                   type="password"
                   value={password}

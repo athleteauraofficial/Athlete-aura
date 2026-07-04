@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Eye, Heart, MessageCircle } from "lucide-react";
 import { getScoutProfile } from "@/lib/scoutProfile";
 import { hasSupabaseEnv, supabase, supabaseConfigError } from "@/lib/supabase";
 import styles from "./scout-profile.module.css";
@@ -57,10 +59,28 @@ function formatMemberSince(createdAt) {
     : date.toLocaleDateString(undefined, { month: "long", year: "numeric" });
 }
 
+function formatPostDate(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+
+  return date.toLocaleDateString(undefined, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 export default function ScoutProfilePage() {
   const router = useRouter();
   const [profile, setProfile] = useState(null);
   const [draft, setDraft] = useState(null);
+  const [profilePosts, setProfilePosts] = useState([]);
+  const [activityStats, setActivityStats] = useState({
+    profileViews: 0,
+    likesReceived: 0,
+    comments: 0,
+  });
   const [userId, setUserId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -105,9 +125,59 @@ export default function ScoutProfilePage() {
       try {
         const loaded = await getScoutProfile(data.user.id);
         if (isMounted) {
+          const { data: postRows, error: postsError } = await supabase
+            .from("posts")
+            .select("id,content,category,image_url,created_at")
+            .eq("user_id", data.user.id)
+            .order("created_at", { ascending: false });
+
+          if (postsError) throw postsError;
+
+          const postIds = (postRows ?? []).map((post) => post.id);
+          let likesReceived = 0;
+          let commentsCount = 0;
+          let postsWithStats = postRows ?? [];
+
+          if (postIds.length > 0) {
+            const [{ data: likes }, { data: comments }] = await Promise.all([
+              supabase.from("post_likes").select("post_id,user_id").in("post_id", postIds),
+              supabase.from("comments").select("post_id,id").in("post_id", postIds),
+            ]);
+
+            const likesByPostId = (likes ?? []).reduce((acc, like) => {
+              acc[like.post_id] = (acc[like.post_id] ?? 0) + 1;
+              return acc;
+            }, {});
+            const commentsByPostId = (comments ?? []).reduce((acc, comment) => {
+              acc[comment.post_id] = (acc[comment.post_id] ?? 0) + 1;
+              return acc;
+            }, {});
+
+            likesReceived = (likes ?? []).length;
+            commentsCount = (comments ?? []).length;
+            postsWithStats = (postRows ?? []).map((post) => ({
+              ...post,
+              likes_count: likesByPostId[post.id] ?? 0,
+              comments_count: commentsByPostId[post.id] ?? 0,
+            }));
+          }
+
+          const { count: profileViews, error: profileViewsError } = await supabase
+            .from("profile_views")
+            .select("*", { count: "exact", head: true })
+            .eq("profile_user_id", data.user.id);
+
+          if (profileViewsError && profileViewsError.code !== "42P01") throw profileViewsError;
+
           setUserId(data.user.id);
           setProfile(loaded);
           setDraft(loaded);
+          setProfilePosts(postsWithStats);
+          setActivityStats({
+            profileViews: profileViewsError ? 0 : profileViews ?? 0,
+            likesReceived,
+            comments: commentsCount,
+          });
         }
       } catch (loadError) {
         if (isMounted) setError(loadError.message);
@@ -279,6 +349,58 @@ export default function ScoutProfilePage() {
               <div><strong>{profile.experience_years ?? "-"}</strong><span>Years experience</span></div>
               <div><strong>{profile.sport || "-"}</strong><span>Sport</span></div>
               <div><strong>{profile.country || "-"}</strong><span>Country</span></div>
+            </section>
+            <section className={styles.activitySection} aria-label="Your activity">
+              <h2>Your Activity</h2>
+              <div className={styles.activityGrid}>
+                <div>
+                  <Eye size={30} />
+                  <strong>{activityStats.profileViews}</strong>
+                  <span>Profile views</span>
+                </div>
+                <div>
+                  <Heart size={30} />
+                  <strong>{activityStats.likesReceived}</strong>
+                  <span>Likes received</span>
+                </div>
+                <div>
+                  <MessageCircle size={30} />
+                  <strong>{activityStats.comments}</strong>
+                  <span>Comments</span>
+                </div>
+              </div>
+            </section>
+            <section className={styles.postsSection} aria-label="Your posts">
+              <h2>Your posts</h2>
+              {profilePosts.length === 0 ? (
+                <p className={styles.emptyText}>No posts shared yet.</p>
+              ) : (
+                <div className={styles.postList}>
+                  {profilePosts.map((post) => (
+                    <article className={styles.postCard} key={post.id}>
+                      <div className={styles.postMeta}>
+                        <span>{post.category}</span>
+                        <time>{formatPostDate(post.created_at)}</time>
+                      </div>
+                      <p>{post.content}</p>
+                      {post.image_url && (
+                        <Image
+                          unoptimized
+                          alt=""
+                          className={styles.postImage}
+                          height={420}
+                          src={post.image_url}
+                          width={760}
+                        />
+                      )}
+                      <div className={styles.postStats}>
+                        <span><Heart size={16} />{post.likes_count ?? 0}</span>
+                        <span><MessageCircle size={16} />{post.comments_count ?? 0}</span>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
             </section>
             <section className={styles.detailsCard}>
               <h2>Professional information</h2>

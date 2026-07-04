@@ -42,6 +42,13 @@ create table if not exists public.comment_likes (
   primary key (comment_id, user_id)
 );
 
+create table if not exists public.post_saves (
+  post_id bigint not null references public.posts(id) on delete cascade,
+  user_id uuid not null references public.profiles(user_id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (post_id, user_id)
+);
+
 create table if not exists public.user_follows (
   follower_id uuid not null references public.profiles(user_id) on delete cascade,
   following_id uuid not null references public.profiles(user_id) on delete cascade,
@@ -77,6 +84,7 @@ alter table public.posts enable row level security;
 alter table public.comments enable row level security;
 alter table public.post_likes enable row level security;
 alter table public.comment_likes enable row level security;
+alter table public.post_saves enable row level security;
 alter table public.user_follows enable row level security;
 alter table public.post_reports enable row level security;
 
@@ -85,6 +93,7 @@ grant select, insert, update, delete on public.posts to authenticated;
 grant select, insert, delete on public.comments to authenticated;
 grant select, insert, delete on public.post_likes to authenticated;
 grant select, insert, delete on public.comment_likes to authenticated;
+grant select, insert, delete on public.post_saves to authenticated;
 grant select, insert, delete on public.user_follows to authenticated;
 grant insert on public.post_reports to authenticated;
 grant select on public.community_profiles to authenticated;
@@ -168,6 +177,24 @@ with check (auth.uid() = user_id);
 drop policy if exists "Users can unlike comments as themselves" on public.comment_likes;
 create policy "Users can unlike comments as themselves"
 on public.comment_likes for delete
+to authenticated
+using (auth.uid() = user_id);
+
+drop policy if exists "Users can read their saved posts" on public.post_saves;
+create policy "Users can read their saved posts"
+on public.post_saves for select
+to authenticated
+using (auth.uid() = user_id);
+
+drop policy if exists "Users can save posts as themselves" on public.post_saves;
+create policy "Users can save posts as themselves"
+on public.post_saves for insert
+to authenticated
+with check (auth.uid() = user_id);
+
+drop policy if exists "Users can unsave their saved posts" on public.post_saves;
+create policy "Users can unsave their saved posts"
+on public.post_saves for delete
 to authenticated
 using (auth.uid() = user_id);
 

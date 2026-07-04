@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  Bookmark,
   Heart,
   ImagePlus,
   Flag,
@@ -184,6 +185,7 @@ export default function ExplorePage() {
   const [commentsByPostId, setCommentsByPostId] = useState({});
   const [likesByPostId, setLikesByPostId] = useState({});
   const [commentLikesById, setCommentLikesById] = useState({});
+  const [savedPostIds, setSavedPostIds] = useState(new Set());
   const [followedUserIds, setFollowedUserIds] = useState(new Set());
   const [content, setContent] = useState("");
   const [category, setCategory] = useState(CATEGORIES[0]);
@@ -198,7 +200,9 @@ export default function ExplorePage() {
   const [editingPostId, setEditingPostId] = useState(null);
   const [editContent, setEditContent] = useState("");
   const [editCategory, setEditCategory] = useState(CATEGORIES[0]);
-  const [isComposerOpen, setIsComposerOpen] = useState(true);
+  const [isComposerOpen, setIsComposerOpen] = useState(
+    () => typeof window !== "undefined" && window.location.hash === "#compose"
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [isPosting, setIsPosting] = useState(false);
   const [busyPostId, setBusyPostId] = useState(null);
@@ -221,17 +225,30 @@ export default function ExplorePage() {
     const userIds = Array.from(new Set(loadedPosts.map((post) => post.user_id)));
 
     let followingRows = [];
+    let savedRows = [];
     if (activeUserId) {
-      const { data, error: followingError } = await withTimeout(
-        supabase
-          .from("user_follows")
-          .select("following_id")
-          .eq("follower_id", activeUserId),
-        "Following list took too long to load. Check Supabase connection."
-      );
+      const [{ data: follows, error: followingError }, { data: saves, error: savesError }] =
+        await Promise.all([
+          withTimeout(
+            supabase
+              .from("user_follows")
+              .select("following_id")
+              .eq("follower_id", activeUserId),
+            "Following list took too long to load. Check Supabase connection."
+          ),
+          withTimeout(
+            supabase
+              .from("post_saves")
+              .select("post_id")
+              .eq("user_id", activeUserId),
+            "Saved posts took too long to load. Check Supabase connection."
+          ),
+        ]);
 
       if (followingError && followingError.code !== "42P01") throw followingError;
-      followingRows = followingError ? [] : data ?? [];
+      if (savesError && savesError.code !== "42P01") throw savesError;
+      followingRows = followingError ? [] : follows ?? [];
+      savedRows = savesError ? [] : saves ?? [];
     }
 
     let profileRows = [];
@@ -322,6 +339,7 @@ export default function ExplorePage() {
 
     setPosts(loadedPosts);
     setFollowedUserIds(new Set(followingRows.map((follow) => follow.following_id)));
+    setSavedPostIds(new Set(savedRows.map((save) => save.post_id)));
     setProfilesById(nextProfilesById);
     setCommentsByPostId(nextCommentsByPostId);
     setLikesByPostId(nextLikesByPostId);
@@ -380,6 +398,25 @@ export default function ExplorePage() {
     // loadFeed is called inside the guarded initial load with the active user id.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
+
+  useEffect(() => {
+    function openComposerFromNavigation() {
+      if (window.location.hash === "#compose") {
+        setIsComposerOpen(true);
+      }
+    }
+
+    function openComposer() {
+      setIsComposerOpen(true);
+    }
+
+    window.addEventListener("hashchange", openComposerFromNavigation);
+    window.addEventListener("athleteaura:open-composer", openComposer);
+    return () => {
+      window.removeEventListener("hashchange", openComposerFromNavigation);
+      window.removeEventListener("athleteaura:open-composer", openComposer);
+    };
+  }, []);
 
   const canPost = useMemo(() => content.trim().length > 0 && !isPosting, [content, isPosting]);
 
@@ -608,6 +645,51 @@ export default function ExplorePage() {
       }
     } catch (likeError) {
       setError(likeError.message || "Unable to update like.");
+    } finally {
+      setBusyPostId(null);
+    }
+  }
+
+  async function handleToggleSave(postId) {
+    if (!user) return;
+
+    const hasSaved = savedPostIds.has(postId);
+    setBusyPostId(postId);
+    setError("");
+
+    try {
+      if (hasSaved) {
+        const { error: unsaveError } = await supabase
+          .from("post_saves")
+          .delete()
+          .eq("post_id", postId)
+          .eq("user_id", user.id);
+
+        if (unsaveError) throw unsaveError;
+
+        setSavedPostIds((current) => {
+          const next = new Set(current);
+          next.delete(postId);
+          return next;
+        });
+      } else {
+        const { error: saveError } = await supabase
+          .from("post_saves")
+          .upsert(
+            { post_id: postId, user_id: user.id },
+            { ignoreDuplicates: true, onConflict: "post_id,user_id" }
+          );
+
+        if (saveError) throw saveError;
+
+        setSavedPostIds((current) => {
+          const next = new Set(current);
+          next.add(postId);
+          return next;
+        });
+      }
+    } catch (saveError) {
+      setError(saveError.message || "Unable to update saved post.");
     } finally {
       setBusyPostId(null);
     }
@@ -925,12 +1007,13 @@ export default function ExplorePage() {
                   }, {});
                   const tags = getHashtags(post.content);
                   const hasLiked = likes.some((like) => like.user_id === user?.id);
+                  const hasSaved = savedPostIds.has(post.id);
                   const isOwner = post.user_id === user?.id;
                   const isEditing = editingPostId === post.id;
                   const commentsOpen = Boolean(expandedComments[post.id]);
 
                   return (
-                    <article className={styles.postCard} key={post.id}>
+                    <article className={styles.postCard} id={`post-${post.id}`} key={post.id}>
                       <div className={styles.postHeader}>
                         <div className={styles.authorBlock}>
                           <ProfileLink userId={post.user_id}>
@@ -1059,6 +1142,16 @@ export default function ExplorePage() {
                         >
                           <MessageCircle size={18} />
                           {comments.length} Comment{comments.length === 1 ? "" : "s"}
+                        </button>
+                        <button
+                          className={hasSaved ? styles.savedAction : styles.actionButton}
+                          disabled={busyPostId === post.id}
+                          title={hasSaved ? "Remove from saved" : "Save post"}
+                          type="button"
+                          onClick={() => handleToggleSave(post.id)}
+                        >
+                          <Bookmark size={18} fill={hasSaved ? "currentColor" : "none"} />
+                          {hasSaved ? "Saved" : "Save"}
                         </button>
                       </div>
 

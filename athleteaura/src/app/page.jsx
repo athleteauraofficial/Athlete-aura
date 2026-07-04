@@ -1,29 +1,32 @@
 "use client";
 
+import { ArrowRight, MessageCircle, Target, UserRound, UsersRound } from "lucide-react";
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import AuthForm from "./auth-form";
 import styles from "./page.module.css";
 
-const services = [
+const features = [
   {
-    title: "For athletes",
-    text: "Create a clean profile with your sport, position, club, physical info, photo, and highlight links.",
+    icon: UserRound,
+    title: "Create Your Profile",
+    text: "Showcase your skills, stats, achievements and highlights in one powerful profile.",
   },
   {
-    title: "For scouts and coaches",
-    text: "Find players faster by sport, position, country, and club. Open profiles without exposing private emails.",
+    icon: UsersRound,
+    title: "Join the Community",
+    text: "Connect, share, and learn from athletes, coaches and people who live the game.",
   },
   {
-    title: "For the community",
-    text: "Post training updates, ask sport questions, comment, reply, follow people, and keep up with their progress.",
+    icon: MessageCircle,
+    title: "Share and Engage",
+    text: "Post, comment, and interact with the sports community around you.",
   },
-];
-
-const stats = [
-  ["Build", "Your sports identity"],
-  ["Discover", "Players and coaches"],
-  ["Connect", "Through posts and follows"],
+  {
+    icon: Target,
+    title: "Unlock Opportunities",
+    text: "Get discovered by the right people and take the next step in your journey.",
+  },
 ];
 
 function HomeContent() {
@@ -40,46 +43,89 @@ function HomeContent() {
     }, 0);
   }
 
+  function scrollToFeatures() {
+    document.getElementById("features")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   return (
     <main className={styles.homePage}>
+      <header className={styles.landingHeader}>
+        <a className={styles.brand} href="#top" aria-label="AthleteAura home">
+          <strong>
+            ATHLETE<span>AURA</span>
+          </strong>
+          <small>Rise. Connect. Inspire.</small>
+        </a>
+
+        <nav className={styles.navLinks} aria-label="Landing navigation">
+          <button type="button" onClick={() => openAuth("register")}>
+            Discover
+          </button>
+          <button type="button" onClick={() => openAuth("login")}>
+            Explore
+          </button>
+          <button type="button" onClick={() => openAuth("register")}>
+            For Athletes
+          </button>
+          <button type="button" onClick={() => openAuth("register")}>
+            For Coaches & Scouts
+          </button>
+        </nav>
+
+        <div className={styles.headerActions}>
+          <button className={styles.loginButton} type="button" onClick={() => openAuth("login")}>
+            Log In
+          </button>
+          <button className={styles.signupButton} type="button" onClick={() => openAuth("register")}>
+            Sign Up
+          </button>
+        </div>
+      </header>
+
       <section className={styles.hero} id="top">
         <div className={styles.heroCopy}>
-          <p className={styles.kicker}>Sports profiles. Real opportunities.</p>
-          <h1>Community-powered sports profiles.</h1>
-          <p>
-            Build your athlete identity, share progress, connect with scouts and
-            coaches, and get discovered through a focused sports community.
+          <p className={styles.badge}>
+            <span />
+            The sports network that works for you
+          </p>
+          <h1>
+            Your Talent.
+            <span>The Right People.</span>
+          </h1>
+          <p className={styles.heroText}>
+            AthleteAura connects athletes with coaches and scouts, helps you showcase your journey,
+            grow your network, and unlock real opportunities.
           </p>
           <div className={styles.heroActions}>
-            <button type="button" onClick={() => openAuth("register")}>
-              Sign Up
+            <button className={styles.primaryCta} type="button" onClick={() => openAuth("register")}>
+              Create Your Profile
+              <ArrowRight size={20} />
             </button>
-            <button type="button" onClick={() => openAuth("login")}>
-              Log In
+            <button className={styles.secondaryCta} type="button" onClick={scrollToFeatures}>
+              Learn More
             </button>
           </div>
         </div>
+
+        <div className={styles.heroVisual} aria-hidden="true" />
       </section>
 
-      <section className={styles.statsBand} aria-label="AthleteAura summary">
-        {stats.map(([value, label]) => (
-          <div key={value}>
-            <strong>{value}</strong>
-            <span>{label}</span>
-          </div>
-        ))}
-      </section>
-
-      <section className={styles.servicesSection} aria-label="AthleteAura services">
+      <section className={styles.featuresSection} id="features" aria-label="AthleteAura features">
         <div className={styles.sectionHeading}>
-          <p className={styles.kicker}>What AthleteAura serves</p>
-          <h2>One place for sports identity, discovery, and community.</h2>
+          <p>Built for athletes. Designed for growth.</p>
+          <h2>
+            Everything you need to <span>stand out</span>
+          </h2>
         </div>
-        <div className={styles.serviceGrid}>
-          {services.map((service) => (
-            <article key={service.title}>
-              <h3>{service.title}</h3>
-              <p>{service.text}</p>
+
+        <div className={styles.featureGrid}>
+          {features.map((feature) => (
+            <article className={styles.featureCard} key={feature.title}>
+              <div className={styles.featureIcon}>
+                <feature.icon size={31} />
+              </div>
+              <h3>{feature.title}</h3>
+              <p>{feature.text}</p>
             </article>
           ))}
         </div>
@@ -88,11 +134,13 @@ function HomeContent() {
       {authMode && (
         <section className={styles.authSection} id="auth" aria-label="Sign up or log in">
           <div className={styles.authIntro}>
-            <p className={styles.kicker}>Join the platform</p>
-            <h2>{authMode === "register" ? "Create your account" : "Welcome back"}</h2>
+            <p className={styles.badge}>
+              <span />
+              {authMode === "register" ? "Start your profile" : "Welcome back"}
+            </p>
+            <h2>{authMode === "register" ? "Create your AthleteAura account" : "Log in to AthleteAura"}</h2>
             <p>
-              Choose athlete or scout/coach. After signing up, you will complete your
-              profile and enter the right side of the platform.
+              Pick athlete or scout/coach, then continue to your profile setup and community feed.
             </p>
           </div>
           <AuthForm initialMode={authMode} key={authMode} />
