@@ -4,9 +4,19 @@
 alter table public.posts
 add column if not exists video_url text;
 
-insert into storage.buckets (id, name, public)
-values ('post-videos', 'post-videos', true)
-on conflict (id) do update set public = excluded.public;
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'post-videos',
+  'post-videos',
+  true,
+  104857600,
+  array['video/mp4', 'video/webm', 'video/quicktime']
+)
+on conflict (id) do update
+set
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
 
 drop policy if exists "Users can upload their own post videos" on storage.objects;
 create policy "Users can upload their own post videos"
