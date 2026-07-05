@@ -7,14 +7,15 @@ import { useRouter } from "next/navigation";
 import {
   Bookmark,
   Heart,
-  ImagePlus,
   Flag,
   Flame,
+  ImagePlus,
   MessageCircle,
   Pencil,
   Search,
   Send,
   Trash2,
+  Video,
   X,
 } from "lucide-react";
 import { hasSupabaseEnv, supabase, supabaseConfigError } from "@/lib/supabase";
@@ -35,6 +36,8 @@ const SORT_OPTIONS = [
 ];
 const REQUEST_TIMEOUT_MS = 12000;
 const AUTH_TIMEOUT_MS = 30000;
+const MAX_VIDEO_SIZE_BYTES = 50 * 1024 * 1024;
+const MAX_VIDEO_DURATION_SECONDS = 90;
 
 function withTimeout(promise, message, timeoutMs = REQUEST_TIMEOUT_MS) {
   let timeoutId;
@@ -137,6 +140,24 @@ function safeFileName(name) {
   return name.replace(/[^a-zA-Z0-9.-]/g, "-").replace(/-+/g, "-");
 }
 
+function getVideoDuration(file) {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement("video");
+    const objectUrl = URL.createObjectURL(file);
+
+    video.preload = "metadata";
+    video.onloadedmetadata = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(video.duration);
+    };
+    video.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("Unable to read this video. Try another file."));
+    };
+    video.src = objectUrl;
+  });
+}
+
 function getHashtags(content) {
   return Array.from(
     new Set((content.match(/#[\p{L}\p{N}_]+/gu) ?? []).map((tag) => tag.toLowerCase()))
@@ -178,6 +199,7 @@ function getSearchScore(post, author, query) {
 export default function ExplorePage() {
   const router = useRouter();
   const imageInputRef = useRef(null);
+  const videoInputRef = useRef(null);
   const [user, setUser] = useState(null);
   const [currentProfile, setCurrentProfile] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -190,6 +212,7 @@ export default function ExplorePage() {
   const [content, setContent] = useState("");
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [imageFile, setImageFile] = useState(null);
+  const [videoFile, setVideoFile] = useState(null);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortMode, setSortMode] = useState("newest");
@@ -212,7 +235,7 @@ export default function ExplorePage() {
     const { data: postRows, error: postsError } = await withTimeout(
       supabase
         .from("posts")
-        .select("id,user_id,content,category,image_url,created_at")
+        .select("id,user_id,content,category,image_url,video_url,created_at")
         .order("created_at", { ascending: false })
         .limit(50),
       "Explore posts took too long to load. Check Supabase connection and run the community feed SQL."
@@ -509,6 +532,54 @@ export default function ExplorePage() {
     return supabase.storage.from("post-images").getPublicUrl(path).data.publicUrl;
   }
 
+  async function uploadPostVideo() {
+    if (!videoFile || !user) return null;
+
+    const path = `${user.id}/${Date.now()}-${safeFileName(videoFile.name)}`;
+    const { error: uploadError } = await supabase.storage
+      .from("post-videos")
+      .upload(path, videoFile, {
+        contentType: videoFile.type || "video/mp4",
+        upsert: false,
+      });
+
+    if (uploadError) throw uploadError;
+    return supabase.storage.from("post-videos").getPublicUrl(path).data.publicUrl;
+  }
+
+  function handleImageSelection(event) {
+    const file = event.target.files?.[0] ?? null;
+    setImageFile(file);
+    if (file) setVideoFile(null);
+    event.target.value = "";
+  }
+
+  async function handleVideoSelection(event) {
+    const file = event.target.files?.[0] ?? null;
+    event.target.value = "";
+    setError("");
+
+    if (!file) return;
+
+    if (file.size > MAX_VIDEO_SIZE_BYTES) {
+      setError("Video must be 50 MB or smaller.");
+      return;
+    }
+
+    try {
+      const duration = await getVideoDuration(file);
+      if (duration > MAX_VIDEO_DURATION_SECONDS) {
+        setError("Video must be 90 seconds or shorter.");
+        return;
+      }
+
+      setVideoFile(file);
+      setImageFile(null);
+    } catch (videoError) {
+      setError(videoError.message || "Unable to read this video.");
+    }
+  }
+
   async function handleCreatePost(event) {
     event.preventDefault();
     if (!canPost || !user) return;
@@ -518,11 +589,13 @@ export default function ExplorePage() {
 
     try {
       const imageUrl = await uploadPostImage();
+      const videoUrl = await uploadPostVideo();
       const { error: insertError } = await supabase.from("posts").insert({
         user_id: user.id,
         content: content.trim(),
         category,
         image_url: imageUrl,
+        video_url: videoUrl,
       });
 
       if (insertError) throw insertError;
@@ -530,6 +603,7 @@ export default function ExplorePage() {
       setContent("");
       setCategory(CATEGORIES[0]);
       setImageFile(null);
+      setVideoFile(null);
       setIsComposerOpen(false);
       await loadFeed(user.id);
     } catch (postError) {
@@ -913,6 +987,15 @@ export default function ExplorePage() {
                   </div>
                 )}
 
+                {videoFile && (
+                  <div className={styles.selectedImage}>
+                    <span>{videoFile.name}</span>
+                    <button aria-label="Remove selected video" type="button" onClick={() => setVideoFile(null)}>
+                      <X size={16} />
+                    </button>
+                  </div>
+                )}
+
                 <div className={styles.composerControls}>
                   <div className={styles.categoryButtons}>
                     {CATEGORIES.map((item) => (
@@ -932,7 +1015,15 @@ export default function ExplorePage() {
                     accept="image/*"
                     className={styles.hiddenInput}
                     type="file"
-                    onChange={(event) => setImageFile(event.target.files?.[0] ?? null)}
+                    onChange={handleImageSelection}
+                  />
+
+                  <input
+                    ref={videoInputRef}
+                    accept="video/mp4,video/webm,video/quicktime"
+                    className={styles.hiddenInput}
+                    type="file"
+                    onChange={handleVideoSelection}
                   />
 
                   <button
@@ -942,6 +1033,15 @@ export default function ExplorePage() {
                     onClick={() => imageInputRef.current?.click()}
                   >
                     <ImagePlus size={18} />
+                  </button>
+
+                  <button
+                    className={styles.iconButton}
+                    title="Add short video"
+                    type="button"
+                    onClick={() => videoInputRef.current?.click()}
+                  >
+                    <Video size={18} />
                   </button>
 
                   <button className={styles.postButton} disabled={!canPost} type="submit">
@@ -1118,6 +1218,12 @@ export default function ExplorePage() {
                           src={post.image_url}
                           width={900}
                         />
+                      )}
+
+                      {post.video_url && (
+                        <video className={styles.postVideo} controls preload="metadata" src={post.video_url}>
+                          <track kind="captions" />
+                        </video>
                       )}
 
                       <div className={styles.postActions}>

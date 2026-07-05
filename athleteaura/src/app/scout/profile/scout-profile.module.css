@@ -231,15 +231,24 @@
   white-space: pre-wrap;
 }
 
-.postImage {
+.postImage,
+.postVideo {
   width: 100%;
-  height: auto;
   max-height: 460px;
   object-fit: contain;
   margin-top: 14px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: rgba(0, 0, 0, 0.28);
+}
+
+.postImage {
+  height: auto;
+}
+
+.postVideo {
+  display: block;
+  height: auto;
 }
 
 .postStats {

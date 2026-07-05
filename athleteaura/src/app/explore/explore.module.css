@@ -200,7 +200,7 @@
 
 .composerControls {
   display: grid;
-  grid-template-columns: 1fr 48px;
+  grid-template-columns: 1fr 48px 48px auto;
   gap: 10px;
   align-items: center;
 }
@@ -508,15 +508,24 @@
   font-weight: 900;
 }
 
-.postImage {
+.postImage,
+.postVideo {
   width: 100%;
-  height: auto;
   max-height: 660px;
   object-fit: contain;
   margin-bottom: 14px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: rgba(0, 0, 0, 0.28);
+}
+
+.postImage {
+  height: auto;
+}
+
+.postVideo {
+  display: block;
+  height: auto;
 }
 
 .postActions {
@@ -871,7 +880,11 @@
   }
 
   .composerControls {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
+  }
+
+  .postButton {
+    grid-column: 1 / -1;
   }
 
   .feedControls,

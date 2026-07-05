@@ -127,7 +127,7 @@ export default function ScoutProfilePage() {
         if (isMounted) {
           const { data: postRows, error: postsError } = await supabase
             .from("posts")
-            .select("id,content,category,image_url,created_at")
+            .select("id,content,category,image_url,video_url,created_at")
             .eq("user_id", data.user.id)
             .order("created_at", { ascending: false });
 
@@ -392,6 +392,11 @@ export default function ScoutProfilePage() {
                           src={post.image_url}
                           width={760}
                         />
+                      )}
+                      {post.video_url && (
+                        <video className={styles.postVideo} controls preload="metadata" src={post.video_url}>
+                          <track kind="captions" />
+                        </video>
                       )}
                       <div className={styles.postStats}>
                         <span><Heart size={16} />{post.likes_count ?? 0}</span>

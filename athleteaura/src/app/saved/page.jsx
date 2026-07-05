@@ -95,7 +95,7 @@ export default function SavedPage() {
 
         const { data: postRows, error: postsError } = await supabase
           .from("posts")
-          .select("id,user_id,content,category,image_url,created_at")
+          .select("id,user_id,content,category,image_url,video_url,created_at")
           .in("id", postIds);
 
         if (postsError) throw postsError;
@@ -201,6 +201,12 @@ export default function SavedPage() {
                       src={post.image_url}
                       width={900}
                     />
+                  )}
+
+                  {post.video_url && (
+                    <video className={styles.postVideo} controls preload="metadata" src={post.video_url}>
+                      <track kind="captions" />
+                    </video>
                   )}
 
                   <div className={styles.postStats}>
