@@ -36,7 +36,7 @@ const SORT_OPTIONS = [
 ];
 const REQUEST_TIMEOUT_MS = 12000;
 const AUTH_TIMEOUT_MS = 30000;
-const MAX_VIDEO_SIZE_BYTES = 50 * 1024 * 1024;
+const MAX_VIDEO_SIZE_BYTES = 100 * 1024 * 1024;
 const MAX_VIDEO_DURATION_SECONDS = 90;
 
 function withTimeout(promise, message, timeoutMs = REQUEST_TIMEOUT_MS) {
@@ -562,7 +562,7 @@ export default function ExplorePage() {
     if (!file) return;
 
     if (file.size > MAX_VIDEO_SIZE_BYTES) {
-      setError("Video must be 50 MB or smaller.");
+      setError("Video must be 100 MB or smaller.");
       return;
     }
 
