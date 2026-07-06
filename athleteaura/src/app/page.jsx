@@ -42,12 +42,6 @@ export default function Home() {
           <small>Rise. Connect. Inspire.</small>
         </a>
 
-        <nav className={styles.navLinks} aria-label="Landing navigation">
-          <a href="#features">Discover</a>
-          <a href="#features">For Athletes</a>
-          <a href="#features">For Coaches & Scouts</a>
-        </nav>
-
         <div className={styles.headerActions}>
           <Link className={styles.loginButton} href="/login">
             Log In

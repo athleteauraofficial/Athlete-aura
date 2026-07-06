@@ -14,7 +14,7 @@
   width: min(1480px, calc(100% - 96px));
   min-height: 110px;
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 38px;
   margin: 0 auto;
@@ -48,18 +48,12 @@
   letter-spacing: 0.32em;
 }
 
-.navLinks,
 .headerActions,
 .heroActions {
   display: flex;
   align-items: center;
 }
 
-.navLinks {
-  gap: 44px;
-}
-
-.navLinks a,
 .loginButton,
 .signupButton,
 .primaryCta,
@@ -78,14 +72,6 @@
     border-color 180ms ease,
     background 180ms ease,
     box-shadow 180ms ease;
-}
-
-.navLinks a {
-  background: transparent;
-}
-
-.navLinks a:hover {
-  color: #22c55e;
 }
 
 .headerActions {
@@ -741,10 +727,6 @@
 
   .landingHeader {
     grid-template-columns: 1fr auto;
-  }
-
-  .navLinks {
-    display: none;
   }
 
   .hero {
