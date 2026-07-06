@@ -6,9 +6,9 @@ import { accountRoles, getPostAuthRoute, isStrongPassword, roleLabels } from "@/
 import { hasSupabaseEnv, supabase, supabaseConfigError } from "@/lib/supabase";
 import styles from "./page.module.css";
 
-export default function AuthForm({ initialMode = "register" }) {
+export default function AuthForm({ mode = "signup" }) {
   const router = useRouter();
-  const [mode, setMode] = useState(initialMode);
+  const isSignup = mode !== "login";
   const [role, setRole] = useState("athlete");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,11 +18,6 @@ export default function AuthForm({ initialMode = "register" }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const selectedRoleLabel = useMemo(() => roleLabels[role], [role]);
-  const passwordChecks = [
-    { label: "At least 8 characters", isMet: password.length >= 8 },
-    { label: "1 capital letter", isMet: /[A-Z]/.test(password) },
-    { label: "1 number", isMet: /\d/.test(password) },
-  ];
 
   useEffect(() => {
     let isMounted = true;
@@ -75,26 +70,25 @@ export default function AuthForm({ initialMode = "register" }) {
       return;
     }
 
-    if (mode === "register" && !isStrongPassword(password)) {
+    if (isSignup && !isStrongPassword(password)) {
       setError("Password must be at least 8 characters and include 1 capital letter and 1 number.");
       return;
     }
 
     setIsLoading(true);
 
-    const authResult =
-      mode === "register"
-        ? await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-              data: { role },
-            },
-          })
-        : await supabase.auth.signInWithPassword({
-            email,
-            password,
-          });
+    const authResult = isSignup
+      ? await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { role },
+          },
+        })
+      : await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
     setIsLoading(false);
 
@@ -111,7 +105,7 @@ export default function AuthForm({ initialMode = "register" }) {
     }
 
     setMessage(
-      mode === "register"
+      isSignup
         ? "Check your email to confirm your account, then sign in to create your profile."
         : "You are signed in."
     );
@@ -122,25 +116,12 @@ export default function AuthForm({ initialMode = "register" }) {
       <section className={styles.authPanel} aria-label="AthleteAura authentication">
         <div className={styles.brandBlock}>
           <p className={styles.kicker}>AthleteAura</p>
-          <h1>{mode === "register" ? "Create your account" : "Welcome back"}</h1>
-          <p>{mode === "register" ? "Sign up with email and choose your account type." : "Log in with your email and password."}</p>
-        </div>
-
-        <div className={styles.modeSwitch} aria-label="Authentication mode">
-          <button
-            className={mode === "register" ? styles.activeSwitch : ""}
-            type="button"
-            onClick={() => setMode("register")}
-          >
-            Sign Up
-          </button>
-          <button
-            className={mode === "login" ? styles.activeSwitch : ""}
-            type="button"
-            onClick={() => setMode("login")}
-          >
-            Log In
-          </button>
+          <h1>{isSignup ? "Create your account" : "Welcome back"}</h1>
+          <p>
+            {isSignup
+              ? "Sign up with email, choose your account type, and start building your profile."
+              : "Log in with your email and password."}
+          </p>
         </div>
 
         {user ? (
@@ -157,73 +138,61 @@ export default function AuthForm({ initialMode = "register" }) {
             </button>
           </div>
         ) : (
-          <>
-            <form className={styles.authForm} onSubmit={handleEmailAuth}>
-              <label>
-                Email
-                <input
-                  autoComplete="email"
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="you@example.com"
-                  required
-                  type="email"
-                  value={email}
-                />
-              </label>
+          <form className={styles.authForm} onSubmit={handleEmailAuth}>
+            <label>
+              Email
+              <input
+                autoComplete="email"
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="you@example.com"
+                required
+                type="email"
+                value={email}
+              />
+            </label>
 
-              <label>
-                Password
-                <input
-                  autoComplete={mode === "register" ? "new-password" : "current-password"}
-                  minLength={mode === "register" ? 8 : 6}
-                  onChange={(event) => setPassword(event.target.value)}
-                  pattern={mode === "register" ? "^(?=.*[A-Z])(?=.*\\d).{8,}$" : undefined}
-                  placeholder={mode === "register" ? "8+ chars, 1 capital, 1 number" : "Your password"}
-                  required
-                  type="password"
-                  value={password}
-                />
-              </label>
+            <label>
+              Password
+              <input
+                autoComplete={isSignup ? "new-password" : "current-password"}
+                minLength={isSignup ? 8 : 6}
+                onChange={(event) => setPassword(event.target.value)}
+                pattern={isSignup ? "^(?=.*[A-Z])(?=.*\\d).{8,}$" : undefined}
+                placeholder="Your password"
+                required
+                type="password"
+                value={password}
+              />
+            </label>
 
-              {mode === "register" && (
-                <div className={styles.passwordChecklist} aria-label="Password requirements">
-                  {passwordChecks.map((check) => (
-                    <span className={check.isMet ? styles.passwordCheckMet : ""} key={check.label}>
-                      {check.isMet ? "✓" : "•"} {check.label}
-                    </span>
+            {isSignup && (
+              <div className={styles.accountTypeGroup}>
+                <span>Account type</span>
+                <div className={styles.roleGrid} aria-label="Choose account type">
+                  {accountRoles.map((accountRole) => (
+                    <button
+                      className={role === accountRole ? styles.selectedRole : ""}
+                      key={accountRole}
+                      type="button"
+                      onClick={() => setRole(accountRole)}
+                    >
+                      <span>{accountRole === "scout_coach" ? "Coach / Scout" : roleLabels[accountRole]}</span>
+                    </button>
                   ))}
                 </div>
-              )}
+              </div>
+            )}
 
-              {mode === "register" && (
-                <div className={styles.accountTypeGroup}>
-                  <span>Account type</span>
-                  <div className={styles.roleGrid} aria-label="Choose account type">
-                    {accountRoles.map((accountRole) => (
-                      <button
-                        className={role === accountRole ? styles.selectedRole : ""}
-                        key={accountRole}
-                        type="button"
-                        onClick={() => setRole(accountRole)}
-                      >
-                        <span>{accountRole === "scout_coach" ? "Coach / Scout" : roleLabels[accountRole]}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <button className={styles.primaryButton} disabled={isLoading} type="submit">
-                {isLoading
-                  ? mode === "register"
-                    ? "Creating account..."
-                    : "Logging in..."
-                  : mode === "register"
-                    ? `Create ${selectedRoleLabel} account`
-                    : "Log In"}
-              </button>
-            </form>
-          </>
+            <button className={isSignup ? styles.signupSubmitButton : styles.loginSubmitButton} disabled={isLoading} type="submit">
+              {isLoading
+                ? isSignup
+                  ? "Creating account..."
+                  : "Logging in..."
+                : isSignup
+                  ? `Create ${selectedRoleLabel} account`
+                  : "Log In"}
+            </button>
+          </form>
         )}
 
         {message && <p className={styles.successMessage}>{message}</p>}

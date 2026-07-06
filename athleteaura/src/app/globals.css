@@ -99,4 +99,14 @@ main {
     padding-left: 335px;
     padding-top: 96px;
   }
+
+  body:has(.authRoutePage) {
+    padding-left: 0;
+    padding-top: 0;
+  }
+}
+
+body:has(.authRoutePage) .app-shell-topbar,
+body:has(.authRoutePage) .app-shell-nav {
+  display: none;
 }

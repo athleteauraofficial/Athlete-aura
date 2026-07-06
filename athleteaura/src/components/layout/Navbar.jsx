@@ -165,7 +165,7 @@ export default function Navbar() {
   }
 
   const profileHref = getProfileHref(user?.user_metadata?.role);
-  const isPublicLanding = !user && pathname === "/";
+  const isPublicLanding = !user && ["/", "/login", "/signup"].includes(pathname);
   const isProfilePage = pathname === profileHref || pathname === "/profile";
   const isSavedPage = pathname === "/saved";
   const navLinks = user
@@ -286,10 +286,10 @@ export default function Navbar() {
           </div>
         ) : (
           <div className={styles.guestLinks}>
-            <Link className={styles.link} href="/?auth=login#auth">
+            <Link className={styles.link} href="/login">
               Log In
             </Link>
-            <Link className={styles.signOutButton} href="/?auth=register#auth">
+            <Link className={styles.signOutButton} href="/signup">
               Sign Up
             </Link>
           </div>
@@ -339,10 +339,10 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Link className={styles.link} href="/?auth=login#auth">
+                <Link className={styles.link} href="/login">
                   Log In
                 </Link>
-                <Link className={styles.createPostLink} href="/?auth=register#auth">
+                <Link className={styles.createPostLink} href="/signup">
                   Sign Up
                 </Link>
               </>
