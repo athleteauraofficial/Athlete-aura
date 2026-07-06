@@ -96,8 +96,6 @@ export default function Home() {
           </Link>
           <small>By continuing, you can create an athlete or coach/scout account.</small>
         </aside>
-
-        <div className={styles.heroVisual} aria-hidden="true" />
       </section>
 
       <section className={styles.featuresSection} id="features" aria-label="AthleteAura features">

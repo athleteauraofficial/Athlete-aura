@@ -18,7 +18,7 @@
 }
 
 .header p {
-  color: #c084fc;
+  color: #86efac;
   font-size: 0.78rem;
   font-weight: 950;
   letter-spacing: 0.14em;
@@ -124,7 +124,7 @@
   border-radius: 999px;
   padding: 6px 10px;
   background: var(--accent-soft);
-  color: #e9d5ff;
+  color: #dcfce7;
   font-size: 0.78rem;
   font-weight: 950;
 }
