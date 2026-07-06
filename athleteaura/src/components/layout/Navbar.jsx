@@ -1,15 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   Bell,
   Bookmark,
-  ChevronDown,
   Plus,
   Search,
-  User,
   Zap,
 } from "lucide-react";
 import { hasSupabaseEnv, supabase } from "@/lib/supabase";
@@ -23,13 +21,10 @@ function getProfileHref(role) {
 
 export default function Navbar() {
   const pathname = usePathname();
-  const router = useRouter();
   const [user, setUser] = useState(null);
   const [currentProfile, setCurrentProfile] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isSigningOut, setIsSigningOut] = useState(false);
 
   useEffect(() => {
     if (!hasSupabaseEnv) return undefined;
@@ -156,14 +151,6 @@ export default function Navbar() {
     };
   }, [user?.id]);
 
-  async function handleSignOut() {
-    setIsSigningOut(true);
-    await supabase.auth.signOut();
-    router.replace("/");
-    router.refresh();
-    setIsSigningOut(false);
-  }
-
   const profileHref = getProfileHref(user?.user_metadata?.role);
   const isPublicLanding = !user && ["/", "/login", "/signup"].includes(pathname);
   const isProfilePage = pathname === profileHref || pathname === "/profile";
@@ -195,96 +182,7 @@ export default function Navbar() {
           <kbd>Ctrl K</kbd>
         </label>
 
-        {user ? (
-          <div className={styles.topActions}>
-            <button
-              aria-expanded={isNotificationsOpen}
-              aria-label="Notifications"
-              className={styles.notificationButton}
-              type="button"
-              onClick={() => setIsNotificationsOpen((isOpen) => !isOpen)}
-            >
-              <Bell size={22} />
-              {notifications.length > 0 && <span>{Math.min(notifications.length, 9)}</span>}
-            </button>
-            {isNotificationsOpen && (
-              <div className={styles.notificationsMenu}>
-                <div className={styles.notificationsHead}>
-                  <strong>Notifications</strong>
-                  <small>{notifications.length} new</small>
-                </div>
-                {notifications.length === 0 ? (
-                  <p>No post activity yet.</p>
-                ) : (
-                  <div className={styles.notificationsList}>
-                    {notifications.map((notification) => {
-                      const actorName =
-                        `${notification.actor?.first_name ?? ""} ${notification.actor?.last_name ?? ""}`.trim() ||
-                        notification.actor?.full_name ||
-                        "Someone";
-
-                      return (
-                        <div className={styles.notificationItem} key={notification.id}>
-                          <Link
-                            className={styles.notificationAvatar}
-                            href={`/profiles/${encodeURIComponent(notification.actorId)}`}
-                            style={
-                              notification.actor?.profile_pic_url
-                                ? { backgroundImage: `url("${notification.actor.profile_pic_url}")` }
-                                : undefined
-                            }
-                          >
-                            {!notification.actor?.profile_pic_url && actorName[0]}
-                          </Link>
-                          <div>
-                            <Link href={`/profiles/${encodeURIComponent(notification.actorId)}`}>
-                              {actorName}
-                            </Link>
-                            <span>{notification.type} your post</span>
-                            <Link href={`/explore#post-${notification.post.id}`}>
-                              {notification.post.content.slice(0, 72)}
-                              {notification.post.content.length > 72 ? "..." : ""}
-                            </Link>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-            <button
-              aria-expanded={isUserMenuOpen}
-              aria-label="Profile menu"
-              className={styles.profileMenuButton}
-              type="button"
-              onClick={() => setIsUserMenuOpen((isOpen) => !isOpen)}
-            >
-              <span
-                className={styles.topAvatar}
-                style={
-                  currentProfile?.profile_pic_url
-                    ? { backgroundImage: `url("${currentProfile.profile_pic_url}")` }
-                    : undefined
-                }
-              >
-                {!currentProfile?.profile_pic_url && (user.email?.[0]?.toUpperCase() ?? "A")}
-              </span>
-              <ChevronDown size={18} />
-            </button>
-            {isUserMenuOpen && (
-              <div className={styles.userMenu}>
-                <Link href={profileHref} onClick={() => setIsUserMenuOpen(false)}>
-                  <User size={18} />
-                  View Profile
-                </Link>
-                <button disabled={isSigningOut} type="button" onClick={handleSignOut}>
-                  {isSigningOut ? "Logging out..." : "Log Out"}
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
+        {user ? null : (
           <div className={styles.guestLinks}>
             <Link className={styles.link} href="/login">
               Log In
@@ -309,7 +207,7 @@ export default function Navbar() {
                     key={link.href}
                   >
                     <link.icon size={22} />
-                    {link.label}
+                    <span className={styles.navLabel}>{link.label}</span>
                   </Link>
                 ))}
                 <Link
@@ -318,15 +216,83 @@ export default function Navbar() {
                   href="/saved"
                 >
                   <Bookmark size={22} />
-                  Saved
+                  <span className={styles.navLabel}>Saved</span>
                 </Link>
+                <button
+                  aria-expanded={isNotificationsOpen}
+                  aria-label="Notifications"
+                  className={styles.navButton}
+                  type="button"
+                  onClick={() => setIsNotificationsOpen((isOpen) => !isOpen)}
+                >
+                  <Bell size={22} />
+                  <span className={styles.navLabel}>Notifications</span>
+                  {notifications.length > 0 && (
+                    <small>{Math.min(notifications.length, 9)}</small>
+                  )}
+                </button>
+                {isNotificationsOpen && (
+                  <div className={styles.notificationsMenu}>
+                    <div className={styles.notificationsHead}>
+                      <strong>Notifications</strong>
+                      <small>{notifications.length} new</small>
+                    </div>
+                    {notifications.length === 0 ? (
+                      <p>No post activity yet.</p>
+                    ) : (
+                      <div className={styles.notificationsList}>
+                        {notifications.map((notification) => {
+                          const actorName =
+                            `${notification.actor?.first_name ?? ""} ${notification.actor?.last_name ?? ""}`.trim() ||
+                            notification.actor?.full_name ||
+                            "Someone";
+
+                          return (
+                            <div className={styles.notificationItem} key={notification.id}>
+                              <Link
+                                className={styles.notificationAvatar}
+                                href={`/profiles/${encodeURIComponent(notification.actorId)}`}
+                                style={
+                                  notification.actor?.profile_pic_url
+                                    ? { backgroundImage: `url("${notification.actor.profile_pic_url}")` }
+                                    : undefined
+                                }
+                              >
+                                {!notification.actor?.profile_pic_url && actorName[0]}
+                              </Link>
+                              <div>
+                                <Link href={`/profiles/${encodeURIComponent(notification.actorId)}`}>
+                                  {actorName}
+                                </Link>
+                                <span>{notification.type} your post</span>
+                                <Link href={`/explore#post-${notification.post.id}`}>
+                                  {notification.post.content.slice(0, 72)}
+                                  {notification.post.content.length > 72 ? "..." : ""}
+                                </Link>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
                 <Link
                   aria-current={isProfilePage ? "page" : undefined}
                   className={isProfilePage ? styles.activeLink : styles.link}
                   href={profileHref}
                 >
-                  <User size={22} />
-                  My Profile
+                  <span
+                    className={styles.navAvatar}
+                    style={
+                      currentProfile?.profile_pic_url
+                        ? { backgroundImage: `url("${currentProfile.profile_pic_url}")` }
+                        : undefined
+                    }
+                  >
+                    {!currentProfile?.profile_pic_url && (user.email?.[0]?.toUpperCase() ?? "A")}
+                  </span>
+                  <span className={styles.navLabel}>Profile</span>
                 </Link>
                 <Link
                   className={styles.createPostLink}
@@ -334,7 +300,7 @@ export default function Navbar() {
                   onClick={() => window.dispatchEvent(new Event("athleteaura:open-composer"))}
                 >
                   <Plus size={22} />
-                  Create Post
+                  <span className={styles.navLabel}>Create Post</span>
                 </Link>
               </>
             ) : (
@@ -351,7 +317,15 @@ export default function Navbar() {
 
           {user && (
             <div className={styles.userCard}>
-              <div>{user.email?.[0]?.toUpperCase() ?? "A"}</div>
+              <div
+                style={
+                  currentProfile?.profile_pic_url
+                    ? { backgroundImage: `url("${currentProfile.profile_pic_url}")` }
+                    : undefined
+                }
+              >
+                {!currentProfile?.profile_pic_url && (user.email?.[0]?.toUpperCase() ?? "A")}
+              </div>
               <span>
                 <strong>AthleteAura user</strong>
                 {user.email}

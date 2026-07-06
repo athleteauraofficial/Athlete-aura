@@ -1,11 +1,11 @@
 .homePage {
   min-height: 100vh;
   overflow: hidden;
-  color: #f8fafc;
+  color: #0f172a;
   background:
     radial-gradient(circle at 76% 28%, rgba(34, 197, 94, 0.26), transparent 30%),
     radial-gradient(circle at 50% 80%, rgba(21, 128, 61, 0.18), transparent 35%),
-    linear-gradient(135deg, #03040a 0%, #070812 48%, #020308 100%);
+    linear-gradient(135deg, #ffffff 0%, #f8fafc 52%, #ffffff 100%);
 }
 
 .landingHeader {
@@ -18,7 +18,7 @@
   align-items: center;
   gap: 38px;
   margin: 0 auto;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .brand {
@@ -29,7 +29,7 @@
 }
 
 .brand strong {
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(1.6rem, 2.4vw, 2.45rem);
   font-weight: 1000;
   font-style: italic;
@@ -42,7 +42,7 @@
 }
 
 .brand small {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(15, 23, 42, 0.78);
   font-size: 0.74rem;
   font-weight: 900;
   letter-spacing: 0.32em;
@@ -63,7 +63,7 @@
   justify-content: center;
   cursor: pointer;
   border: 0;
-  color: #ffffff;
+  color: #0f172a;
   font: inherit;
   font-size: 1rem;
   font-weight: 850;
@@ -86,8 +86,8 @@
 }
 
 .loginButton {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  background: rgba(15, 23, 42, 0.03);
 }
 
 .signupButton,
@@ -118,7 +118,7 @@
   width: min(1480px, calc(100% - 96px));
   margin: 0 auto;
   padding: 60px 0 62px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.07);
 }
 
 .hero::after {
@@ -126,7 +126,7 @@
   position: absolute;
   inset: auto -8vw 0 36%;
   height: 190px;
-  background: linear-gradient(to bottom, transparent, rgba(3, 4, 10, 0.96));
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.9));
   pointer-events: none;
 }
 
@@ -145,11 +145,11 @@
   align-items: center;
   gap: 12px;
   min-height: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(15, 23, 42, 0.12);
   border-radius: 999px;
   padding: 0 18px;
-  color: rgba(255, 255, 255, 0.82);
-  background: rgba(255, 255, 255, 0.02);
+  color: rgba(15, 23, 42, 0.74);
+  background: rgba(15, 23, 42, 0.03);
   font-size: 0.78rem;
   font-weight: 900;
   letter-spacing: 0.17em;
@@ -169,7 +169,7 @@
   display: grid;
   gap: 10px;
   max-width: 760px;
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(4rem, 6.5vw, 6rem);
   font-weight: 1000;
   line-height: 0.98;
@@ -183,7 +183,7 @@
 
 .heroText {
   max-width: 530px;
-  color: rgba(226, 232, 240, 0.84);
+  color: rgba(15, 23, 42, 0.74);
   font-size: 1.12rem;
   line-height: 1.78;
 }
@@ -208,8 +208,8 @@
 
 .secondaryCta {
   min-width: 168px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  background: rgba(15, 23, 42, 0.03);
 }
 
 .landingSignupPanel {
@@ -218,18 +218,18 @@
   display: grid;
   gap: 18px;
   justify-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.085);
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 18px;
   padding: 34px;
-  background: rgba(10, 13, 26, 0.86);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
   text-align: center;
   backdrop-filter: blur(24px);
 }
 
 .landingSignupPanel h2 {
   max-width: 360px;
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(1.9rem, 3vw, 2.55rem);
   line-height: 1.05;
   letter-spacing: -0.055em;
@@ -237,20 +237,20 @@
 
 .landingSignupPanel p {
   max-width: 390px;
-  color: rgba(226, 232, 240, 0.78);
+  color: rgba(15, 23, 42, 0.68);
   font-size: 1rem;
   line-height: 1.5;
 }
 
 .landingSignupPanel small {
-  color: rgba(226, 232, 240, 0.74);
+  color: rgba(15, 23, 42, 0.62);
   font-size: 0.8rem;
   line-height: 1.45;
 }
 
 .memberPrompt,
 .authSwitchText {
-  color: rgba(226, 232, 240, 0.74);
+  color: rgba(15, 23, 42, 0.62);
   font-size: 0.92rem;
   font-weight: 750;
   text-align: center;
@@ -258,7 +258,7 @@
 
 .memberPrompt a,
 .authSwitchText a {
-  color: #bbf7d0;
+  color: #15803d;
   font-weight: 950;
 }
 
@@ -300,7 +300,7 @@
 }
 
 .sectionHeading p {
-  color: #86efac;
+  color: #15803d;
   font-size: 0.78rem;
   font-weight: 900;
   letter-spacing: 0.24em;
@@ -308,7 +308,7 @@
 }
 
 .sectionHeading h2 {
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(2rem, 3vw, 2.55rem);
   line-height: 1.1;
   letter-spacing: -0.055em;
@@ -329,13 +329,13 @@
   display: grid;
   align-content: start;
   gap: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 14px;
   padding: 22px 26px 28px;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
-    rgba(8, 11, 22, 0.72);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(240, 253, 244, 0.72)),
+    #ffffff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
   backdrop-filter: blur(24px);
   transition:
     transform 180ms ease,
@@ -360,13 +360,13 @@
 }
 
 .featureCard h3 {
-  color: #ffffff;
+  color: #0f172a;
   font-size: 1.18rem;
   line-height: 1.15;
 }
 
 .featureCard p {
-  color: rgba(226, 232, 240, 0.78);
+  color: rgba(15, 23, 42, 0.68);
   font-size: 1rem;
   line-height: 1.48;
 }
@@ -389,14 +389,14 @@
 }
 
 .authIntro h2 {
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(2rem, 3.4vw, 3rem);
   line-height: 1.04;
   letter-spacing: -0.055em;
 }
 
 .authIntro p:not(.badge) {
-  color: rgba(226, 232, 240, 0.78);
+  color: rgba(15, 23, 42, 0.68);
   font-size: 1rem;
   line-height: 1.65;
 }
@@ -408,11 +408,11 @@
 .authPanel {
   display: grid;
   gap: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.085);
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 18px;
   padding: 22px;
-  background: rgba(10, 13, 26, 0.82);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
   backdrop-filter: blur(24px);
 }
 
@@ -423,7 +423,7 @@
 
 .brandBlock h1,
 .signedInPanel h2 {
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(1.7rem, 3.4vw, 2.7rem);
   line-height: 1.04;
   letter-spacing: -0.04em;
@@ -432,14 +432,14 @@
 .brandBlock p,
 .signedInPanel p {
   max-width: 560px;
-  color: rgba(226, 232, 240, 0.74);
+  color: rgba(15, 23, 42, 0.62);
   font-size: 1rem;
   line-height: 1.65;
 }
 
 .kicker,
 .statusLabel {
-  color: #bbf7d0;
+  color: #15803d;
   font-size: 0.72rem;
   font-weight: 950;
   letter-spacing: 0.14em;
@@ -458,7 +458,7 @@
   border: 1px solid transparent;
   border-radius: 13px;
   cursor: pointer;
-  color: #cbd5e1;
+  color: #334155;
   font: inherit;
   font-size: 0.88rem;
   font-weight: 850;
@@ -470,14 +470,14 @@
 
 .roleGrid button,
 .oauthGrid button {
-  border-color: rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(15, 23, 42, 0.1);
+  background: rgba(15, 23, 42, 0.07);
 }
 
 .roleGrid .selectedRole {
   border-color: rgba(22, 163, 74, 0.36);
   background: rgba(34, 197, 94, 0.18);
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .accountTypeGroup {
@@ -486,7 +486,7 @@
 }
 
 .accountTypeGroup > span {
-  color: #cbd5e1;
+  color: #334155;
   font-size: 0.84rem;
   font-weight: 850;
 }
@@ -495,7 +495,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #94a3b8;
+  color: #64748b;
   font-size: 0.8rem;
 }
 
@@ -504,7 +504,7 @@
   content: "";
   height: 1px;
   flex: 1;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.1);
 }
 
 .authForm {
@@ -515,7 +515,7 @@
 .authForm label {
   display: grid;
   gap: 6px;
-  color: #cbd5e1;
+  color: #334155;
   font-size: 0.84rem;
   font-weight: 850;
 }
@@ -524,10 +524,10 @@
 .authForm select,
 .authForm textarea {
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
   outline: none;
   font: inherit;
 }
@@ -556,16 +556,16 @@
 .signedInPanel {
   display: grid;
   gap: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.085);
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 18px;
   padding: 14px;
-  background: rgba(10, 13, 26, 0.72);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.26);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.1);
   backdrop-filter: blur(24px);
 }
 
 .sectionTitle {
-  color: #ffffff;
+  color: #0f172a;
   font-size: 0.9rem;
   font-weight: 950;
 }
@@ -588,7 +588,7 @@
 }
 
 .profileLink {
-  color: #dcfce7;
+  color: #166534;
   font-weight: 850;
 }
 
@@ -603,9 +603,9 @@
   height: 25px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 999px;
-  color: #94a3b8;
+  color: #64748b;
   font-size: 0.74rem;
   font-weight: 950;
 }
@@ -613,7 +613,7 @@
 .activeStepDot {
   border-color: rgba(22, 163, 74, 0.28);
   background: linear-gradient(135deg, #16a34a, #22c55e);
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .successMessage,
@@ -627,7 +627,7 @@
 
 .successMessage {
   background: rgba(52, 211, 153, 0.12);
-  color: #bbf7d0;
+  color: #166534;
 }
 
 .errorMessage {
@@ -659,14 +659,14 @@
 .primaryButton {
   border: 0;
   background: linear-gradient(135deg, #16a34a, #22c55e);
-  color: #ffffff;
+  color: #0f172a;
   box-shadow: 0 14px 34px rgba(34, 197, 94, 0.32);
 }
 
 .secondaryButton {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.06);
-  color: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
 }
 
 .signupSubmitButton,
@@ -689,8 +689,8 @@
 
 .loginSubmitButton {
   background: #ffffff;
-  color: #070a12;
-  box-shadow: 0 14px 34px rgba(255, 255, 255, 0.12);
+  color: #0f172a;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
 }
 
 .authRoutePage {
@@ -698,11 +698,11 @@
   display: grid;
   place-items: center;
   padding: 36px 18px;
-  color: #f8fafc;
+  color: #0f172a;
   background:
     radial-gradient(circle at 74% 16%, rgba(34, 197, 94, 0.24), transparent 32%),
     radial-gradient(circle at 20% 88%, rgba(34, 197, 94, 0.1), transparent 30%),
-    linear-gradient(135deg, #03040a 0%, #070812 50%, #020308 100%);
+    linear-gradient(135deg, #ffffff 0%, #f8fafc 52%, #ffffff 100%);
 }
 
 .authRouteShell {
