@@ -18,6 +18,11 @@ export default function AuthForm({ initialMode = "register" }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const selectedRoleLabel = useMemo(() => roleLabels[role], [role]);
+  const passwordChecks = [
+    { label: "At least 8 characters", isMet: password.length >= 8 },
+    { label: "1 capital letter", isMet: /[A-Z]/.test(password) },
+    { label: "1 number", isMet: /\d/.test(password) },
+  ];
 
   useEffect(() => {
     let isMounted = true;
@@ -118,10 +123,7 @@ export default function AuthForm({ initialMode = "register" }) {
         <div className={styles.brandBlock}>
           <p className={styles.kicker}>AthleteAura</p>
           <h1>{mode === "register" ? "Create your account" : "Welcome back"}</h1>
-          <p>
-            Choose your account type first. After signup, you will create your full
-            profile on the next page.
-          </p>
+          <p>{mode === "register" ? "Sign up with email and choose your account type." : "Log in with your email and password."}</p>
         </div>
 
         <div className={styles.modeSwitch} aria-label="Authentication mode">
@@ -130,14 +132,14 @@ export default function AuthForm({ initialMode = "register" }) {
             type="button"
             onClick={() => setMode("register")}
           >
-            Register
+            Sign Up
           </button>
           <button
             className={mode === "login" ? styles.activeSwitch : ""}
             type="button"
             onClick={() => setMode("login")}
           >
-            Login
+            Log In
           </button>
         </div>
 
@@ -156,19 +158,6 @@ export default function AuthForm({ initialMode = "register" }) {
           </div>
         ) : (
           <>
-            <div className={styles.roleGrid} aria-label="Choose account type">
-              {accountRoles.map((accountRole) => (
-                <button
-                  className={role === accountRole ? styles.selectedRole : ""}
-                  key={accountRole}
-                  type="button"
-                  onClick={() => setRole(accountRole)}
-                >
-                  <span>{roleLabels[accountRole]}</span>
-                </button>
-              ))}
-            </div>
-
             <form className={styles.authForm} onSubmit={handleEmailAuth}>
               <label>
                 Email
@@ -196,12 +185,42 @@ export default function AuthForm({ initialMode = "register" }) {
                 />
               </label>
 
+              {mode === "register" && (
+                <div className={styles.passwordChecklist} aria-label="Password requirements">
+                  {passwordChecks.map((check) => (
+                    <span className={check.isMet ? styles.passwordCheckMet : ""} key={check.label}>
+                      {check.isMet ? "✓" : "•"} {check.label}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {mode === "register" && (
+                <div className={styles.accountTypeGroup}>
+                  <span>Account type</span>
+                  <div className={styles.roleGrid} aria-label="Choose account type">
+                    {accountRoles.map((accountRole) => (
+                      <button
+                        className={role === accountRole ? styles.selectedRole : ""}
+                        key={accountRole}
+                        type="button"
+                        onClick={() => setRole(accountRole)}
+                      >
+                        <span>{accountRole === "scout_coach" ? "Coach / Scout" : roleLabels[accountRole]}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <button className={styles.primaryButton} disabled={isLoading} type="submit">
                 {isLoading
-                  ? "Working..."
+                  ? mode === "register"
+                    ? "Creating account..."
+                    : "Logging in..."
                   : mode === "register"
                     ? `Create ${selectedRoleLabel} account`
-                    : "Login"}
+                    : "Log In"}
               </button>
             </form>
           </>
