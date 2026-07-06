@@ -543,7 +543,15 @@ export default function ExplorePage() {
         upsert: false,
       });
 
-    if (uploadError) throw uploadError;
+    if (uploadError) {
+      const message = uploadError.message?.toLowerCase() ?? "";
+      if (message.includes("maximum") || message.includes("exceeded") || message.includes("too large")) {
+        throw new Error(
+          "Supabase rejected this video because the project or bucket upload limit is lower than 100 MB."
+        );
+      }
+      throw uploadError;
+    }
     return supabase.storage.from("post-videos").getPublicUrl(path).data.publicUrl;
   }
 
