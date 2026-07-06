@@ -35,7 +35,7 @@
   gap: 30px;
   padding: 30px;
   background:
-    linear-gradient(135deg, rgba(124, 58, 237, 0.2), transparent 45%),
+    linear-gradient(135deg, rgba(34, 197, 94, 0.2), transparent 45%),
     var(--surface);
 }
 
@@ -55,8 +55,8 @@
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   background-position: center;
   background-size: cover;
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.45), 0 0 44px rgba(124, 58, 237, 0.28);
-  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.45), 0 0 44px rgba(34, 197, 94, 0.28);
+  color: #0f172a;
   font-size: 2.7rem;
   font-weight: 950;
 }
@@ -69,10 +69,10 @@
   height: 40px;
   display: grid;
   place-items: center;
-  border: 3px solid #101420;
+  border: 3px solid #ffffff;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #ffffff;
+  color: #0f172a;
   cursor: pointer;
   font-size: 18px;
   font-weight: 900;
@@ -87,7 +87,7 @@
   padding: 7px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: #101420;
+  background: #ffffff;
   box-shadow: var(--glass-shadow);
   transform: translateX(-50%);
 }
@@ -108,7 +108,7 @@
 
 .photoMenu button:hover {
   background: var(--accent-soft);
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .photoMenu .deleteAction {
@@ -129,7 +129,7 @@
 }
 
 .identity h1 {
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(2rem, 5vw, 3.35rem);
   line-height: 1;
   letter-spacing: -0.045em;
@@ -148,7 +148,7 @@
   border-radius: 999px;
   padding: 6px 11px;
   background: var(--accent-soft);
-  color: #e9d5ff;
+  color: #166534;
   font-size: 0.74rem;
   font-weight: 950;
   letter-spacing: 0.06em;
@@ -184,13 +184,13 @@
 .primaryLink {
   border: 0;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #ffffff;
-  box-shadow: 0 14px 34px rgba(124, 58, 237, 0.32);
+  color: #0f172a;
+  box-shadow: 0 14px 34px rgba(34, 197, 94, 0.32);
 }
 
 .secondaryButton {
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(15, 23, 42, 0.08);
   color: var(--muted-strong);
 }
 
@@ -213,7 +213,7 @@
 
 .completionSection strong,
 .summaryGrid strong {
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .completionSection span,
@@ -226,7 +226,7 @@
   height: 9px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.1);
 }
 
 .progressTrack span {
@@ -276,7 +276,7 @@
 .postsSection h2,
 .editHeading h2 {
   margin-bottom: 18px;
-  color: #ffffff;
+  color: #0f172a;
   font-size: 1.05rem;
 }
 
@@ -293,7 +293,7 @@
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 18px 12px;
-  background: rgba(255, 255, 255, 0.045);
+  background: rgba(15, 23, 42, 0.06);
   text-align: center;
 }
 
@@ -302,11 +302,11 @@
 }
 
 .activityGrid div:nth-child(2) svg {
-  color: #a855f7;
+  color: #22c55e;
 }
 
 .activityGrid strong {
-  color: #ffffff;
+  color: #0f172a;
   font-size: 1.35rem;
   line-height: 1;
 }
@@ -326,7 +326,7 @@
   border: 1px solid var(--line);
   border-radius: 18px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.045);
+  background: rgba(15, 23, 42, 0.06);
 }
 
 .postMeta,
@@ -349,7 +349,7 @@
   border-radius: 999px;
   padding: 5px 9px;
   background: var(--accent-soft);
-  color: #e9d5ff;
+  color: #166534;
 }
 
 .postCard p {
@@ -405,7 +405,7 @@
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 0 12px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(15, 23, 42, 0.08);
   color: var(--foreground);
   outline: none;
   font: inherit;
@@ -415,7 +415,7 @@
 .editGrid input:focus,
 .editGrid select:focus {
   border-color: var(--line-strong);
-  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.16);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16);
 }
 
 .highlightList {
@@ -433,7 +433,7 @@
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 13px 14px;
-  background: rgba(255, 255, 255, 0.045);
+  background: rgba(15, 23, 42, 0.06);
 }
 
 .highlightItem a {
@@ -507,8 +507,8 @@
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 0 15px;
-  background: rgba(255, 255, 255, 0.055);
-  color: #e9d5ff;
+  background: rgba(15, 23, 42, 0.07);
+  color: #166534;
   font-weight: 850;
 }
 
@@ -536,7 +536,7 @@
 
 .successMessage {
   background: rgba(52, 211, 153, 0.12);
-  color: #bbf7d0;
+  color: #15803d;
 }
 
 .errorMessage {

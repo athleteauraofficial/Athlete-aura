@@ -1,11 +1,11 @@
 .homePage {
   min-height: 100vh;
   overflow: hidden;
-  color: #f8fafc;
+  color: #0f172a;
   background:
-    radial-gradient(circle at 76% 28%, rgba(124, 58, 237, 0.26), transparent 30%),
-    radial-gradient(circle at 50% 80%, rgba(91, 33, 182, 0.18), transparent 35%),
-    linear-gradient(135deg, #03040a 0%, #070812 48%, #020308 100%);
+    radial-gradient(circle at 76% 28%, rgba(34, 197, 94, 0.26), transparent 30%),
+    radial-gradient(circle at 50% 80%, rgba(21, 128, 61, 0.18), transparent 35%),
+    linear-gradient(135deg, #ffffff 0%, #f8fafc 52%, #ffffff 100%);
 }
 
 .landingHeader {
@@ -14,11 +14,11 @@
   width: min(1480px, calc(100% - 96px));
   min-height: 110px;
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 38px;
   margin: 0 auto;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .brand {
@@ -29,7 +29,7 @@
 }
 
 .brand strong {
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(1.6rem, 2.4vw, 2.45rem);
   font-weight: 1000;
   font-style: italic;
@@ -38,35 +38,32 @@
 }
 
 .brand span {
-  color: #8b3dff;
+  color: #22c55e;
 }
 
 .brand small {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(15, 23, 42, 0.78);
   font-size: 0.74rem;
   font-weight: 900;
   letter-spacing: 0.32em;
 }
 
-.navLinks,
 .headerActions,
 .heroActions {
   display: flex;
   align-items: center;
 }
 
-.navLinks {
-  gap: 44px;
-}
-
-.navLinks button,
 .loginButton,
 .signupButton,
 .primaryCta,
 .secondaryCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   border: 0;
-  color: #ffffff;
+  color: #0f172a;
   font: inherit;
   font-size: 1rem;
   font-weight: 850;
@@ -75,14 +72,6 @@
     border-color 180ms ease,
     background 180ms ease,
     box-shadow 180ms ease;
-}
-
-.navLinks button {
-  background: transparent;
-}
-
-.navLinks button:hover {
-  color: #a855f7;
 }
 
 .headerActions {
@@ -97,14 +86,14 @@
 }
 
 .loginButton {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  background: rgba(15, 23, 42, 0.03);
 }
 
 .signupButton,
 .primaryCta {
-  background: linear-gradient(135deg, #7c3aed 0%, #5b21d8 100%);
-  box-shadow: 0 18px 45px rgba(124, 58, 237, 0.3);
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  box-shadow: 0 18px 45px rgba(34, 197, 94, 0.3);
 }
 
 .loginButton:hover,
@@ -116,19 +105,20 @@
 
 .loginButton:hover,
 .secondaryCta:hover {
-  border-color: rgba(168, 85, 247, 0.6);
+  border-color: rgba(22, 163, 74, 0.6);
 }
 
 .hero {
   position: relative;
-  min-height: 560px;
+  min-height: 620px;
   display: grid;
-  grid-template-columns: minmax(330px, 0.7fr) minmax(560px, 1.3fr);
+  grid-template-columns: minmax(330px, 0.95fr) minmax(350px, 430px);
   align-items: center;
+  gap: 44px;
   width: min(1480px, calc(100% - 96px));
   margin: 0 auto;
   padding: 60px 0 62px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.07);
 }
 
 .hero::after {
@@ -136,7 +126,7 @@
   position: absolute;
   inset: auto -8vw 0 36%;
   height: 190px;
-  background: linear-gradient(to bottom, transparent, rgba(3, 4, 10, 0.96));
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.9));
   pointer-events: none;
 }
 
@@ -155,11 +145,11 @@
   align-items: center;
   gap: 12px;
   min-height: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(15, 23, 42, 0.12);
   border-radius: 999px;
   padding: 0 18px;
-  color: rgba(255, 255, 255, 0.82);
-  background: rgba(255, 255, 255, 0.02);
+  color: rgba(15, 23, 42, 0.74);
+  background: rgba(15, 23, 42, 0.03);
   font-size: 0.78rem;
   font-weight: 900;
   letter-spacing: 0.17em;
@@ -171,15 +161,15 @@
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: #8b3dff;
-  box-shadow: 0 0 18px rgba(168, 85, 247, 0.9);
+  background: #22c55e;
+  box-shadow: 0 0 18px rgba(22, 163, 74, 0.9);
 }
 
 .hero h1 {
   display: grid;
   gap: 10px;
   max-width: 760px;
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(4rem, 6.5vw, 6rem);
   font-weight: 1000;
   line-height: 0.98;
@@ -187,13 +177,13 @@
 }
 
 .hero h1 span {
-  color: #7c3aed;
-  text-shadow: 0 0 36px rgba(124, 58, 237, 0.32);
+  color: #16a34a;
+  text-shadow: 0 0 36px rgba(34, 197, 94, 0.32);
 }
 
 .heroText {
   max-width: 530px;
-  color: rgba(226, 232, 240, 0.84);
+  color: rgba(15, 23, 42, 0.74);
   font-size: 1.12rem;
   line-height: 1.78;
 }
@@ -218,22 +208,78 @@
 
 .secondaryCta {
   min-width: 168px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  background: rgba(15, 23, 42, 0.03);
 }
 
-.heroVisual {
-  position: absolute;
-  z-index: 1;
-  right: -55px;
-  bottom: 0;
-  width: min(1060px, 72vw);
-  height: min(590px, 48vw);
-  background:
-    linear-gradient(90deg, rgba(3, 4, 10, 0.98) 0%, rgba(3, 4, 10, 0.42) 20%, rgba(3, 4, 10, 0) 42%),
-    linear-gradient(0deg, rgba(3, 4, 10, 0.98) 0%, rgba(3, 4, 10, 0) 30%),
-    url("/landing-hero-athletes.png") right bottom / contain no-repeat;
-  filter: saturate(1.08) contrast(1.05);
+.landingSignupPanel {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 18px;
+  padding: 34px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
+  text-align: center;
+  backdrop-filter: blur(24px);
+}
+
+.landingSignupPanel h2 {
+  max-width: 360px;
+  color: #0f172a;
+  font-size: clamp(1.9rem, 3vw, 2.55rem);
+  line-height: 1.05;
+  letter-spacing: -0.055em;
+}
+
+.landingSignupPanel p {
+  max-width: 390px;
+  color: rgba(15, 23, 42, 0.68);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.landingSignupPanel small {
+  color: rgba(15, 23, 42, 0.62);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.memberPrompt,
+.authSwitchText {
+  color: rgba(15, 23, 42, 0.62);
+  font-size: 0.92rem;
+  font-weight: 750;
+  text-align: center;
+}
+
+.memberPrompt a,
+.authSwitchText a {
+  color: #15803d;
+  font-weight: 950;
+}
+
+.emailSignupButton {
+  width: 100%;
+  min-height: 54px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #04110a;
+  font-size: 1rem;
+  font-weight: 950;
+  box-shadow: 0 18px 42px rgba(34, 197, 94, 0.24);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.emailSignupButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 52px rgba(34, 197, 94, 0.3);
 }
 
 .featuresSection {
@@ -254,7 +300,7 @@
 }
 
 .sectionHeading p {
-  color: #c4a5ff;
+  color: #15803d;
   font-size: 0.78rem;
   font-weight: 900;
   letter-spacing: 0.24em;
@@ -262,14 +308,14 @@
 }
 
 .sectionHeading h2 {
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(2rem, 3vw, 2.55rem);
   line-height: 1.1;
   letter-spacing: -0.055em;
 }
 
 .sectionHeading h2 span {
-  color: #8b3dff;
+  color: #22c55e;
 }
 
 .featureGrid {
@@ -283,13 +329,13 @@
   display: grid;
   align-content: start;
   gap: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 14px;
   padding: 22px 26px 28px;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
-    rgba(8, 11, 22, 0.72);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(240, 253, 244, 0.72)),
+    #ffffff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
   backdrop-filter: blur(24px);
   transition:
     transform 180ms ease,
@@ -299,8 +345,8 @@
 
 .featureCard:hover {
   transform: translateY(-5px);
-  border-color: rgba(168, 85, 247, 0.42);
-  box-shadow: 0 28px 85px rgba(0, 0, 0, 0.34), 0 0 42px rgba(124, 58, 237, 0.12);
+  border-color: rgba(22, 163, 74, 0.42);
+  box-shadow: 0 28px 85px rgba(0, 0, 0, 0.34), 0 0 42px rgba(34, 197, 94, 0.12);
 }
 
 .featureIcon {
@@ -309,18 +355,18 @@
   display: grid;
   place-items: center;
   border-radius: 14px;
-  color: #a855f7;
-  background: rgba(124, 58, 237, 0.18);
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.18);
 }
 
 .featureCard h3 {
-  color: #ffffff;
+  color: #0f172a;
   font-size: 1.18rem;
   line-height: 1.15;
 }
 
 .featureCard p {
-  color: rgba(226, 232, 240, 0.78);
+  color: rgba(15, 23, 42, 0.68);
   font-size: 1rem;
   line-height: 1.48;
 }
@@ -343,14 +389,14 @@
 }
 
 .authIntro h2 {
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(2rem, 3.4vw, 3rem);
   line-height: 1.04;
   letter-spacing: -0.055em;
 }
 
 .authIntro p:not(.badge) {
-  color: rgba(226, 232, 240, 0.78);
+  color: rgba(15, 23, 42, 0.68);
   font-size: 1rem;
   line-height: 1.65;
 }
@@ -361,12 +407,12 @@
 
 .authPanel {
   display: grid;
-  gap: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.085);
+  gap: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 18px;
-  padding: 20px;
-  background: rgba(10, 13, 26, 0.82);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+  padding: 22px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
   backdrop-filter: blur(24px);
 }
 
@@ -377,7 +423,7 @@
 
 .brandBlock h1,
 .signedInPanel h2 {
-  color: #ffffff;
+  color: #0f172a;
   font-size: clamp(1.7rem, 3.4vw, 2.7rem);
   line-height: 1.04;
   letter-spacing: -0.04em;
@@ -386,58 +432,36 @@
 .brandBlock p,
 .signedInPanel p {
   max-width: 560px;
-  color: rgba(226, 232, 240, 0.74);
+  color: rgba(15, 23, 42, 0.62);
   font-size: 1rem;
   line-height: 1.65;
 }
 
 .kicker,
 .statusLabel {
-  color: #c4b5fd;
+  color: #15803d;
   font-size: 0.72rem;
   font-weight: 950;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.modeSwitch,
 .roleGrid,
 .oauthGrid {
   display: grid;
   gap: 8px;
 }
 
-.modeSwitch {
-  grid-template-columns: repeat(2, 1fr);
-  padding: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.045);
-}
-
-.modeSwitch button,
 .roleGrid button,
 .oauthGrid button {
-  min-height: 38px;
+  min-height: 42px;
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: 13px;
   cursor: pointer;
-  color: #cbd5e1;
+  color: #334155;
   font: inherit;
   font-size: 0.88rem;
   font-weight: 850;
-}
-
-.modeSwitch button {
-  background: transparent;
-  color: #94a3b8;
-}
-
-.modeSwitch .activeSwitch,
-.roleGrid .selectedRole {
-  border-color: rgba(168, 85, 247, 0.28);
-  background: rgba(124, 58, 237, 0.16);
-  color: #ffffff;
 }
 
 .roleGrid {
@@ -446,15 +470,32 @@
 
 .roleGrid button,
 .oauthGrid button {
-  border-color: rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(15, 23, 42, 0.1);
+  background: rgba(15, 23, 42, 0.07);
+}
+
+.roleGrid .selectedRole {
+  border-color: rgba(22, 163, 74, 0.36);
+  background: rgba(34, 197, 94, 0.18);
+  color: #0f172a;
+}
+
+.accountTypeGroup {
+  display: grid;
+  gap: 8px;
+}
+
+.accountTypeGroup > span {
+  color: #334155;
+  font-size: 0.84rem;
+  font-weight: 850;
 }
 
 .divider {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #94a3b8;
+  color: #64748b;
   font-size: 0.8rem;
 }
 
@@ -463,18 +504,18 @@
   content: "";
   height: 1px;
   flex: 1;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.1);
 }
 
 .authForm {
   display: grid;
-  gap: 12px;
+  gap: 13px;
 }
 
 .authForm label {
   display: grid;
   gap: 6px;
-  color: #cbd5e1;
+  color: #334155;
   font-size: 0.84rem;
   font-weight: 850;
 }
@@ -483,10 +524,10 @@
 .authForm select,
 .authForm textarea {
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
   outline: none;
   font: inherit;
 }
@@ -506,8 +547,8 @@
 .authForm input:focus,
 .authForm select:focus,
 .authForm textarea:focus {
-  border-color: rgba(168, 85, 247, 0.28);
-  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.16);
+  border-color: rgba(22, 163, 74, 0.28);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16);
 }
 
 .profileSection,
@@ -515,16 +556,54 @@
 .signedInPanel {
   display: grid;
   gap: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.085);
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 18px;
   padding: 14px;
-  background: rgba(10, 13, 26, 0.72);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.26);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.1);
   backdrop-filter: blur(24px);
 }
 
+.signedInPanel {
+  gap: 8px;
+  padding: 12px;
+}
+
+.signedInPanel h2 {
+  overflow: hidden;
+  color: #0f172a;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signedInPanel p {
+  max-width: 100%;
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.signedInActions {
+  display: grid;
+  gap: 9px;
+  margin-top: 4px;
+}
+
+.authChoicePanel {
+  display: grid;
+  gap: 10px;
+}
+
+.authChoicePanel button {
+  width: 100%;
+  min-width: 0;
+  white-space: normal;
+}
+
 .sectionTitle {
-  color: #ffffff;
+  color: #0f172a;
   font-size: 0.9rem;
   font-weight: 950;
 }
@@ -547,7 +626,7 @@
 }
 
 .profileLink {
-  color: #e9d5ff;
+  color: #166534;
   font-weight: 850;
 }
 
@@ -562,17 +641,17 @@
   height: 25px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 999px;
-  color: #94a3b8;
+  color: #64748b;
   font-size: 0.74rem;
   font-weight: 950;
 }
 
 .activeStepDot {
-  border-color: rgba(168, 85, 247, 0.28);
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
-  color: #ffffff;
+  border-color: rgba(22, 163, 74, 0.28);
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: #0f172a;
 }
 
 .successMessage,
@@ -586,7 +665,7 @@
 
 .successMessage {
   background: rgba(52, 211, 153, 0.12);
-  color: #bbf7d0;
+  color: #166534;
 }
 
 .errorMessage {
@@ -594,11 +673,13 @@
   color: #fecdd3;
 }
 
-.modeSwitch button:disabled,
 .roleGrid button:disabled,
 .oauthGrid button:disabled,
 .primaryButton:disabled,
-.secondaryButton:disabled {
+.secondaryButton:disabled,
+.signedInActions button:disabled,
+.signupSubmitButton:disabled,
+.loginSubmitButton:disabled {
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -616,15 +697,64 @@
 
 .primaryButton {
   border: 0;
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
-  color: #ffffff;
-  box-shadow: 0 14px 34px rgba(124, 58, 237, 0.32);
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: #0f172a;
+  box-shadow: 0 14px 34px rgba(34, 197, 94, 0.32);
 }
 
 .secondaryButton {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.06);
-  color: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+}
+
+.signupSubmitButton,
+.loginSubmitButton {
+  min-height: 46px;
+  border: 0;
+  border-radius: 14px;
+  padding: 0 18px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 950;
+}
+
+.signupSubmitButton {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #04110a;
+  box-shadow: 0 14px 34px rgba(34, 197, 94, 0.24);
+}
+
+.loginSubmitButton {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
+}
+
+.authRoutePage {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 36px 18px;
+  color: #0f172a;
+  background:
+    radial-gradient(circle at 74% 16%, rgba(34, 197, 94, 0.24), transparent 32%),
+    radial-gradient(circle at 20% 88%, rgba(34, 197, 94, 0.1), transparent 30%),
+    linear-gradient(135deg, #ffffff 0%, #f8fafc 52%, #ffffff 100%);
+}
+
+.authRouteShell {
+  width: min(430px, 100%);
+  display: grid;
+  gap: 26px;
+  justify-items: center;
+}
+
+.authRouteCard {
+  width: 100%;
+  display: grid;
+  gap: 12px;
 }
 
 @media (max-width: 1120px) {
@@ -638,25 +768,10 @@
     grid-template-columns: 1fr auto;
   }
 
-  .navLinks {
-    display: none;
-  }
-
   .hero {
     min-height: auto;
     grid-template-columns: 1fr;
     padding-top: 52px;
-  }
-
-  .heroVisual {
-    position: relative;
-    right: auto;
-    width: 100%;
-    height: clamp(330px, 52vw, 520px);
-    margin-top: -20px;
-    background:
-      linear-gradient(0deg, rgba(3, 4, 10, 1) 0%, rgba(3, 4, 10, 0) 30%),
-      url("/landing-hero-athletes.png") center bottom / contain no-repeat;
   }
 
   .featureGrid {
@@ -724,16 +839,12 @@
     width: 100%;
   }
 
-  .heroVisual {
-    height: 300px;
-    margin-top: 0;
-  }
-
   .featureGrid,
   .roleGrid,
   .fieldGrid,
   .dateGrid,
-  .stepActions {
+  .stepActions,
+  .signedInActions {
     grid-template-columns: 1fr;
   }
 

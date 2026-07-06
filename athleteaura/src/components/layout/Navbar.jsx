@@ -6,10 +6,8 @@ import { useEffect, useState } from "react";
 import {
   Bell,
   Bookmark,
-  ChevronDown,
   Plus,
   Search,
-  User,
   Zap,
 } from "lucide-react";
 import { hasSupabaseEnv, supabase } from "@/lib/supabase";
@@ -21,14 +19,29 @@ function getProfileHref(role) {
   return "/profile";
 }
 
+function getDisplayName(profile) {
+  const name = `${profile?.first_name ?? ""} ${profile?.last_name ?? ""}`.trim();
+  return name || profile?.full_name || "Profile";
+}
+
+function rememberLastAccount(user, profile) {
+  if (typeof window === "undefined" || !user?.email) return;
+
+  window.localStorage.setItem(
+    "athleteaura:lastAccount",
+    JSON.stringify({
+      email: user.email,
+      name: getDisplayName(profile),
+    })
+  );
+}
+
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [currentProfile, setCurrentProfile] = useState(null);
   const [notifications, setNotifications] = useState([]);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   useEffect(() => {
@@ -74,40 +87,57 @@ export default function Navbar() {
     }
 
     async function loadNotifications() {
-      const { data: ownPosts, error: postsError } = await supabase
-        .from("posts")
-        .select("id,content,created_at")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(80);
+      const [{ data: ownPosts, error: postsError }, { data: follows, error: followsError }] =
+        await Promise.all([
+          supabase
+            .from("posts")
+            .select("id,content,created_at")
+            .eq("user_id", user.id)
+            .order("created_at", { ascending: false })
+            .limit(80),
+          supabase
+            .from("user_follows")
+            .select("follower_id,created_at")
+            .eq("following_id", user.id)
+            .neq("follower_id", user.id)
+            .order("created_at", { ascending: false })
+            .limit(20),
+        ]);
 
-      if (postsError || !isMounted) return;
+      if ((postsError || (followsError && followsError.code !== "42P01")) || !isMounted) return;
 
       const postIds = (ownPosts ?? []).map((post) => post.id);
-      if (postIds.length === 0) {
-        setNotifications([]);
-        return;
+      let likes = [];
+      let comments = [];
+
+      if (postIds.length > 0) {
+        const [{ data: likeRows }, { data: commentRows }] = await Promise.all([
+          supabase
+            .from("post_likes")
+            .select("post_id,user_id,created_at")
+            .in("post_id", postIds)
+            .neq("user_id", user.id)
+            .order("created_at", { ascending: false })
+            .limit(20),
+          supabase
+            .from("comments")
+            .select("id,post_id,user_id,content,created_at")
+            .in("post_id", postIds)
+            .neq("user_id", user.id)
+            .order("created_at", { ascending: false })
+            .limit(20),
+        ]);
+
+        likes = likeRows ?? [];
+        comments = commentRows ?? [];
       }
 
-      const [{ data: likes }, { data: comments }] = await Promise.all([
-        supabase
-          .from("post_likes")
-          .select("post_id,user_id,created_at")
-          .in("post_id", postIds)
-          .neq("user_id", user.id)
-          .order("created_at", { ascending: false })
-          .limit(20),
-        supabase
-          .from("comments")
-          .select("id,post_id,user_id,content,created_at")
-          .in("post_id", postIds)
-          .neq("user_id", user.id)
-          .order("created_at", { ascending: false })
-          .limit(20),
-      ]);
-
       const actorIds = Array.from(
-        new Set([...(likes ?? []), ...(comments ?? [])].map((item) => item.user_id))
+        new Set([
+          ...likes.map((item) => item.user_id),
+          ...comments.map((item) => item.user_id),
+          ...((followsError ? [] : follows) ?? []).map((item) => item.follower_id),
+        ])
       );
 
       let profiles = [];
@@ -122,7 +152,7 @@ export default function Navbar() {
       const postsById = Object.fromEntries((ownPosts ?? []).map((post) => [post.id, post]));
       const profilesById = Object.fromEntries(profiles.map((profile) => [profile.user_id, profile]));
       const nextNotifications = [
-        ...(likes ?? []).map((like) => ({
+        ...likes.map((like) => ({
           id: `like-${like.post_id}-${like.user_id}`,
           type: "liked",
           actorId: like.user_id,
@@ -130,7 +160,7 @@ export default function Navbar() {
           post: postsById[like.post_id],
           createdAt: like.created_at,
         })),
-        ...(comments ?? []).map((comment) => ({
+        ...comments.map((comment) => ({
           id: `comment-${comment.id}`,
           type: "commented on",
           actorId: comment.user_id,
@@ -138,8 +168,15 @@ export default function Navbar() {
           post: postsById[comment.post_id],
           createdAt: comment.created_at,
         })),
+        ...((followsError ? [] : follows) ?? []).map((follow) => ({
+          id: `follow-${follow.follower_id}-${follow.created_at}`,
+          type: "followed",
+          actorId: follow.follower_id,
+          actor: profilesById[follow.follower_id],
+          createdAt: follow.created_at,
+        })),
       ]
-        .filter((item) => item.post)
+        .filter((item) => item.type === "followed" || item.post)
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
         .slice(0, 12);
 
@@ -156,18 +193,11 @@ export default function Navbar() {
     };
   }, [user?.id]);
 
-  async function handleSignOut() {
-    setIsSigningOut(true);
-    await supabase.auth.signOut();
-    router.replace("/");
-    router.refresh();
-    setIsSigningOut(false);
-  }
-
   const profileHref = getProfileHref(user?.user_metadata?.role);
-  const isPublicLanding = !user && pathname === "/";
+  const isPublicPage = ["/", "/login", "/signup"].includes(pathname);
   const isProfilePage = pathname === profileHref || pathname === "/profile";
   const isSavedPage = pathname === "/saved";
+  const isNotificationsPage = pathname === "/notifications";
   const navLinks = user
     ? [
         { href: "/explore", label: "Explore", active: pathname === "/explore", icon: Zap },
@@ -175,7 +205,23 @@ export default function Navbar() {
       ]
     : [];
 
-  if (isPublicLanding) {
+  function collapseSidebar(event) {
+    event.currentTarget.blur();
+  }
+
+  async function handleSignOut() {
+    setIsSigningOut(true);
+    rememberLastAccount(user, currentProfile);
+    await supabase.auth.signOut();
+    setUser(null);
+    setCurrentProfile(null);
+    setNotifications([]);
+    router.replace("/");
+    router.refresh();
+    setIsSigningOut(false);
+  }
+
+  if (isPublicPage) {
     return null;
   }
 
@@ -198,98 +244,20 @@ export default function Navbar() {
         {user ? (
           <div className={styles.topActions}>
             <button
-              aria-expanded={isNotificationsOpen}
-              aria-label="Notifications"
-              className={styles.notificationButton}
+              className={styles.logoutButton}
+              disabled={isSigningOut}
               type="button"
-              onClick={() => setIsNotificationsOpen((isOpen) => !isOpen)}
+              onClick={handleSignOut}
             >
-              <Bell size={22} />
-              {notifications.length > 0 && <span>{Math.min(notifications.length, 9)}</span>}
+              {isSigningOut ? "Signing out..." : "Sign Out"}
             </button>
-            {isNotificationsOpen && (
-              <div className={styles.notificationsMenu}>
-                <div className={styles.notificationsHead}>
-                  <strong>Notifications</strong>
-                  <small>{notifications.length} new</small>
-                </div>
-                {notifications.length === 0 ? (
-                  <p>No post activity yet.</p>
-                ) : (
-                  <div className={styles.notificationsList}>
-                    {notifications.map((notification) => {
-                      const actorName =
-                        `${notification.actor?.first_name ?? ""} ${notification.actor?.last_name ?? ""}`.trim() ||
-                        notification.actor?.full_name ||
-                        "Someone";
-
-                      return (
-                        <div className={styles.notificationItem} key={notification.id}>
-                          <Link
-                            className={styles.notificationAvatar}
-                            href={`/profiles/${encodeURIComponent(notification.actorId)}`}
-                            style={
-                              notification.actor?.profile_pic_url
-                                ? { backgroundImage: `url("${notification.actor.profile_pic_url}")` }
-                                : undefined
-                            }
-                          >
-                            {!notification.actor?.profile_pic_url && actorName[0]}
-                          </Link>
-                          <div>
-                            <Link href={`/profiles/${encodeURIComponent(notification.actorId)}`}>
-                              {actorName}
-                            </Link>
-                            <span>{notification.type} your post</span>
-                            <Link href={`/explore#post-${notification.post.id}`}>
-                              {notification.post.content.slice(0, 72)}
-                              {notification.post.content.length > 72 ? "..." : ""}
-                            </Link>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-            <button
-              aria-expanded={isUserMenuOpen}
-              aria-label="Profile menu"
-              className={styles.profileMenuButton}
-              type="button"
-              onClick={() => setIsUserMenuOpen((isOpen) => !isOpen)}
-            >
-              <span
-                className={styles.topAvatar}
-                style={
-                  currentProfile?.profile_pic_url
-                    ? { backgroundImage: `url("${currentProfile.profile_pic_url}")` }
-                    : undefined
-                }
-              >
-                {!currentProfile?.profile_pic_url && (user.email?.[0]?.toUpperCase() ?? "A")}
-              </span>
-              <ChevronDown size={18} />
-            </button>
-            {isUserMenuOpen && (
-              <div className={styles.userMenu}>
-                <Link href={profileHref} onClick={() => setIsUserMenuOpen(false)}>
-                  <User size={18} />
-                  View Profile
-                </Link>
-                <button disabled={isSigningOut} type="button" onClick={handleSignOut}>
-                  {isSigningOut ? "Logging out..." : "Log Out"}
-                </button>
-              </div>
-            )}
           </div>
         ) : (
           <div className={styles.guestLinks}>
-            <Link className={styles.link} href="/?auth=login#auth">
+            <Link className={styles.link} href="/login">
               Log In
             </Link>
-            <Link className={styles.signOutButton} href="/?auth=register#auth">
+            <Link className={styles.signOutButton} href="/signup">
               Sign Up
             </Link>
           </div>
@@ -307,42 +275,69 @@ export default function Navbar() {
                     className={link.active ? styles.activeLink : styles.link}
                     href={link.href}
                     key={link.href}
+                    onClick={collapseSidebar}
                   >
                     <link.icon size={22} />
-                    {link.label}
+                    <span className={styles.navLabel}>{link.label}</span>
                   </Link>
                 ))}
                 <Link
                   aria-current={isSavedPage ? "page" : undefined}
                   className={isSavedPage ? styles.activeLink : styles.link}
                   href="/saved"
+                  onClick={collapseSidebar}
                 >
                   <Bookmark size={22} />
-                  Saved
+                  <span className={styles.navLabel}>Saved</span>
+                </Link>
+                <Link
+                  aria-current={isNotificationsPage ? "page" : undefined}
+                  className={isNotificationsPage ? styles.activeLink : styles.link}
+                  href="/notifications"
+                  onClick={collapseSidebar}
+                >
+                  <Bell size={22} />
+                  <span className={styles.navLabel}>Notifications</span>
+                  {notifications.length > 0 && (
+                    <small>{Math.min(notifications.length, 9)}</small>
+                  )}
                 </Link>
                 <Link
                   aria-current={isProfilePage ? "page" : undefined}
                   className={isProfilePage ? styles.activeLink : styles.link}
                   href={profileHref}
+                  onClick={collapseSidebar}
                 >
-                  <User size={22} />
-                  My Profile
+                  <span
+                    className={styles.navAvatar}
+                    style={
+                      currentProfile?.profile_pic_url
+                        ? { backgroundImage: `url("${currentProfile.profile_pic_url}")` }
+                        : undefined
+                    }
+                  >
+                    {!currentProfile?.profile_pic_url && (user.email?.[0]?.toUpperCase() ?? "A")}
+                  </span>
+                  <span className={styles.navLabel}>Profile</span>
                 </Link>
                 <Link
                   className={styles.createPostLink}
                   href="/explore#compose"
-                  onClick={() => window.dispatchEvent(new Event("athleteaura:open-composer"))}
+                  onClick={(event) => {
+                    collapseSidebar(event);
+                    window.dispatchEvent(new Event("athleteaura:open-composer"));
+                  }}
                 >
                   <Plus size={22} />
-                  Create Post
+                  <span className={styles.navLabel}>Create Post</span>
                 </Link>
               </>
             ) : (
               <>
-                <Link className={styles.link} href="/?auth=login#auth">
+                <Link className={styles.link} href="/login" onClick={collapseSidebar}>
                   Log In
                 </Link>
-                <Link className={styles.createPostLink} href="/?auth=register#auth">
+                <Link className={styles.createPostLink} href="/signup" onClick={collapseSidebar}>
                   Sign Up
                 </Link>
               </>
@@ -351,9 +346,17 @@ export default function Navbar() {
 
           {user && (
             <div className={styles.userCard}>
-              <div>{user.email?.[0]?.toUpperCase() ?? "A"}</div>
+              <div
+                style={
+                  currentProfile?.profile_pic_url
+                    ? { backgroundImage: `url("${currentProfile.profile_pic_url}")` }
+                    : undefined
+                }
+              >
+                {!currentProfile?.profile_pic_url && (user.email?.[0]?.toUpperCase() ?? "A")}
+              </div>
               <span>
-                <strong>AthleteAura user</strong>
+                <strong>{getDisplayName(currentProfile)}</strong>
                 {user.email}
               </span>
             </div>

@@ -2,27 +2,37 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { accountRoles, getPostAuthRoute, isStrongPassword, roleLabels } from "@/lib/auth";
 import { hasSupabaseEnv, supabase, supabaseConfigError } from "@/lib/supabase";
 import styles from "./page.module.css";
 
-const roleLabels = {
-  athlete: "Athlete",
-  scout_coach: "Scout / Coach",
-};
+const LAST_ACCOUNT_KEY = "athleteaura:lastAccount";
 
-const accountRoles = ["athlete", "scout_coach"];
+function getStoredLastAccount() {
+  if (typeof window === "undefined") return null;
 
-function getPostAuthRoute(userRole) {
-  return userRole === "scout_coach" ? "/scout/profile" : "/profile";
+  try {
+    return JSON.parse(window.localStorage.getItem(LAST_ACCOUNT_KEY) ?? "null");
+  } catch {
+    return null;
+  }
 }
 
-function isStrongPassword(value) {
-  return value.length >= 8 && /[A-Z]/.test(value) && /\d/.test(value);
+function rememberLastAccount(user) {
+  if (typeof window === "undefined" || !user?.email) return;
+
+  window.localStorage.setItem(
+    LAST_ACCOUNT_KEY,
+    JSON.stringify({
+      email: user.email,
+      name: user.user_metadata?.full_name ?? user.email,
+    })
+  );
 }
 
-export default function AuthForm({ initialMode = "register" }) {
+export default function AuthForm({ mode = "signup" }) {
   const router = useRouter();
-  const [mode, setMode] = useState(initialMode);
+  const isSignup = mode !== "login";
   const [role, setRole] = useState("athlete");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,8 +40,13 @@ export default function AuthForm({ initialMode = "register" }) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSwitchingAccount, setIsSwitchingAccount] = useState(false);
+  const [lastAccount, setLastAccount] = useState(null);
+  const [authChoice, setAuthChoice] = useState("");
 
   const selectedRoleLabel = useMemo(() => roleLabels[role], [role]);
+  const shouldShowLoginChoice = !isSignup && !user && lastAccount && !authChoice;
+  const shouldShowSignupChoice = isSignup && !user && authChoice !== "signup";
 
   useEffect(() => {
     let isMounted = true;
@@ -40,6 +55,10 @@ export default function AuthForm({ initialMode = "register" }) {
       if (!hasSupabaseEnv) {
         setError(supabaseConfigError);
         return;
+      }
+
+      if (isMounted) {
+        setLastAccount(getStoredLastAccount());
       }
 
       let data;
@@ -84,26 +103,25 @@ export default function AuthForm({ initialMode = "register" }) {
       return;
     }
 
-    if (mode === "register" && !isStrongPassword(password)) {
+    if (isSignup && !isStrongPassword(password)) {
       setError("Password must be at least 8 characters and include 1 capital letter and 1 number.");
       return;
     }
 
     setIsLoading(true);
 
-    const authResult =
-      mode === "register"
-        ? await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-              data: { role },
-            },
-          })
-        : await supabase.auth.signInWithPassword({
-            email,
-            password,
-          });
+    const authResult = isSignup
+      ? await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { role },
+          },
+        })
+      : await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
     setIsLoading(false);
 
@@ -120,10 +138,53 @@ export default function AuthForm({ initialMode = "register" }) {
     }
 
     setMessage(
-      mode === "register"
+      isSignup
         ? "Check your email to confirm your account, then sign in to create your profile."
         : "You are signed in."
     );
+  }
+
+  async function handleUseAnotherAccount() {
+    if (!hasSupabaseEnv) {
+      setError(supabaseConfigError);
+      return;
+    }
+
+    setIsSwitchingAccount(true);
+    setError("");
+    setMessage("");
+
+    const { error: signOutError } = await supabase.auth.signOut();
+
+    setIsSwitchingAccount(false);
+
+    if (signOutError) {
+      setError(signOutError.message);
+      return;
+    }
+
+    rememberLastAccount(user);
+    setLastAccount(getStoredLastAccount());
+    setUser(null);
+    setEmail(isSignup ? "" : "");
+    setPassword("");
+    setAuthChoice(isSignup ? "signup" : "other");
+  }
+
+  function handleContinueAsLastAccount() {
+    setEmail(lastAccount?.email ?? "");
+    setPassword("");
+    setAuthChoice("same");
+    setError("");
+    setMessage("");
+  }
+
+  function handleUseDifferentEmail() {
+    setEmail("");
+    setPassword("");
+    setAuthChoice("other");
+    setError("");
+    setMessage("");
   }
 
   return (
@@ -131,28 +192,12 @@ export default function AuthForm({ initialMode = "register" }) {
       <section className={styles.authPanel} aria-label="AthleteAura authentication">
         <div className={styles.brandBlock}>
           <p className={styles.kicker}>AthleteAura</p>
-          <h1>{mode === "register" ? "Create your account" : "Welcome back"}</h1>
+          <h1>{isSignup ? "Create your account" : "Welcome back"}</h1>
           <p>
-            Choose your account type first. After signup, you will create your full
-            profile on the next page.
+            {isSignup
+              ? "Sign up with email, choose your account type, and start building your profile."
+              : "Log in with your email and password."}
           </p>
-        </div>
-
-        <div className={styles.modeSwitch} aria-label="Authentication mode">
-          <button
-            className={mode === "register" ? styles.activeSwitch : ""}
-            type="button"
-            onClick={() => setMode("register")}
-          >
-            Register
-          </button>
-          <button
-            className={mode === "login" ? styles.activeSwitch : ""}
-            type="button"
-            onClick={() => setMode("login")}
-          >
-            Login
-          </button>
         </div>
 
         {user ? (
@@ -160,65 +205,110 @@ export default function AuthForm({ initialMode = "register" }) {
             <p className={styles.statusLabel}>Signed in</p>
             <h2>{user.email}</h2>
             <p>Account type: {roleLabels[user.user_metadata?.role] ?? "Not set"}</p>
+            <div className={styles.signedInActions}>
+              <button
+                className={styles.primaryButton}
+                type="button"
+                onClick={() => router.push(getPostAuthRoute(user.user_metadata?.role))}
+              >
+                Go to my profile
+              </button>
+              <button
+                className={styles.secondaryButton}
+                disabled={isSwitchingAccount}
+                type="button"
+                onClick={handleUseAnotherAccount}
+              >
+                {isSwitchingAccount
+                  ? "Preparing..."
+                  : isSignup
+                    ? "Create new account"
+                    : "Log in with another account"}
+              </button>
+            </div>
+          </div>
+        ) : shouldShowLoginChoice ? (
+          <div className={styles.authChoicePanel}>
+            <button className={styles.loginSubmitButton} type="button" onClick={handleContinueAsLastAccount}>
+              Continue as {lastAccount.email}
+            </button>
+            <button className={styles.secondaryButton} type="button" onClick={handleUseDifferentEmail}>
+              Use another email
+            </button>
+          </div>
+        ) : shouldShowSignupChoice ? (
+          <div className={styles.authChoicePanel}>
+            <button className={styles.secondaryButton} type="button" onClick={() => router.push("/login")}>
+              Log in with existing account
+            </button>
             <button
-              className={styles.primaryButton}
+              className={styles.signupSubmitButton}
               type="button"
-              onClick={() => router.push(getPostAuthRoute(user.user_metadata?.role))}
+              onClick={() => {
+                setAuthChoice("signup");
+                setError("");
+                setMessage("");
+              }}
             >
-              Go to my profile
+              Create new account
             </button>
           </div>
         ) : (
-          <>
-            <div className={styles.roleGrid} aria-label="Choose account type">
-              {accountRoles.map((accountRole) => (
-                <button
-                  className={role === accountRole ? styles.selectedRole : ""}
-                  key={accountRole}
-                  type="button"
-                  onClick={() => setRole(accountRole)}
-                >
-                  <span>{roleLabels[accountRole]}</span>
-                </button>
-              ))}
-            </div>
+          <form className={styles.authForm} onSubmit={handleEmailAuth}>
+            <label>
+              Email
+              <input
+                autoComplete="email"
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="you@example.com"
+                required
+                type="email"
+                value={email}
+              />
+            </label>
 
-            <form className={styles.authForm} onSubmit={handleEmailAuth}>
-              <label>
-                Email
-                <input
-                  autoComplete="email"
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="you@example.com"
-                  required
-                  type="email"
-                  value={email}
-                />
-              </label>
+            <label>
+              Password
+              <input
+                autoComplete={isSignup ? "new-password" : "current-password"}
+                minLength={isSignup ? 8 : 6}
+                onChange={(event) => setPassword(event.target.value)}
+                pattern={isSignup ? "^(?=.*[A-Z])(?=.*\\d).{8,}$" : undefined}
+                placeholder="Your password"
+                required
+                type="password"
+                value={password}
+              />
+            </label>
 
-              <label>
-                Password
-                <input
-                  autoComplete={mode === "register" ? "new-password" : "current-password"}
-                  minLength={mode === "register" ? 8 : 6}
-                  onChange={(event) => setPassword(event.target.value)}
-                  pattern={mode === "register" ? "^(?=.*[A-Z])(?=.*\\d).{8,}$" : undefined}
-                  placeholder={mode === "register" ? "8+ chars, 1 capital, 1 number" : "Your password"}
-                  required
-                  type="password"
-                  value={password}
-                />
-              </label>
+            {isSignup && (
+              <div className={styles.accountTypeGroup}>
+                <span>Account type</span>
+                <div className={styles.roleGrid} aria-label="Choose account type">
+                  {accountRoles.map((accountRole) => (
+                    <button
+                      className={role === accountRole ? styles.selectedRole : ""}
+                      key={accountRole}
+                      type="button"
+                      onClick={() => setRole(accountRole)}
+                    >
+                      <span>{accountRole === "scout_coach" ? "Coach / Scout" : roleLabels[accountRole]}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
-              <button className={styles.primaryButton} disabled={isLoading} type="submit">
-                {isLoading
-                  ? "Working..."
-                  : mode === "register"
-                    ? `Create ${selectedRoleLabel} account`
-                    : "Login"}
-              </button>
-            </form>
-          </>
+            <button className={isSignup ? styles.signupSubmitButton : styles.loginSubmitButton} disabled={isLoading} type="submit">
+              {isLoading
+                ? isSignup
+                  ? "Creating account..."
+                  : "Logging in..."
+                : isSignup
+                  ? `Create ${selectedRoleLabel} account`
+                  : "Log In"}
+            </button>
+          </form>
         )}
 
         {message && <p className={styles.successMessage}>{message}</p>}
