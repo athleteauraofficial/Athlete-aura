@@ -91,6 +91,38 @@
   color: #334155;
 }
 
+.logoutButton {
+  min-width: 126px;
+  min-height: 50px;
+  border: 1px solid rgba(220, 38, 38, 0.34);
+  border-radius: 10px;
+  padding: 0 20px;
+  background: rgba(220, 38, 38, 0.1);
+  color: #991b1b;
+  cursor: pointer;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 850;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.logoutButton:hover {
+  border-color: rgba(220, 38, 38, 0.7);
+  background: rgba(220, 38, 38, 0.16);
+  box-shadow: 0 14px 34px rgba(220, 38, 38, 0.16);
+  transform: translateY(-2px);
+}
+
+.logoutButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  transform: none;
+}
+
 .notificationsMenu {
   position: fixed;
   top: 206px;
@@ -183,7 +215,7 @@
   white-space: nowrap;
 }
 
-.topActions > button {
+.topActions > button:not(.logoutButton) {
   position: relative;
   width: 42px;
   height: 42px;
@@ -196,7 +228,7 @@
   cursor: pointer;
 }
 
-.topActions > button:hover {
+.topActions > button:not(.logoutButton):hover {
   background: rgba(15, 23, 42, 0.08);
   color: #0f172a;
 }

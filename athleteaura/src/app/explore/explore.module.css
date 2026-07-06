@@ -583,7 +583,17 @@
   background: rgba(15, 23, 42, 0.06);
 }
 
+.comment .avatar {
+  width: 36px;
+  height: 36px;
+  flex-basis: 36px;
+  font-size: 0.76rem;
+  box-shadow: none;
+}
+
 .commentBody {
+  flex: 1;
+  min-width: 0;
   display: grid;
   gap: 4px;
 }

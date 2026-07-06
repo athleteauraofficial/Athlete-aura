@@ -6,6 +6,30 @@ import { accountRoles, getPostAuthRoute, isStrongPassword, roleLabels } from "@/
 import { hasSupabaseEnv, supabase, supabaseConfigError } from "@/lib/supabase";
 import styles from "./page.module.css";
 
+const LAST_ACCOUNT_KEY = "athleteaura:lastAccount";
+
+function getStoredLastAccount() {
+  if (typeof window === "undefined") return null;
+
+  try {
+    return JSON.parse(window.localStorage.getItem(LAST_ACCOUNT_KEY) ?? "null");
+  } catch {
+    return null;
+  }
+}
+
+function rememberLastAccount(user) {
+  if (typeof window === "undefined" || !user?.email) return;
+
+  window.localStorage.setItem(
+    LAST_ACCOUNT_KEY,
+    JSON.stringify({
+      email: user.email,
+      name: user.user_metadata?.full_name ?? user.email,
+    })
+  );
+}
+
 export default function AuthForm({ mode = "signup" }) {
   const router = useRouter();
   const isSignup = mode !== "login";
@@ -16,8 +40,13 @@ export default function AuthForm({ mode = "signup" }) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSwitchingAccount, setIsSwitchingAccount] = useState(false);
+  const [lastAccount, setLastAccount] = useState(null);
+  const [authChoice, setAuthChoice] = useState("");
 
   const selectedRoleLabel = useMemo(() => roleLabels[role], [role]);
+  const shouldShowLoginChoice = !isSignup && !user && lastAccount && !authChoice;
+  const shouldShowSignupChoice = isSignup && !user && authChoice !== "signup";
 
   useEffect(() => {
     let isMounted = true;
@@ -26,6 +55,10 @@ export default function AuthForm({ mode = "signup" }) {
       if (!hasSupabaseEnv) {
         setError(supabaseConfigError);
         return;
+      }
+
+      if (isMounted) {
+        setLastAccount(getStoredLastAccount());
       }
 
       let data;
@@ -111,6 +144,49 @@ export default function AuthForm({ mode = "signup" }) {
     );
   }
 
+  async function handleUseAnotherAccount() {
+    if (!hasSupabaseEnv) {
+      setError(supabaseConfigError);
+      return;
+    }
+
+    setIsSwitchingAccount(true);
+    setError("");
+    setMessage("");
+
+    const { error: signOutError } = await supabase.auth.signOut();
+
+    setIsSwitchingAccount(false);
+
+    if (signOutError) {
+      setError(signOutError.message);
+      return;
+    }
+
+    rememberLastAccount(user);
+    setLastAccount(getStoredLastAccount());
+    setUser(null);
+    setEmail(isSignup ? "" : "");
+    setPassword("");
+    setAuthChoice(isSignup ? "signup" : "other");
+  }
+
+  function handleContinueAsLastAccount() {
+    setEmail(lastAccount?.email ?? "");
+    setPassword("");
+    setAuthChoice("same");
+    setError("");
+    setMessage("");
+  }
+
+  function handleUseDifferentEmail() {
+    setEmail("");
+    setPassword("");
+    setAuthChoice("other");
+    setError("");
+    setMessage("");
+  }
+
   return (
     <div className={styles.pageShell}>
       <section className={styles.authPanel} aria-label="AthleteAura authentication">
@@ -129,12 +205,52 @@ export default function AuthForm({ mode = "signup" }) {
             <p className={styles.statusLabel}>Signed in</p>
             <h2>{user.email}</h2>
             <p>Account type: {roleLabels[user.user_metadata?.role] ?? "Not set"}</p>
+            <div className={styles.signedInActions}>
+              <button
+                className={styles.primaryButton}
+                type="button"
+                onClick={() => router.push(getPostAuthRoute(user.user_metadata?.role))}
+              >
+                Go to my profile
+              </button>
+              <button
+                className={styles.secondaryButton}
+                disabled={isSwitchingAccount}
+                type="button"
+                onClick={handleUseAnotherAccount}
+              >
+                {isSwitchingAccount
+                  ? "Preparing..."
+                  : isSignup
+                    ? "Create new account"
+                    : "Log in with another account"}
+              </button>
+            </div>
+          </div>
+        ) : shouldShowLoginChoice ? (
+          <div className={styles.authChoicePanel}>
+            <button className={styles.loginSubmitButton} type="button" onClick={handleContinueAsLastAccount}>
+              Continue as {lastAccount.email}
+            </button>
+            <button className={styles.secondaryButton} type="button" onClick={handleUseDifferentEmail}>
+              Use another email
+            </button>
+          </div>
+        ) : shouldShowSignupChoice ? (
+          <div className={styles.authChoicePanel}>
+            <button className={styles.secondaryButton} type="button" onClick={() => router.push("/login")}>
+              Log in with existing account
+            </button>
             <button
-              className={styles.primaryButton}
+              className={styles.signupSubmitButton}
               type="button"
-              onClick={() => router.push(getPostAuthRoute(user.user_metadata?.role))}
+              onClick={() => {
+                setAuthChoice("signup");
+                setError("");
+                setMessage("");
+              }}
             >
-              Go to my profile
+              Create new account
             </button>
           </div>
         ) : (

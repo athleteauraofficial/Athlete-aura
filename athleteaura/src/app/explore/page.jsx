@@ -81,7 +81,7 @@ async function getActiveUser() {
 
 function getDisplayName(profile) {
   const name = `${profile?.first_name ?? ""} ${profile?.last_name ?? ""}`.trim();
-  return name || profile?.full_name || "AthleteAura user";
+  return name || profile?.full_name || "Member";
 }
 
 function getRoleLabel(role) {
@@ -804,6 +804,10 @@ export default function ExplorePage() {
 
       if (commentError) throw commentError;
 
+      setProfilesById((current) => ({
+        ...current,
+        [user.id]: current[user.id] ?? currentProfile,
+      }));
       setCommentsByPostId((current) => ({
         ...current,
         [postId]: [...(current[postId] ?? []), data],
@@ -1272,15 +1276,22 @@ export default function ExplorePage() {
                       {commentsOpen && parentComments.length > 0 && (
                         <div className={styles.comments}>
                           {parentComments.map((comment) => {
-                            const commentAuthor = profilesById[comment.user_id];
+                            const commentAuthor =
+                              profilesById[comment.user_id] ??
+                              (comment.user_id === user?.id ? currentProfile : null);
                             const commentLikes = commentLikesById[comment.id] ?? [];
                             const hasLikedComment = commentLikes.some((like) => like.user_id === user?.id);
                             const replies = repliesByCommentId[comment.id] ?? [];
                             return (
                               <div className={styles.commentThread} key={comment.id}>
                                 <div className={styles.comment}>
+                                  <ProfileLink userId={comment.user_id}>
+                                    <ProfileAvatar profile={commentAuthor} />
+                                  </ProfileLink>
                                   <div className={styles.commentBody}>
-                                    <strong>{getDisplayName(commentAuthor)}</strong>
+                                    <ProfileLink userId={comment.user_id}>
+                                      <strong>{getDisplayName(commentAuthor)}</strong>
+                                    </ProfileLink>
                                     <span>{comment.content}</span>
                                     <div className={styles.commentActions}>
                                       <button
@@ -1344,7 +1355,9 @@ export default function ExplorePage() {
                                 {replies.length > 0 && (
                                   <div className={styles.replies}>
                                     {replies.map((reply) => {
-                                      const replyAuthor = profilesById[reply.user_id];
+                                      const replyAuthor =
+                                        profilesById[reply.user_id] ??
+                                        (reply.user_id === user?.id ? currentProfile : null);
                                       const replyLikes = commentLikesById[reply.id] ?? [];
                                       const hasLikedReply = replyLikes.some(
                                         (like) => like.user_id === user?.id
@@ -1352,8 +1365,13 @@ export default function ExplorePage() {
 
                                       return (
                                         <div className={styles.comment} key={reply.id}>
+                                          <ProfileLink userId={reply.user_id}>
+                                            <ProfileAvatar profile={replyAuthor} />
+                                          </ProfileLink>
                                           <div className={styles.commentBody}>
-                                            <strong>{getDisplayName(replyAuthor)}</strong>
+                                            <ProfileLink userId={reply.user_id}>
+                                              <strong>{getDisplayName(replyAuthor)}</strong>
+                                            </ProfileLink>
                                             <span>{reply.content}</span>
                                             <div className={styles.commentActions}>
                                               <button
