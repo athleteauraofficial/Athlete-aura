@@ -2,23 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { accountRoles, getPostAuthRoute, isStrongPassword, roleLabels } from "@/lib/auth";
 import { hasSupabaseEnv, supabase, supabaseConfigError } from "@/lib/supabase";
 import styles from "./page.module.css";
-
-const roleLabels = {
-  athlete: "Athlete",
-  scout_coach: "Scout / Coach",
-};
-
-const accountRoles = ["athlete", "scout_coach"];
-
-function getPostAuthRoute(userRole) {
-  return userRole === "scout_coach" ? "/scout/profile" : "/profile";
-}
-
-function isStrongPassword(value) {
-  return value.length >= 8 && /[A-Z]/.test(value) && /\d/.test(value);
-}
 
 export default function AuthForm({ initialMode = "register" }) {
   const router = useRouter();
