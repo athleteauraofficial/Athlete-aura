@@ -71,6 +71,21 @@ textarea {
   font: inherit;
 }
 
+select option {
+  background-color: #111827;
+  color: #f9fafb;
+}
+
+select option:checked {
+  background-color: #7c3aed;
+  color: #ffffff;
+}
+
+select option:disabled {
+  background-color: #111827;
+  color: #94a3b8;
+}
+
 ::selection {
   background: rgba(168, 85, 247, 0.45);
 }
