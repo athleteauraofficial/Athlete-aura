@@ -68,7 +68,28 @@ button,
 input,
 select,
 textarea {
+  max-width: 100%;
+  min-width: 0;
   font: inherit;
+}
+
+img,
+picture,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+
+img,
+picture,
+video,
+canvas {
+  height: auto;
+}
+
+button {
+  touch-action: manipulation;
 }
 
 select option {
@@ -92,6 +113,7 @@ select option:disabled {
 
 main {
   width: 100%;
+  min-width: 0;
 }
 
 @media (min-width: 980px) {
@@ -109,4 +131,11 @@ main {
 body:has(.authRoutePage) .app-shell-topbar,
 body:has(.authRoutePage) .app-shell-nav {
   display: none;
+}
+
+@media (max-width: 979px) {
+  body:has(.app-shell-nav) {
+    padding-left: 0;
+    padding-top: 0;
+  }
 }

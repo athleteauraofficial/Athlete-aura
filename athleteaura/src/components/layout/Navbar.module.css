@@ -19,6 +19,7 @@
   display: grid;
   gap: 4px;
   width: fit-content;
+  min-width: 0;
   color: #0f172a;
 }
 
@@ -43,6 +44,7 @@
 }
 
 .searchBox {
+  min-width: 0;
   min-height: 54px;
   display: flex;
   align-items: center;
@@ -83,6 +85,7 @@
 }
 
 .topActions {
+  min-width: 0;
   position: relative;
   display: flex;
   align-items: center;
@@ -255,6 +258,7 @@
   bottom: 0;
   left: 0;
   width: 92px;
+  max-width: 100vw;
   overflow: hidden;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   background: #0b0f12;
@@ -270,6 +274,8 @@
 }
 
 .container {
+  width: 100%;
+  max-width: 100%;
   min-height: 100%;
   display: flex;
   flex-direction: column;
@@ -280,6 +286,7 @@
 .links {
   position: relative;
   display: grid;
+  max-width: 100%;
   gap: 12px;
 }
 
@@ -299,6 +306,7 @@
   font-size: 1.02rem;
   font-weight: 850;
   position: relative;
+  white-space: nowrap;
   transition:
     border-color 180ms ease,
     background 180ms ease,
@@ -489,45 +497,89 @@
 
 @media (max-width: 979px) {
   .topbar {
-    position: sticky;
-    grid-template-columns: 1fr;
+    position: relative;
+    grid-template-columns: minmax(0, 1fr) auto;
     height: auto;
-    gap: 14px;
-    padding: 16px;
+    gap: 12px;
+    padding: 12px 14px;
   }
 
   .brand {
     display: flex;
     align-items: baseline;
     gap: 10px;
+    min-width: 0;
   }
 
   .brand strong {
     font-size: 1.25rem;
   }
 
-  .brand small,
-  .topActions {
+  .brand small {
     display: none;
+  }
+
+  .topActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .logoutButton {
+    min-width: 94px;
+    min-height: 42px;
+    border-radius: 10px;
+    padding: 0 12px;
+    font-size: 0.82rem;
+  }
+
+  .searchBox {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 44px;
+    gap: 10px;
+    border-radius: 12px;
+    padding: 0 12px;
+  }
+
+  .searchBox input {
+    font-size: 0.9rem;
   }
 
   .navbar {
     position: sticky;
     top: 0;
     width: 100%;
+    max-width: 100vw;
     border-right: 0;
     border-bottom: 1px solid rgba(15, 23, 42, 0.1);
   }
 
+  .navbar:hover,
+  .navbar:focus-within {
+    width: 100%;
+    box-shadow: none;
+  }
+
   .container {
     min-height: auto;
+    width: 100%;
     padding: 12px 14px;
   }
 
   .links {
     display: flex;
     gap: 8px;
+    width: 100%;
+    max-width: 100%;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .links::-webkit-scrollbar {
+    display: none;
   }
 
   .link,
@@ -539,6 +591,17 @@
     gap: 8px;
     padding: 0 12px;
     font-size: 0.86rem;
+  }
+
+  .navbar:hover .link,
+  .navbar:hover .activeLink,
+  .navbar:hover .navButton,
+  .navbar:hover .createPostLink,
+  .navbar:focus-within .link,
+  .navbar:focus-within .activeLink,
+  .navbar:focus-within .navButton,
+  .navbar:focus-within .createPostLink {
+    gap: 8px;
   }
 
   .navLabel,
@@ -570,5 +633,35 @@
 
   .searchBox kbd {
     display: none;
+  }
+}
+
+@media (max-width: 430px) {
+  .topbar {
+    padding: 10px 12px;
+  }
+
+  .brand strong {
+    font-size: 1.08rem;
+    letter-spacing: -0.055em;
+  }
+
+  .logoutButton {
+    min-width: 84px;
+    min-height: 40px;
+    padding: 0 10px;
+    font-size: 0.78rem;
+  }
+
+  .container {
+    padding: 10px 10px;
+  }
+
+  .link,
+  .activeLink,
+  .navButton,
+  .createPostLink {
+    min-height: 44px;
+    padding: 0 11px;
   }
 }
