@@ -1,0 +1,85 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  min-width: 0;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.dark {
+  color: #ffffff;
+}
+
+.light {
+  color: #0f172a;
+}
+
+.logoMark {
+  width: 34px;
+  height: 34px;
+  display: block;
+  flex: 0 0 34px;
+  border-radius: 7px;
+  background: var(--brand-green-light, #22c55e);
+  clip-path: polygon(50% 0, 100% 100%, 72% 100%, 50% 49%, 28% 100%, 0 100%);
+  filter: drop-shadow(0 0 14px rgba(34, 197, 94, 0.26));
+}
+
+.brandCopy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.brand strong {
+  color: var(--brand-green-light, #22c55e);
+  font-size: clamp(1.05rem, 1.8vw, 1.38rem);
+  font-weight: 1000;
+  letter-spacing: -0.055em;
+  line-height: 0.95;
+  text-transform: none;
+}
+
+.brand strong span {
+  color: inherit;
+}
+
+.brand small {
+  color: currentColor;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.23em;
+  opacity: 0.68;
+}
+
+.noTagline .brandCopy {
+  gap: 0;
+}
+
+.brand:focus-visible {
+  outline: 3px solid rgba(34, 197, 94, 0.32);
+  outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .brand {
+    gap: 10px;
+  }
+
+  .logoMark {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
+
+  .brand strong {
+    font-size: 1.1rem;
+  }
+
+  .brand small {
+    font-size: 0.54rem;
+    letter-spacing: 0.17em;
+  }
+}

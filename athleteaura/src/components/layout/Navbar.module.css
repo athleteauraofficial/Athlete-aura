@@ -16,31 +16,8 @@
 }
 
 .brand {
-  display: grid;
-  gap: 4px;
   width: fit-content;
   min-width: 0;
-  color: #0f172a;
-}
-
-.brand strong {
-  font-size: 2rem;
-  font-style: italic;
-  font-weight: 950;
-  letter-spacing: -0.07em;
-  line-height: 1;
-}
-
-.brand strong span {
-  color: var(--accent-2);
-}
-
-.brand small {
-  color: #334155;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
 }
 
 .searchBox {
@@ -505,18 +482,7 @@
   }
 
   .brand {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
     min-width: 0;
-  }
-
-  .brand strong {
-    font-size: 1.25rem;
-  }
-
-  .brand small {
-    display: none;
   }
 
   .topActions {
@@ -639,11 +605,6 @@
 @media (max-width: 430px) {
   .topbar {
     padding: 10px 12px;
-  }
-
-  .brand strong {
-    font-size: 1.08rem;
-    letter-spacing: -0.055em;
   }
 
   .logoutButton {

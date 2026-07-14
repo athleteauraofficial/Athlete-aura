@@ -10,6 +10,7 @@ import {
   Search,
   Zap,
 } from "lucide-react";
+import BrandLogo from "@/components/brand/BrandLogo";
 import { hasSupabaseEnv, supabase } from "@/lib/supabase";
 import styles from "./Navbar.module.css";
 
@@ -194,7 +195,7 @@ export default function Navbar() {
   }, [user?.id]);
 
   const profileHref = getProfileHref(user?.user_metadata?.role);
-  const isPublicPage = ["/", "/login", "/signup"].includes(pathname);
+  const isPublicPage = ["/", "/login", "/signup", "/for-athletes", "/for-coaches", "/explore-talent"].includes(pathname);
   const isProfilePage = pathname === profileHref || pathname === "/profile";
   const isSavedPage = pathname === "/saved";
   const isNotificationsPage = pathname === "/notifications";
@@ -228,12 +229,7 @@ export default function Navbar() {
   return (
     <>
       <header className={`${styles.topbar} app-shell-topbar`}>
-        <Link className={styles.brand} href={user ? "/explore" : "/"}>
-          <strong>
-            ATHLETE <span>AURA</span>
-          </strong>
-          <small>Rise. Connect. Inspire.</small>
-        </Link>
+        <BrandLogo className={styles.brand} href={user ? "/explore" : "/"} theme="light" />
 
         <label className={styles.searchBox}>
           <Search size={18} />

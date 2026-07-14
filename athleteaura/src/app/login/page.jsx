@@ -1,17 +1,13 @@
 import Link from "next/link";
 import AuthForm from "../auth-form";
+import BrandLogo from "@/components/brand/BrandLogo";
 import styles from "../page.module.css";
 
 export default function LoginPage() {
   return (
     <main className={styles.authRoutePage}>
       <section className={styles.authRouteShell}>
-        <Link className={styles.brand} href="/">
-          <strong>
-            ATHLETE<span>AURA</span>
-          </strong>
-          <small>Rise. Connect. Inspire.</small>
-        </Link>
+        <BrandLogo className={styles.brand} theme="light" />
 
         <div className={styles.authRouteCard}>
           <AuthForm mode="login" />
