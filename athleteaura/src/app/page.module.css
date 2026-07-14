@@ -8,6 +8,866 @@
     linear-gradient(180deg, #ffffff 0%, #f8fafc 58%, #ffffff 100%);
 }
 
+.launchPage {
+  min-height: 100vh;
+  overflow: hidden;
+  color: #f8fafc;
+  background:
+    linear-gradient(rgba(34, 197, 94, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 197, 94, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 78% 18%, rgba(34, 197, 94, 0.22), transparent 30%),
+    radial-gradient(circle at 18% 42%, rgba(15, 23, 42, 0.5), transparent 36%),
+    linear-gradient(180deg, #07111f 0%, #0a1118 46%, #f7faf8 46.1%, #ffffff 100%);
+  background-size: 44px 44px, 44px 44px, auto, auto, auto;
+}
+
+.launchHeader {
+  position: sticky;
+  z-index: 50;
+  top: 14px;
+  width: min(1180px, calc(100% - 32px));
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  margin: 14px auto 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 10px 12px 10px 22px;
+  background: rgba(7, 17, 31, 0.78);
+  box-shadow: 0 18px 60px rgba(2, 6, 23, 0.28);
+  backdrop-filter: blur(22px);
+}
+
+.landingBrand {
+  display: grid;
+  gap: 4px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.landingBrand strong {
+  color: #ffffff;
+  font-size: clamp(1.1rem, 2vw, 1.55rem);
+  font-style: italic;
+  font-weight: 1000;
+  letter-spacing: -0.07em;
+  line-height: 0.95;
+}
+
+.landingBrand strong span {
+  color: #22c55e;
+}
+
+.landingBrand small {
+  color: rgba(248, 250, 252, 0.68);
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.23em;
+}
+
+.desktopNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.desktopNav a {
+  position: relative;
+  border-radius: 999px;
+  padding: 10px 14px;
+  color: rgba(248, 250, 252, 0.72);
+  font-size: 0.88rem;
+  font-weight: 850;
+  transition: color 180ms ease, background 180ms ease;
+}
+
+.desktopNav a::after {
+  content: "";
+  position: absolute;
+  right: 18px;
+  bottom: 5px;
+  left: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: #22c55e;
+  opacity: 0;
+  transform: scaleX(0.4);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.desktopNav a:hover,
+.desktopNav .activeNavLink {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.desktopNav .activeNavLink::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.headerCtas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.headerLogin,
+.headerSignup,
+.primaryLaunchButton,
+.secondaryLaunchButton {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 999px;
+  padding: 0 20px;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 950;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.headerLogin,
+.secondaryLaunchButton {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+}
+
+.headerSignup,
+.primaryLaunchButton {
+  border: 0;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #04130a;
+  box-shadow: 0 18px 44px rgba(34, 197, 94, 0.28);
+}
+
+.headerLogin:hover,
+.headerSignup:hover,
+.primaryLaunchButton:hover,
+.secondaryLaunchButton:hover,
+.menuButton:hover {
+  transform: translateY(-2px);
+}
+
+.menuButton {
+  width: 46px;
+  height: 46px;
+  display: none;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.menuButtonOpen {
+  background: rgba(34, 197, 94, 0.16);
+}
+
+.mobileBackdrop,
+.mobileMenu {
+  display: none;
+}
+
+.launchHero,
+.audienceSection,
+.timelineSection,
+.platformSection,
+.coachSection,
+.impactSection,
+.launchFinalCta,
+.launchFooter {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.launchHero {
+  position: relative;
+  min-height: calc(100vh - 96px);
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
+  align-items: center;
+  gap: 54px;
+  padding: 86px 0 92px;
+}
+
+.heroMessage {
+  display: grid;
+  justify-items: start;
+  gap: 24px;
+}
+
+.heroKicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(34, 197, 94, 0.26);
+  border-radius: 999px;
+  padding: 8px 13px;
+  color: rgba(248, 250, 252, 0.74);
+  background: rgba(34, 197, 94, 0.08);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.heroKicker span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 22px rgba(34, 197, 94, 0.9);
+}
+
+.heroMessage h1 {
+  max-width: 720px;
+  color: #ffffff;
+  font-size: clamp(3.8rem, 7vw, 7.2rem);
+  font-weight: 1000;
+  line-height: 0.86;
+  letter-spacing: -0.08em;
+}
+
+.heroMessage > p:not(.heroKicker) {
+  max-width: 560px;
+  color: rgba(226, 232, 240, 0.78);
+  font-size: clamp(1rem, 1.45vw, 1.22rem);
+  line-height: 1.65;
+}
+
+.heroButtons,
+.launchFinalCta div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.heroVisual {
+  position: relative;
+  min-height: 540px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 34px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at center, rgba(34, 197, 94, 0.16), transparent 38%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 34px 90px rgba(2, 6, 23, 0.28);
+}
+
+.fieldLines {
+  position: absolute;
+  inset: 9%;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 50%;
+  animation: radarSpin 16s linear infinite;
+}
+
+.fieldLines::before,
+.fieldLines::after {
+  content: "";
+  position: absolute;
+  inset: 17%;
+  border: 1px solid rgba(34, 197, 94, 0.13);
+  border-radius: 50%;
+}
+
+.fieldLines::after {
+  inset: 36%;
+}
+
+.connectionLineOne,
+.connectionLineTwo {
+  position: absolute;
+  width: 260px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.72), transparent);
+  animation: pulseLine 2.8s ease-in-out infinite;
+}
+
+.connectionLineOne {
+  transform: rotate(-26deg) translateY(-42px);
+}
+
+.connectionLineTwo {
+  transform: rotate(28deg) translateY(84px);
+  animation-delay: 900ms;
+}
+
+.networkNode {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(34, 197, 94, 0.45);
+  border-radius: 50%;
+  background: rgba(8, 20, 16, 0.9);
+  color: #bbf7d0;
+  font-size: 0.85rem;
+  font-weight: 950;
+  box-shadow: 0 0 28px rgba(34, 197, 94, 0.22);
+  animation: nodePulse 2.6s ease-in-out infinite;
+}
+
+.nodeAthlete {
+  top: 18%;
+  left: 17%;
+}
+
+.nodeCoach {
+  right: 18%;
+  top: 24%;
+  animation-delay: 450ms;
+}
+
+.nodeScout {
+  right: 24%;
+  bottom: 18%;
+  animation-delay: 900ms;
+}
+
+.motionProfileCard,
+.eventCard,
+.performanceCard,
+.platformPreview,
+.audienceCard,
+.timelineStep,
+.coachGrid article,
+.impactStat {
+  animation: revealUp 760ms ease both;
+}
+
+.motionProfileCard {
+  position: relative;
+  z-index: 2;
+  width: min(380px, 86%);
+  display: grid;
+  gap: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 28px;
+  padding: 22px;
+  background: rgba(8, 15, 24, 0.76);
+  box-shadow: 0 28px 80px rgba(2, 6, 23, 0.38);
+  backdrop-filter: blur(18px);
+  animation: cardFloat 4.2s ease-in-out infinite;
+}
+
+.profileTop,
+.previewProfile > div,
+.performanceCard div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profileTop {
+  justify-content: space-between;
+}
+
+.playerAvatar {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  flex: 0 0 54px;
+  place-items: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #22c55e, #bbf7d0);
+  color: #06140c;
+  font-weight: 1000;
+}
+
+.profileTop div:not(.playerAvatar),
+.previewProfile span {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.profileTop strong,
+.previewProfile strong,
+.performanceCard strong,
+.invitePreview strong {
+  color: #ffffff;
+}
+
+.profileTop span,
+.previewProfile span,
+.performanceCard,
+.invitePreview p {
+  color: rgba(226, 232, 240, 0.68);
+}
+
+.scoreRing {
+  width: 134px;
+  height: 134px;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, rgba(8, 15, 24, 1) 52%, transparent 54%),
+    conic-gradient(#22c55e 0 86%, rgba(255, 255, 255, 0.12) 86% 100%);
+}
+
+.scoreRing span {
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 1000;
+}
+
+.scoreRing small {
+  margin-top: -30px;
+  color: rgba(226, 232, 240, 0.64);
+  font-weight: 850;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.statGrid span {
+  display: grid;
+  gap: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 10px;
+  color: rgba(226, 232, 240, 0.68);
+  font-size: 0.78rem;
+}
+
+.statGrid strong {
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.eventCard,
+.performanceCard {
+  position: absolute;
+  z-index: 3;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  background: rgba(8, 15, 24, 0.78);
+  color: #ffffff;
+  box-shadow: 0 22px 60px rgba(2, 6, 23, 0.28);
+  backdrop-filter: blur(18px);
+}
+
+.eventCard {
+  right: 7%;
+  top: 18%;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 14px;
+  color: #bbf7d0;
+  animation: eventPop 3.4s ease-in-out infinite;
+}
+
+.performanceCard {
+  left: 7%;
+  bottom: 12%;
+  width: 220px;
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.performanceCard > span {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #22c55e, rgba(34, 197, 94, 0.16));
+}
+
+.performanceCard > span:nth-child(3) {
+  width: 72%;
+}
+
+.performanceCard > span:nth-child(4) {
+  width: 54%;
+}
+
+.audienceSection,
+.timelineSection,
+.platformSection,
+.coachSection {
+  scroll-margin-top: 110px;
+  display: grid;
+  gap: 32px;
+  padding: 82px 0;
+  color: #0f172a;
+}
+
+.sectionIntro {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.sectionIntro p {
+  color: #15803d;
+  font-size: 0.75rem;
+  font-weight: 1000;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.sectionIntro h2,
+.launchFinalCta p {
+  max-width: 780px;
+  color: #0f172a;
+  font-size: clamp(2.15rem, 4vw, 4rem);
+  font-weight: 1000;
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+
+.audienceGrid,
+.coachGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.audienceCard,
+.coachGrid article,
+.timelineStep,
+.platformPreview,
+.impactStat {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
+}
+
+.audienceCard,
+.coachGrid article {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  min-height: 260px;
+  padding: 24px;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.audienceCard:hover,
+.coachGrid article:hover,
+.timelineStep:hover {
+  border-color: rgba(34, 197, 94, 0.34);
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.14);
+  transform: translateY(-5px);
+}
+
+.audienceCard > svg,
+.coachGrid article > svg {
+  color: #16a34a;
+}
+
+.audienceCard h3,
+.timelineStep h3,
+.coachGrid h3 {
+  color: #0f172a;
+  font-size: 1.35rem;
+  letter-spacing: -0.035em;
+}
+
+.audienceCard ul {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.audienceCard li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #475569;
+  font-weight: 750;
+  line-height: 1.38;
+}
+
+.audienceCard li svg {
+  flex: 0 0 auto;
+  color: #16a34a;
+  margin-top: 2px;
+}
+
+.timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 38px;
+  right: 10%;
+  left: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.52), transparent);
+}
+
+.timelineStep {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  padding: 22px;
+}
+
+.timelineStep > span {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #16a34a;
+  color: #ffffff;
+  font-weight: 1000;
+}
+
+.timelineStep svg {
+  color: #16a34a;
+}
+
+.timelineStep p,
+.coachGrid p,
+.previewProfile p,
+.launchFooter span {
+  color: #64748b;
+  line-height: 1.55;
+}
+
+.platformPreview {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(220px, 0.86fr) minmax(280px, 1.2fr) minmax(210px, 0.72fr);
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.platformPreview::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(22, 163, 74, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 163, 74, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+}
+
+.searchPreview,
+.previewProfile,
+.invitePreview {
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 22px;
+  background: rgba(248, 250, 252, 0.9);
+  padding: 18px;
+}
+
+.searchPreview {
+  display: grid;
+  gap: 14px;
+}
+
+.searchPreview label {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 999px;
+  padding: 0 14px;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 850;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+}
+
+.filterRow,
+.previewStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filterRow span,
+.previewStats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 8px 10px;
+  background: rgba(34, 197, 94, 0.12);
+  color: #166534;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.previewProfile {
+  display: grid;
+  gap: 18px;
+  min-height: 250px;
+  transform: translateY(-10px);
+}
+
+.previewProfile strong {
+  color: #0f172a;
+}
+
+.invitePreview {
+  display: grid;
+  gap: 8px;
+  transform: translateY(28px);
+}
+
+.invitePreview svg {
+  color: #16a34a;
+}
+
+.invitePreview strong {
+  color: #0f172a;
+}
+
+.impactSection {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  padding: 28px 0 74px;
+}
+
+.impactStat {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 22px;
+  color: #0f172a;
+}
+
+.impactStat strong {
+  color: #15803d;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 1000;
+  letter-spacing: -0.05em;
+}
+
+.impactStat span {
+  color: #64748b;
+  font-weight: 850;
+}
+
+.launchFinalCta {
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+  border-radius: 34px;
+  padding: 58px 20px;
+  margin-bottom: 38px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.2), transparent 42%),
+    #07111f;
+  text-align: center;
+}
+
+.launchFinalCta p {
+  color: #ffffff;
+}
+
+.launchFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 24px 0 36px;
+  color: #0f172a;
+}
+
+.launchFooter .landingBrand strong {
+  color: #0f172a;
+}
+
+.launchFooter .landingBrand small {
+  color: #64748b;
+}
+
+@keyframes radarSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseLine {
+  0%,
+  100% {
+    opacity: 0.22;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes nodePulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes cardFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes eventPop {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.78;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .landingHeader {
   position: relative;
   z-index: 5;
@@ -501,6 +1361,13 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 44px;
   align-items: start;
+}
+
+.displayCardsWrap {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: 8px 0 20px;
 }
 
 .centerFeature {
@@ -1106,6 +1973,47 @@
 }
 
 @media (max-width: 1120px) {
+  .launchHeader {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .desktopNav {
+    justify-content: flex-end;
+  }
+
+  .desktopNav a {
+    padding: 10px;
+    font-size: 0.82rem;
+  }
+
+  .launchHero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: 72px;
+  }
+
+  .heroVisual {
+    min-height: 500px;
+  }
+
+  .timeline,
+  .impactSection {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .timeline::before {
+    display: none;
+  }
+
+  .platformPreview {
+    grid-template-columns: 1fr;
+  }
+
+  .previewProfile,
+  .invitePreview {
+    transform: none;
+  }
+
   .landingHeader,
   .hero,
   .sectionTabs,
@@ -1172,6 +2080,214 @@
 }
 
 @media (max-width: 680px) {
+  .launchPage {
+    background:
+      radial-gradient(circle at 50% 10%, rgba(34, 197, 94, 0.2), transparent 34%),
+      linear-gradient(180deg, #07111f 0%, #0a1118 45%, #f7faf8 45.1%, #ffffff 100%);
+  }
+
+  .launchHeader {
+    top: 10px;
+    width: min(100% - 24px, 560px);
+    min-height: 62px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 8px 8px 8px 16px;
+  }
+
+  .landingBrand strong {
+    font-size: 1.1rem;
+  }
+
+  .landingBrand small {
+    font-size: 0.54rem;
+    letter-spacing: 0.17em;
+  }
+
+  .desktopNav,
+  .headerCtas {
+    display: none;
+  }
+
+  .menuButton {
+    display: grid;
+  }
+
+  .mobileBackdrop {
+    position: fixed;
+    z-index: 55;
+    inset: 0;
+    display: block;
+    pointer-events: none;
+    background: rgba(2, 6, 23, 0);
+    backdrop-filter: blur(0);
+    transition: background 220ms ease, backdrop-filter 220ms ease;
+  }
+
+  .mobileBackdropOpen {
+    pointer-events: auto;
+    background: rgba(2, 6, 23, 0.42);
+    backdrop-filter: blur(5px);
+  }
+
+  .mobileMenu {
+    position: fixed;
+    z-index: 60;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(330px, calc(100vw - 34px));
+    display: grid;
+    align-content: start;
+    gap: 24px;
+    padding: 24px;
+    background: rgba(7, 17, 31, 0.96);
+    box-shadow: -28px 0 80px rgba(2, 6, 23, 0.35);
+    transform: translateX(110%);
+    transition: transform 260ms ease;
+  }
+
+  .mobileMenuOpen {
+    transform: translateX(0);
+  }
+
+  .mobileMenu nav {
+    display: grid;
+    gap: 8px;
+  }
+
+  .mobileMenu nav a {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 16px 0;
+    color: #ffffff;
+    font-size: 1.08rem;
+    font-weight: 900;
+  }
+
+  .mobileMenuCtas {
+    display: grid;
+    gap: 10px;
+  }
+
+  .launchHero,
+  .audienceSection,
+  .timelineSection,
+  .platformSection,
+  .coachSection,
+  .impactSection,
+  .launchFinalCta,
+  .launchFooter {
+    width: min(100% - 28px, 560px);
+  }
+
+  .launchHero {
+    gap: 38px;
+    padding: 54px 0 70px;
+  }
+
+  .heroMessage {
+    gap: 18px;
+  }
+
+  .heroMessage h1 {
+    font-size: clamp(3.15rem, 16vw, 4.45rem);
+    letter-spacing: -0.075em;
+  }
+
+  .heroMessage > p:not(.heroKicker) {
+    font-size: 1rem;
+  }
+
+  .heroButtons,
+  .launchFinalCta div {
+    width: 100%;
+    display: grid;
+  }
+
+  .primaryLaunchButton,
+  .secondaryLaunchButton {
+    width: 100%;
+  }
+
+  .heroVisual {
+    min-height: 450px;
+    border-radius: 26px;
+  }
+
+  .motionProfileCard {
+    width: min(90%, 340px);
+    padding: 18px;
+  }
+
+  .eventCard {
+    top: 12%;
+    right: 5%;
+    max-width: 190px;
+    font-size: 0.82rem;
+  }
+
+  .performanceCard {
+    left: 5%;
+    bottom: 7%;
+    width: min(210px, 72%);
+  }
+
+  .nodeAthlete {
+    left: 8%;
+  }
+
+  .nodeCoach {
+    right: 8%;
+  }
+
+  .nodeScout {
+    right: 12%;
+    bottom: 11%;
+  }
+
+  .audienceSection,
+  .timelineSection,
+  .platformSection,
+  .coachSection {
+    padding: 62px 0;
+  }
+
+  .sectionIntro h2,
+  .launchFinalCta p {
+    font-size: clamp(2.05rem, 10vw, 3rem);
+  }
+
+  .audienceGrid,
+  .coachGrid,
+  .timeline,
+  .impactSection {
+    grid-template-columns: 1fr;
+  }
+
+  .audienceCard,
+  .timelineStep,
+  .coachGrid article {
+    min-height: 0;
+  }
+
+  .platformPreview {
+    padding: 16px;
+  }
+
+  .previewStats span,
+  .filterRow span {
+    font-size: 0.78rem;
+  }
+
+  .launchFinalCta {
+    border-radius: 26px;
+    padding: 44px 18px;
+  }
+
+  .launchFooter {
+    display: grid;
+    justify-items: start;
+  }
+
   .landingHeader,
   .hero,
   .sectionTabs,

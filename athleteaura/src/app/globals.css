@@ -1,4 +1,13 @@
 :root {
+  --brand-navy: #07111f;
+  --brand-navy-2: #0a1118;
+  --brand-green: #16a34a;
+  --brand-green-light: #22c55e;
+  --brand-background: #ffffff;
+  --brand-background-soft: #f8fafc;
+  --brand-text: #0f172a;
+  --brand-muted: #64748b;
+  --brand-border: rgba(15, 23, 42, 0.1);
   --background: #ffffff;
   --background-2: #f8fafc;
   --foreground: #0f172a;
@@ -8,8 +17,8 @@
   --line-strong: rgba(22, 163, 74, 0.28);
   --muted: #64748b;
   --muted-strong: #334155;
-  --accent: #16a34a;
-  --accent-2: #22c55e;
+  --accent: var(--brand-green);
+  --accent-2: var(--brand-green-light);
   --accent-soft: rgba(34, 197, 94, 0.16);
   --danger: #fb7185;
   --success: #34d399;

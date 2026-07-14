@@ -30,10 +30,17 @@ function rememberLastAccount(user) {
   );
 }
 
+function getInitialRole(isSignup) {
+  if (!isSignup || typeof window === "undefined") return "athlete";
+
+  const requestedRole = new URLSearchParams(window.location.search).get("role");
+  return accountRoles.includes(requestedRole) ? requestedRole : "athlete";
+}
+
 export default function AuthForm({ mode = "signup" }) {
   const router = useRouter();
   const isSignup = mode !== "login";
-  const [role, setRole] = useState("athlete");
+  const [role, setRole] = useState(() => getInitialRole(isSignup));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
