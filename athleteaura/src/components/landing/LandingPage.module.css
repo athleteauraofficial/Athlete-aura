@@ -132,7 +132,6 @@
 .secondaryButton:hover,
 .secondaryDarkButton:hover,
 .menuButton:hover,
-.glassCard:hover,
 .audiencePanel:hover,
 .previewColumns article:hover {
   transform: translateY(-3px);
@@ -459,14 +458,12 @@
   letter-spacing: -0.06em;
 }
 
-.pointGrid,
 .featureGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 
-.glassCard,
 .audiencePanel,
 .workflow article,
 .previewColumns article,
@@ -478,7 +475,6 @@
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
-.glassCard,
 .featureCard {
   display: grid;
   gap: 14px;
@@ -487,14 +483,12 @@
   padding: 24px;
 }
 
-.glassCard svg,
 .featureCard svg,
 .audiencePanel svg,
 .previewColumns svg {
   color: var(--brand-green);
 }
 
-.glassCard h3,
 .featureCard h3,
 .audiencePanel h2,
 .workflow h3,
@@ -503,7 +497,6 @@
   letter-spacing: -0.03em;
 }
 
-.glassCard p,
 .featureCard p,
 .audiencePanel p,
 .workflow p,
@@ -537,10 +530,109 @@
   font-weight: 1000;
 }
 
+.whatAthleteAuraDoes {
+  position: relative;
+  width: 100%;
+  min-height: 620px;
+  display: flex;
+  align-items: center;
+  margin: 48px 0;
+  overflow: hidden;
+  background-image: url("/images/what-athleteaura-does-bg.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.whatAthleteAuraDoes::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(4, 15, 10, 0.88) 0%,
+      rgba(4, 15, 10, 0.68) 42%,
+      rgba(4, 15, 10, 0.18) 72%,
+      rgba(4, 15, 10, 0.04) 100%
+    );
+  pointer-events: none;
+}
+
+.whatAthleteAuraContent {
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
+  padding: 80px clamp(24px, 8vw, 150px);
+  color: #ffffff;
+}
+
+.whatEyebrow {
+  color: #22c55e;
+  font-size: 0.86rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.whatAthleteAuraContent h2 {
+  margin: 20px 0 24px;
+  color: #ffffff;
+  font-size: clamp(3rem, 5vw, 5.5rem);
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.whatDescription {
+  max-width: 650px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: clamp(1.1rem, 1.5vw, 1.55rem);
+  line-height: 1.6;
+}
+
+.whatAccentLine {
+  width: 190px;
+  height: 6px;
+  margin-top: 32px;
+  border-radius: 999px;
+  background: #22c55e;
+}
+
+.audienceSection {
+  position: relative;
+  width: 100%;
+  min-height: 650px;
+  display: flex;
+  align-items: center;
+  margin: 40px 0;
+  padding: 80px max(24px, calc((100vw - 1180px) / 2));
+  overflow: hidden;
+  background-image: url("/images/audience-football-background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.audienceSection::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(2, 6, 23, 0.5), rgba(2, 6, 23, 0.22) 52%, rgba(2, 6, 23, 0.36)),
+    rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
 .audienceSplit {
+  position: relative;
+  z-index: 1;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 24px;
 }
 
 .audiencePanel {
@@ -548,6 +640,21 @@
   gap: 18px;
   align-content: start;
   padding: 30px;
+}
+
+.audienceSection .audiencePanel {
+  border-color: rgba(255, 255, 255, 0.58);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 26px 70px rgba(2, 6, 23, 0.26);
+  backdrop-filter: blur(10px);
+}
+
+.audienceSection .audiencePanel h2 {
+  color: #07111f;
+}
+
+.audienceSection .audiencePanel p {
+  color: #475569;
 }
 
 .audienceLearnMore {
@@ -571,6 +678,11 @@
   background: #159548;
   transform: translateY(-2px);
   box-shadow: 0 10px 24px rgba(25, 173, 84, 0.2);
+}
+
+.audienceLearnMore svg {
+  color: #ffffff;
+  stroke: #ffffff;
 }
 
 .productPreview {
@@ -1211,8 +1323,8 @@
 @media (prefers-reduced-motion: reduce) {
   .previewFeed,
   .previewScout,
-  .glassCard,
   .audiencePanel,
+  .workflow article,
   .previewColumns article,
   .featureCard,
   .projectVisual,
@@ -1244,7 +1356,11 @@
     min-height: 500px;
   }
 
-  .pointGrid,
+  .audienceSection {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+
   .featureGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1400,12 +1516,101 @@
     bottom: 24px;
   }
 
-  .pointGrid,
   .workflow,
   .audienceSplit,
   .previewColumns,
   .featureGrid {
     grid-template-columns: 1fr;
+  }
+
+  .audienceSection {
+    min-height: 500px;
+    margin: 28px 0;
+    padding: 34px 16px;
+    background-position: 42% center;
+  }
+
+  .audienceSplit {
+    gap: 16px;
+  }
+
+  .audienceSection .audiencePanel {
+    gap: 12px;
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .audienceSection .audiencePanel h2 {
+    font-size: 1.45rem;
+    line-height: 1.08;
+  }
+
+  .audienceSection .audiencePanel p {
+    font-size: 0.94rem;
+    line-height: 1.42;
+  }
+
+  .audienceSection .audiencePanel svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .audienceSection .audienceLearnMore {
+    width: min(100%, 260px);
+    min-height: 46px;
+    gap: 10px;
+    justify-self: start;
+    padding: 0 18px;
+    font-size: 0.95rem;
+  }
+
+  .audienceSection::before {
+    background:
+      linear-gradient(180deg, rgba(2, 6, 23, 0.48), rgba(2, 6, 23, 0.26) 44%, rgba(2, 6, 23, 0.52)),
+      rgba(0, 0, 0, 0.16);
+  }
+
+  .whatAthleteAuraDoes {
+    min-height: 520px;
+    align-items: flex-end;
+    margin: 28px 0;
+    background-position: 58% center;
+  }
+
+  .whatAthleteAuraDoes::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(4, 15, 10, 0.18) 0%,
+        rgba(4, 15, 10, 0.58) 48%,
+        rgba(4, 15, 10, 0.92) 100%
+      );
+  }
+
+  .whatAthleteAuraContent {
+    width: 100%;
+    padding: 32px 20px 36px;
+  }
+
+  .whatEyebrow {
+    font-size: 0.75rem;
+  }
+
+  .whatAthleteAuraContent h2 {
+    margin: 16px 0 18px;
+    font-size: clamp(2.1rem, 10vw, 3.1rem);
+    line-height: 1.02;
+  }
+
+  .whatDescription {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .whatAccentLine {
+    width: 120px;
+    height: 4px;
+    margin-top: 22px;
   }
 
   .productPreview,
@@ -1418,6 +1623,7 @@
   .audiencePanel .audienceLearnMore {
     width: 100%;
   }
+
 
   .visualCard:first-child,
   .visualCard:nth-child(2) {
@@ -1871,6 +2077,7 @@
   .heroVisualFrame {
     width: 100%;
     max-width: 620px;
+    margin-left: -16px;
     margin-right: 0;
   }
 
@@ -1903,9 +2110,36 @@
     font-size: clamp(2.55rem, 14vw, 3.35rem);
   }
 
+  .heroVisualFrame {
+    margin-left: -22px;
+  }
+
   .landingFeatureStrip article {
     grid-template-columns: 40px minmax(0, 1fr);
     gap: 14px;
+  }
+
+  .audienceSection {
+    min-height: 450px;
+    padding: 26px 14px;
+    background-position: 44% center;
+  }
+
+  .audienceSection .audiencePanel {
+    padding: 16px;
+  }
+
+  .audienceSection .audiencePanel h2 {
+    font-size: 1.32rem;
+  }
+
+  .audienceSection .audiencePanel p {
+    font-size: 0.9rem;
+  }
+
+  .audienceSection .audienceLearnMore {
+    min-height: 44px;
+    width: min(100%, 230px);
   }
 }
 
@@ -2112,5 +2346,300 @@
   .mobileBackdrop,
   .mobileMenu {
     transition: none;
+  }
+}
+
+/* Final compact mobile landing layout */
+@media (max-width: 768px) {
+  .page {
+    overflow-x: hidden;
+  }
+
+  .header {
+    min-height: 68px;
+    padding: 0 16px;
+  }
+
+  .landingHero {
+    width: calc(100% - 32px);
+    grid-template-columns: 1fr;
+    gap: 18px;
+    min-height: auto;
+    padding: 32px 0 28px;
+  }
+
+  .landingHeroText {
+    gap: 14px;
+  }
+
+  .landingKicker {
+    padding: 8px 12px;
+    font-size: 0.72rem;
+  }
+
+  .landingHeroText h1 {
+    max-width: 100%;
+    font-size: clamp(2.6rem, 11vw, 3.6rem);
+    line-height: 1.04;
+    letter-spacing: -0.055em;
+  }
+
+  .landingHeroText > p:not(.landingKicker) {
+    max-width: 100%;
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .landingHeroActions {
+    width: 100%;
+    display: grid;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .landingHeroActions .primaryButton,
+  .landingOutlineButton {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    border-radius: 10px;
+    padding: 0 18px;
+    font-size: 0.98rem;
+  }
+
+  .heroVisualFrame {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: 16px;
+  }
+
+  .heroVisualImage {
+    width: 100%;
+  }
+
+  .landingFeatureStrip {
+    width: calc(100% - 32px);
+    grid-template-columns: 1fr;
+    margin: 8px auto 24px;
+    border-radius: 16px;
+  }
+
+  .landingFeatureStrip article,
+  .landingFeatureStrip article:last-child {
+    min-height: auto;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 12px;
+    border-right: 0;
+    padding: 14px 16px;
+  }
+
+  .landingFeatureStrip svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .landingFeatureStrip h2 {
+    font-size: 0.98rem;
+  }
+
+  .landingFeatureStrip p {
+    margin-top: 4px;
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .section,
+  .finalCta,
+  .footer {
+    width: calc(100% - 32px);
+  }
+
+  .section {
+    gap: 20px;
+    padding: 44px 0;
+  }
+
+  .sectionIntro {
+    gap: 8px;
+  }
+
+  .sectionIntro p {
+    font-size: 0.72rem;
+  }
+
+  .sectionIntro h2,
+  .productPreview h2,
+  .finalCta h2 {
+    font-size: clamp(1.8rem, 9vw, 2.45rem);
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  .workflow,
+  .audienceSplit,
+  .previewColumns {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .workflow article,
+  .previewColumns article,
+  .audiencePanel {
+    min-height: auto;
+    height: auto;
+    gap: 12px;
+    border-radius: 18px;
+    padding: 18px;
+  }
+
+  .workflow span {
+    width: 34px;
+    height: 34px;
+    font-size: 0.9rem;
+  }
+
+  .workflow h3,
+  .previewColumns strong,
+  .audiencePanel h2 {
+    font-size: clamp(1.2rem, 6vw, 1.45rem);
+    line-height: 1.15;
+  }
+
+  .workflow p,
+  .previewColumns span,
+  .audiencePanel p,
+  .productPreview p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .whatAthleteAuraDoes {
+    min-height: 500px;
+    align-items: flex-end;
+    margin: 24px 0;
+    background-position: 60% center;
+  }
+
+  .whatAthleteAuraDoes::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(4, 15, 10, 0.16) 0%,
+        rgba(4, 15, 10, 0.54) 46%,
+        rgba(4, 15, 10, 0.9) 100%
+      );
+  }
+
+  .whatAthleteAuraContent {
+    width: 100%;
+    padding: 30px 16px 34px;
+  }
+
+  .whatEyebrow {
+    font-size: 0.72rem;
+  }
+
+  .whatAthleteAuraContent h2 {
+    margin: 14px 0 16px;
+    font-size: clamp(2rem, 9vw, 2.8rem);
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+  }
+
+  .whatDescription {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .whatAccentLine {
+    width: 110px;
+    height: 4px;
+    margin-top: 18px;
+  }
+
+  .audienceSection {
+    min-height: auto;
+    display: block;
+    margin: 24px 0;
+    padding: 32px 16px;
+    background-position: 45% center;
+  }
+
+  .audienceSection::before {
+    background:
+      linear-gradient(180deg, rgba(2, 6, 23, 0.34), rgba(2, 6, 23, 0.16) 42%, rgba(2, 6, 23, 0.42)),
+      rgba(0, 0, 0, 0.08);
+  }
+
+  .audienceSection .audiencePanel {
+    max-width: 100%;
+    min-height: auto;
+    gap: 11px;
+    border-radius: 18px;
+    padding: 18px;
+  }
+
+  .audienceSection .audiencePanel svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .audienceSection .audiencePanel h2 {
+    font-size: 1.32rem;
+  }
+
+  .audienceSection .audiencePanel p {
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  .audienceSection .audienceLearnMore {
+    width: 100%;
+    min-height: 46px;
+    gap: 10px;
+    border-radius: 14px;
+    padding: 0 18px;
+    font-size: 0.95rem;
+  }
+
+  .productPreview {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    border-radius: 20px;
+    padding: 20px;
+  }
+
+  .finalCta {
+    gap: 16px;
+    border-radius: 20px;
+    padding: 40px 18px;
+    margin-bottom: 26px;
+  }
+
+  .finalCta div {
+    width: 100%;
+    display: grid;
+    gap: 10px;
+  }
+
+  .primaryButton,
+  .secondaryButton,
+  .secondaryDarkButton,
+  .coachButton {
+    min-height: 48px;
+    padding: 0 18px;
+    font-size: 0.98rem;
+  }
+
+  .mobileMenu nav a {
+    padding: 14px 0;
+    font-size: 1.1rem;
+  }
+
+  .mobileLoginLink,
+  .mobileSignupLink {
+    min-height: 48px;
+    font-size: 0.98rem;
   }
 }

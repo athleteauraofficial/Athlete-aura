@@ -8,9 +8,7 @@ import {
   Bookmark,
   Dumbbell,
   Eye,
-  MessageCircle,
   PlayCircle,
-  Search,
   ShieldCheck,
   UserRound,
   Users,
@@ -18,13 +16,6 @@ import {
 import BrandLogo from "@/components/brand/BrandLogo";
 import PublicHeader from "@/components/landing/PublicHeader";
 import styles from "./LandingPage.module.css";
-
-const PLATFORM_POINTS = [
-  { icon: UserRound, title: "Public sports profiles", text: "Bring your sport, club, position, details, and story into one clean profile." },
-  { icon: PlayCircle, title: "Highlights and achievements", text: "Share clips, photos, progress, wins, and social links from the same place." },
-  { icon: MessageCircle, title: "Community feed", text: "Post training updates, questions, match thoughts, and short videos." },
-  { icon: Search, title: "Talent discovery", text: "Coaches and scouts can discover athletes, follow progress, and save profiles." },
-];
 
 const WORKFLOW = [
   { step: "01", title: "Create your account", text: "Choose athlete or coach/scout and start with email." },
@@ -104,19 +95,18 @@ function LandingFeatureStrip() {
 
 function PlatformSection() {
   return (
-    <section className={styles.section}>
-      <div className={styles.sectionIntro}>
-        <p>What AthleteAura does</p>
-        <h2>One place for profiles, progress, and discovery.</h2>
-      </div>
-      <div className={styles.pointGrid}>
-        {PLATFORM_POINTS.map((point) => (
-          <article className={styles.glassCard} key={point.title}>
-            <point.icon size={24} aria-hidden="true" />
-            <h3>{point.title}</h3>
-            <p>{point.text}</p>
-          </article>
-        ))}
+    <section className={`${styles.whatAthleteAuraDoes} ${styles.revealBlock}`} data-landing-reveal>
+      <div className={styles.whatAthleteAuraContent}>
+        <p className={styles.whatEyebrow}>What AthleteAura does</p>
+        <h2>
+          One place for profiles,
+          <br />
+          progress, and discovery.
+        </h2>
+        <p className={styles.whatDescription}>
+          AthleteAura brings profiles, highlights, progress, and talent discovery together in one place.
+        </p>
+        <div className={styles.whatAccentLine} aria-hidden="true" />
       </div>
     </section>
   );
@@ -144,7 +134,7 @@ function WorkflowSection() {
 
 function AudienceCards() {
   return (
-    <section className={styles.section}>
+    <section className={styles.audienceSection}>
       <div className={styles.audienceSplit}>
         <article className={styles.audiencePanel}>
           <Dumbbell size={28} aria-hidden="true" />

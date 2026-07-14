@@ -3,14 +3,14 @@
   --brand-navy-2: #0a1118;
   --brand-green: #16a34a;
   --brand-green-light: #22c55e;
-  --brand-background: #ffffff;
-  --brand-background-soft: #f8fafc;
-  --brand-text: #0f172a;
+  --brand-background: #05080d;
+  --brand-background-soft: #07111f;
+  --brand-text: #f8fafc;
   --brand-muted: #64748b;
   --brand-border: rgba(15, 23, 42, 0.1);
-  --background: #ffffff;
-  --background-2: #f8fafc;
-  --foreground: #0f172a;
+  --background: #05080d;
+  --background-2: #07111f;
+  --foreground: #f8fafc;
   --surface: rgba(255, 255, 255, 0.92);
   --surface-strong: #ffffff;
   --line: rgba(15, 23, 42, 0.1);
@@ -44,7 +44,7 @@ body {
   background:
     radial-gradient(circle at 12% 10%, rgba(34, 197, 94, 0.12), transparent 32%),
     radial-gradient(circle at 88% 12%, rgba(16, 185, 129, 0.08), transparent 30%),
-    linear-gradient(135deg, var(--background), var(--background-2) 46%, #ffffff);
+    linear-gradient(135deg, #05080d, #07111f 48%, #020711);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -56,8 +56,8 @@ body::before {
   z-index: -1;
   inset: 0;
   background:
-    linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 78%);
 }
@@ -88,6 +88,39 @@ video,
 canvas,
 iframe {
   max-width: 100%;
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+  }
+
+  h1 {
+    font-size: clamp(2.35rem, 12vw, 3.4rem);
+    line-height: 1.06;
+  }
+
+  h2 {
+    font-size: clamp(1.8rem, 9vw, 2.45rem);
+    line-height: 1.1;
+  }
+
+  h3 {
+    font-size: clamp(1.2rem, 6vw, 1.55rem);
+    line-height: 1.15;
+  }
+
+  p,
+  li {
+    font-size: clamp(0.95rem, 4vw, 1.02rem);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-size: 0.98rem;
+  }
 }
 
 img,
