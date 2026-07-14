@@ -37,7 +37,8 @@ export default function ForCoachesPage() {
           className={styles.splitImage}
           src="/images/coach-hero.png"
           alt="Coach or scout reviewing players on a football training pitch"
-          fill
+          width={1600}
+          height={1100}
           priority
           sizes="100vw"
         />

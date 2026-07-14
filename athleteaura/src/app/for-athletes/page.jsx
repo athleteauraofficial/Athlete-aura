@@ -37,7 +37,8 @@ export default function ForAthletesPage() {
           className={styles.splitImage}
           src="/images/athlete-hero.png"
           alt="Football athlete training on a stadium pitch"
-          fill
+          width={1600}
+          height={1100}
           priority
           sizes="100vw"
         />

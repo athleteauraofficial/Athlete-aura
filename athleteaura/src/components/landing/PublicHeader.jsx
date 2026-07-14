@@ -22,7 +22,9 @@ export default function PublicHeader({ hideActions = false }) {
     if (!isMenuOpen) return undefined;
 
     const previousOverflow = document.body.style.overflow;
+    const previousDocumentOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
 
     function handleKeyDown(event) {
       if (event.key === "Escape") setIsMenuOpen(false);
@@ -32,6 +34,7 @@ export default function PublicHeader({ hideActions = false }) {
 
     return () => {
       document.body.style.overflow = previousOverflow;
+      document.documentElement.style.overflow = previousDocumentOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isMenuOpen]);

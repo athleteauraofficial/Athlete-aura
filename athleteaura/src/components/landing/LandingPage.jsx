@@ -150,7 +150,7 @@ function AudienceCards() {
           <Dumbbell size={28} aria-hidden="true" />
           <h2>For Athletes</h2>
           <p>Create a sports profile, share highlights, post progress, and make your journey easier to review.</p>
-          <Link className={styles.primaryButton} href="/for-athletes">
+          <Link className={styles.audienceLearnMore} href="/for-athletes">
             Learn more
             <ArrowRight size={18} aria-hidden="true" />
           </Link>
@@ -159,7 +159,7 @@ function AudienceCards() {
           <ShieldCheck size={28} aria-hidden="true" />
           <h2>For Coaches & Scouts</h2>
           <p>Discover athletes, review their profile context, follow updates, and save talent worth watching.</p>
-          <Link className={styles.secondaryDarkButton} href="/for-coaches">
+          <Link className={styles.audienceLearnMore} href="/for-coaches">
             Learn more
             <ArrowRight size={18} aria-hidden="true" />
           </Link>
