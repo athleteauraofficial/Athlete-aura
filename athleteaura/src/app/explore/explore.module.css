@@ -205,15 +205,15 @@
 .categoryButtons {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .categoryButtons button {
-  min-height: 40px;
+  min-height: 38px;
   border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 0 16px;
-  background: rgba(15, 23, 42, 0.06);
+  border-radius: 10px;
+  padding: 0 14px;
+  background: #ffffff;
   color: var(--muted-strong);
   cursor: pointer;
   font: inherit;
@@ -228,9 +228,8 @@
 .categoryButtons button:hover,
 .categoryButtons .activeCategoryButton {
   border-color: var(--line-strong);
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.34), rgba(34, 197, 94, 0.12));
+  background: var(--accent-soft);
   color: #166534;
-  transform: translateY(-1px);
 }
 
 .composer select,
@@ -376,9 +375,11 @@
 
 .feedControls {
   order: 3;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
-  gap: 9px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
   margin: 0 0 18px;
 }
 
@@ -393,10 +394,17 @@
 }
 
 .feedControls select {
+  width: 100%;
   min-height: 42px;
-  min-width: 160px;
-  border-radius: 12px;
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--muted-strong);
   font-size: 0.92rem;
+}
+
+.feedControls select option {
+  background: #ffffff;
+  color: var(--muted-strong);
 }
 
 .searchMeta,
@@ -898,7 +906,10 @@
   .feedTopBar {
     width: 100%;
     align-items: stretch;
-    flex-direction: column;
+  }
+
+  .feedControls {
+    grid-template-columns: 1fr;
   }
 
   .createPostButton {

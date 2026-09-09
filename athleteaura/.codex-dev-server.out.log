@@ -1,0 +1,36 @@
+
+> athleteaura@0.1.0 dev
+> next dev --webpack
+
+▲ Next.js 16.2.9 (webpack)
+- Local:         http://localhost:3000
+- Network:       http://10.75.40.170:3000
+- Environments: .env.local
+✓ Ready in 1519ms
+
+○ Compiling / ...
+ GET / 200 in 8.6s (next.js: 8.1s, application-code: 458ms)
+ GET / 200 in 136ms (next.js: 11ms, application-code: 126ms)
+ GET / 200 in 88ms (next.js: 6ms, application-code: 83ms)
+○ Compiling /login ...
+ GET /login 200 in 15.3s (next.js: 14.6s, application-code: 732ms)
+ GET /login 200 in 762ms (next.js: 22ms, application-code: 741ms)
+ GET /login 200 in 702ms (next.js: 11ms, application-code: 690ms)
+ GET /login 200 in 627ms (next.js: 13ms, application-code: 614ms)
+ GET /login 200 in 521ms (next.js: 14ms, application-code: 506ms)
+○ Compiling /profile ...
+ GET /profile 200 in 8.2s (next.js: 8.0s, application-code: 188ms)
+○ Compiling /athlete/profile ...
+ GET /athlete/profile 200 in 23.4s (next.js: 23.1s, application-code: 268ms)
+○ Compiling /notifications ...
+ GET /notifications 200 in 13.1s (next.js: 12.7s, application-code: 375ms)
+ GET /notifications 200 in 277ms (next.js: 15ms, application-code: 262ms)
+ GET /notifications 200 in 165ms (next.js: 16ms, application-code: 149ms)
+○ Compiling /saved ...
+ GET /saved 200 in 7.6s (next.js: 7.4s, application-code: 134ms)
+○ Compiling /discover ...
+ GET /discover 200 in 9.2s (next.js: 9.0s, application-code: 230ms)
+ GET /discover 200 in 145ms (next.js: 10ms, application-code: 135ms)
+○ Compiling /explore ...
+ GET /explore 200 in 10.7s (next.js: 9.9s, application-code: 871ms)
+ GET /explore 200 in 138ms (next.js: 25ms, application-code: 113ms)

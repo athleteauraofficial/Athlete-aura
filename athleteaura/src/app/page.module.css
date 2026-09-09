@@ -1595,6 +1595,7 @@
 
 .pageShell {
   min-height: auto;
+  background: #ffffff;
 }
 
 .authPanel {
