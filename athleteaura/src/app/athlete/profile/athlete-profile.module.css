@@ -407,9 +407,25 @@
   border-radius: 14px;
   padding: 0 12px;
   background: rgba(15, 23, 42, 0.08);
-  color: var(--foreground);
+  color: var(--brand-navy);
   outline: none;
   font: inherit;
+}
+
+.highlightForm input::placeholder,
+.editGrid input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.highlightForm input:disabled,
+.highlightForm input:read-only,
+.editGrid input:disabled,
+.editGrid input:read-only,
+.editGrid select:disabled {
+  color: var(--muted-strong);
+  -webkit-text-fill-color: var(--muted-strong);
+  opacity: 1;
 }
 
 .highlightForm input:focus,
@@ -447,7 +463,7 @@
 
 .highlightItem strong,
 .detailItem dd {
-  color: var(--foreground);
+  color: var(--brand-navy);
 }
 
 .highlightItem span {

@@ -99,7 +99,7 @@
 }
 
 .followStats strong {
-  color: var(--foreground);
+  color: var(--brand-navy);
 }
 
 .profileStats {
@@ -211,7 +211,7 @@
 }
 
 .detailGrid dd {
-  color: var(--foreground);
+  color: var(--brand-navy);
   font-weight: 850;
   overflow-wrap: anywhere;
 }

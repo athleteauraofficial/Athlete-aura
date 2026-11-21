@@ -337,7 +337,7 @@
 }
 
 .detailItem dd {
-  color: var(--foreground);
+  color: var(--brand-navy);
   font-weight: 750;
   overflow-wrap: anywhere;
   text-transform: capitalize;
@@ -362,9 +362,25 @@
   border-radius: 14px;
   padding: 0 12px;
   background: rgba(15, 23, 42, 0.08);
-  color: var(--foreground);
+  color: var(--brand-navy);
   outline: none;
   font: inherit;
+}
+
+.editGrid input::placeholder,
+.editGrid textarea::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.editGrid input:disabled,
+.editGrid input:read-only,
+.editGrid select:disabled,
+.editGrid textarea:disabled,
+.editGrid textarea:read-only {
+  color: var(--muted-strong);
+  -webkit-text-fill-color: var(--muted-strong);
+  opacity: 1;
 }
 
 .editGrid textarea {

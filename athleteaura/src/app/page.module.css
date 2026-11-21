@@ -1737,6 +1737,22 @@
   resize: vertical;
 }
 
+.authForm input::placeholder,
+.authForm textarea::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.authForm input:disabled,
+.authForm input:read-only,
+.authForm select:disabled,
+.authForm textarea:disabled,
+.authForm textarea:read-only {
+  color: var(--muted-strong);
+  -webkit-text-fill-color: var(--muted-strong);
+  opacity: 1;
+}
+
 .authForm input:focus,
 .authForm select:focus,
 .authForm textarea:focus {

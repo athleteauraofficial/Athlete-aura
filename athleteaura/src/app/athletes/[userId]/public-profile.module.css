@@ -152,7 +152,7 @@
 }
 
 .detailItem dd {
-  color: var(--foreground);
+  color: var(--brand-navy);
   font-weight: 750;
   overflow-wrap: anywhere;
   text-transform: capitalize;
